@@ -18,7 +18,7 @@
 		<property name="hibernate.connection.password">pos123</property>
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost/pos</property>
-		<property name="hbm2ddl.auto">update</property>
+		<property name="hbm2ddl.auto">validate</property>
 		<property name="hibernate.connection.autocommit">false</property>
 		<property name="hibernate.max_fetch_depth">5</property>
 		<property name="show_sql">true</property>
@@ -40,6 +40,7 @@
 		<mapping resource="com/floreantpos/model/Gratuity.hbm.xml" />
 		<mapping resource="com/floreantpos/model/InventoryGroup.hbm.xml" />
 		<mapping resource="com/floreantpos/model/InventoryItem.hbm.xml" />
+		<mapping resource="com/floreantpos/model/InventoryWarehouseItem.hbm.xml" />
 		<mapping resource="com/floreantpos/model/InventoryLocation.hbm.xml" />
 		<mapping resource="com/floreantpos/model/InventoryMetaCode.hbm.xml" />
 		<mapping resource="com/floreantpos/model/InventoryTransaction.hbm.xml" />

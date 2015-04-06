@@ -23,6 +23,7 @@ import com.floreantpos.model.InventoryTransactionType;
 import com.floreantpos.model.InventoryUnit;
 import com.floreantpos.model.InventoryVendor;
 import com.floreantpos.model.InventoryWarehouse;
+import com.floreantpos.model.InventoryWarehouseItem;
 import com.floreantpos.model.KitchenTicket;
 import com.floreantpos.model.KitchenTicketItem;
 import com.floreantpos.model.MenuCategory;
@@ -137,7 +138,7 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.setProperty("hibernate.connection.url", AppConfig.getConnectString());
 		configuration = configuration.setProperty("hibernate.connection.username", AppConfig.getDatabaseUser());
 		configuration = configuration.setProperty("hibernate.connection.password", AppConfig.getDatabasePassword());
-		configuration = configuration.setProperty("hibernate.hbm2ddl.auto", "update");
+		configuration = configuration.setProperty("hibernate.hbm2ddl.auto", "validate");
 		configuration = configuration.setProperty("hibernate.connection.autocommit", "false");
 		configuration = configuration.setProperty("hibernate.max_fetch_depth", "5");
 		configuration = configuration.setProperty("hibernate.show_sql", "true");
@@ -166,6 +167,8 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.addClass(Recepie.class);
 		configuration = configuration.addClass(RecepieItem.class);
 		configuration = configuration.addClass(PackagingUnit.class);
+		configuration = configuration.addClass(InventoryWarehouseItem.class);
+		
 		
 		return configuration;
 	}

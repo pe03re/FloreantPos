@@ -35,7 +35,6 @@ import com.floreantpos.model.Restaurant;
 import com.floreantpos.model.Shift;
 import com.floreantpos.model.Terminal;
 import com.floreantpos.model.User;
-import com.floreantpos.model.UserPermission;
 import com.floreantpos.model.dao.OrderTypePropertiesDAO;
 import com.floreantpos.model.dao.PrinterConfigurationDAO;
 import com.floreantpos.model.dao.RestaurantDAO;
@@ -97,7 +96,7 @@ public class Application {
 		pluginManager.addPluginsFrom(new File("plugins/").toURI());
 
 		if (developmentMode) {
-			pluginManager.addPluginsFrom(new File("C:/Users/SOMYA/workspace_pos/orostock/target/classes").toURI());
+			pluginManager.addPluginsFrom(new File("C:/MyProjects/InventoryPlugin/orostock/target/classes").toURI());
 		}
 
 		setApplicationLook();

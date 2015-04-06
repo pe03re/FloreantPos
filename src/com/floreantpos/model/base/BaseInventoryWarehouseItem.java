@@ -4,7 +4,7 @@ import java.lang.Comparable;
 import java.io.Serializable;
 
 /**
- * This is an object that contains data related to the INVENTORY__WAREHOUSE_ITEM
+ * This is an object that contains data related to the INVENTORY_WAREHOUSE_ITEM
  * table. Do not modify this class because it will be overwritten if the
  * configuration file related to this class is modified.
  * 
@@ -37,7 +37,7 @@ public abstract class BaseInventoryWarehouseItem implements Comparable, Serializ
 	public static String PROP_TOTAL_RECEPIE_UNITS = "totalRecepieUnits";
 	public static String PROP_UNIT_PURCHASE_PRICE = "unitPurchasePrice";
 	public static String PROP_ITEM_LOCATION = "itemLocation";
-	public static String INVENTORY_ITEM = "InventoryItem";
+	public static String PROP_INVENTORY_ITEM = "InventoryItem";
 
 	// constructors
 	public BaseInventoryWarehouseItem() {

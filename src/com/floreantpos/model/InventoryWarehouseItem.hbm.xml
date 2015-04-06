@@ -3,7 +3,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.floreantpos.model">
 	<class lazy="false" name="com.floreantpos.model.InventoryWarehouseItem"
-		table="INVENTORY__WAREHOUSE_ITEM">
+		table="INVENTORY_WAREHOUSE_ITEM">
 		<id column="ID" name="id" type="java.lang.Integer">
 			<generator class="identity" />
 		</id>
@@ -16,9 +16,7 @@
 			type="java.lang.Double" />
 		<property column="TOTAL_RECEPIE_UNITS" name="totalRecepieUnits"
 			type="java.lang.Double" />
-		<property column="PROP_ITEM_LOCATION" name="itemLocation"
-			type="java.lang.String" />
-		<property column="INVENTORY_ITEM" name="InventoryItem" type="java.lang.String" />
+<!-- 		<property column="INVENTORY_ITEM" name="InventoryItem" type="java.lang.String" /> -->
 		<property column="UNIT_PURCHASE_PRICE" name="unitPurchasePrice"
 			type="java.lang.Double" />
 
