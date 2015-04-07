@@ -48,10 +48,10 @@ public class InventoryItem extends BaseInventoryItem {
 			
 			inventoryItem.setName(strings[index++]);
 			inventoryItem.setUnitPerPackage(POSUtil.parseDouble(strings[index++]));
-			inventoryItem.setTotalPackages(POSUtil.parseInteger(strings[index++]));
+//			inventoryItem.setTotalPackages(POSUtil.parseInteger(strings[index++]));
 			inventoryItem.setAveragePackagePrice(POSUtil.parseDouble(strings[index++]));
-			inventoryItem.setTotalRecepieUnits(POSUtil.parseDouble(strings[index++]));
-			inventoryItem.setUnitPurchasePrice(POSUtil.parseDouble(strings[index++]));
+//			inventoryItem.setTotalRecepieUnits(POSUtil.parseDouble(strings[index++]));
+//			inventoryItem.setUnitPurchasePrice(POSUtil.parseDouble(strings[index++]));
 			inventoryItem.setPackageBarcode(strings[index++]);
 			inventoryItem.setUnitBarcode(strings[index++]);
 //			inventoryItem.setPackagingUnit(strings[index++]);
@@ -59,7 +59,7 @@ public class InventoryItem extends BaseInventoryItem {
 			inventoryItem.setPackageReorderLevel(POSUtil.parseInteger(strings[index++]));
 			inventoryItem.setPackageReplenishLevel(POSUtil.parseInteger(strings[index++]));
 			inventoryItem.setDescription(strings[index++]);
-			inventoryItem.setUnitSellingPrice(POSUtil.parseDouble(strings[index++]));
+//			inventoryItem.setUnitSellingPrice(POSUtil.parseDouble(strings[index++]));
 			
 
 		} catch (Exception e) {

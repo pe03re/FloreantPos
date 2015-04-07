@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 public abstract class BaseInventoryWarehouseItem implements Comparable, Serializable {
 
-	// public static String REF = "InventoryItem";
+	 public static String REF = "InventoryWarehouseItem";
 	// public static String PROP_PACKAGE_BARCODE = "packageBarcode";
 	// public static String PROP_PACKAGING_UNIT = "packagingUnit";
 	// public static String PROP_DESCRIPTION = "description";
@@ -37,7 +37,7 @@ public abstract class BaseInventoryWarehouseItem implements Comparable, Serializ
 	public static String PROP_TOTAL_RECEPIE_UNITS = "totalRecepieUnits";
 	public static String PROP_UNIT_PURCHASE_PRICE = "unitPurchasePrice";
 	public static String PROP_ITEM_LOCATION = "itemLocation";
-	public static String PROP_INVENTORY_ITEM = "InventoryItem";
+	public static String PROP_INVENTORY_ITEM = "inventoryItem";
 
 	// constructors
 	public BaseInventoryWarehouseItem() {
