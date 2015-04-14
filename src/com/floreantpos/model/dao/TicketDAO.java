@@ -36,28 +36,29 @@ public class TicketDAO extends BaseTicketDAO {
 	 */
 	public TicketDAO() {
 	}
-	
+
 	@Override
 	public void saveOrUpdate(Ticket ticket) {
 		ticket.setActiveDate(Calendar.getInstance().getTime());
-		
+
 		super.saveOrUpdate(ticket);
 	}
-	
+
 	@Override
 	public void saveOrUpdate(Ticket ticket, Session s) {
 		ticket.setActiveDate(Calendar.getInstance().getTime());
-		
+
 		super.saveOrUpdate(ticket, s);
 	}
-	
+
 	public Ticket loadFullTicket(int id) {
 		Session session = createNewSession();
-		
+
 		Ticket ticket = (Ticket) session.get(getReferenceClass(), id);
-		
-		if(ticket == null) return null;
-		
+
+		if (ticket == null)
+			return null;
+
 		Hibernate.initialize(ticket.getTicketItems());
 		Hibernate.initialize(ticket.getCouponAndDiscounts());
 		Hibernate.initialize(ticket.getTransactions());
@@ -74,25 +75,25 @@ public class TicketDAO extends BaseTicketDAO {
 				}
 			}
 		}
-		
+
 		session.close();
-		
+
 		return ticket;
 	}
-	
+
 	public Ticket loadCouponsAndTransactions(int id) {
 		Session session = createNewSession();
-		
+
 		Ticket ticket = (Ticket) session.get(getReferenceClass(), id);
-		
+
 		Hibernate.initialize(ticket.getCouponAndDiscounts());
 		Hibernate.initialize(ticket.getTransactions());
-		
+
 		session.close();
-		
+
 		return ticket;
 	}
-	
+
 	public List<Gratuity> getServerGratuities(Terminal terminal, String transactionType) {
 		Session session = null;
 		ArrayList<Gratuity> gratuities = new ArrayList<Gratuity>();
@@ -115,9 +116,10 @@ public class TicketDAO extends BaseTicketDAO {
 			closeSession(session);
 		}
 	}
+
 	public double getPaidGratuityAmount(Terminal terminal) {
 		Session session = null;
-		
+
 		try {
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass(), "t");
@@ -126,9 +128,9 @@ public class TicketDAO extends BaseTicketDAO {
 			criteria.add(Restrictions.eq(Ticket.PROP_TERMINAL, terminal));
 			criteria.add(Restrictions.eq("gratuity.paid", Boolean.TRUE));
 			criteria.setProjection(Projections.sum("gratuity.amount"));
-			
+
 			List list = criteria.list();
-			if(list.size() > 0 && list.get(0) instanceof Number) {
+			if (list.size() > 0 && list.get(0) instanceof Number) {
 				return ((Number) list.get(0)).doubleValue();
 			}
 			return 0;
@@ -140,19 +142,19 @@ public class TicketDAO extends BaseTicketDAO {
 	public void voidTicket(Ticket ticket) throws Exception {
 		Session session = null;
 		Transaction tx = null;
-		
+
 		try {
 			session = createNewSession();
 			tx = session.beginTransaction();
-		
+
 			Terminal terminal = Application.getInstance().getTerminal();
-			
+
 			ticket.setVoided(true);
 			ticket.setClosed(true);
 			ticket.setClosingDate(new Date());
 			ticket.setTerminal(terminal);
-			
-			if(ticket.isPaid()) {
+
+			if (ticket.isPaid()) {
 				VoidTransaction transaction = new VoidTransaction();
 				transaction.setTicket(ticket);
 				transaction.setTerminal(terminal);
@@ -162,15 +164,15 @@ public class TicketDAO extends BaseTicketDAO {
 				transaction.setAmount(ticket.getPaidAmount());
 				transaction.setTerminal(Application.getInstance().getTerminal());
 				transaction.setCaptured(true);
-				
+
 				PosTransactionService.adjustTerminalBalance(transaction);
-				
+
 				ticket.addTotransactions(transaction);
 			}
-			
+
 			session.update(ticket);
 			session.update(terminal);
-			
+
 			session.flush();
 			tx.commit();
 		} catch (Exception x) {
@@ -199,16 +201,17 @@ public class TicketDAO extends BaseTicketDAO {
 			closeSession(session);
 		}
 	}
-	
+
 	public List<Ticket> findOpenTicketsForUser(User user) {
 		Session session = null;
-		
+
 		try {
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
 			criteria.add(Restrictions.eq(Ticket.PROP_CLOSED, Boolean.FALSE));
-			//criteria.add(Restrictions.eq(Ticket.PROP_VOIDED, Boolean.FALSE));
-			//criteria.add(Restrictions.eq(Ticket.PROP_REFUNDED, Boolean.FALSE));
+			// criteria.add(Restrictions.eq(Ticket.PROP_VOIDED, Boolean.FALSE));
+			// criteria.add(Restrictions.eq(Ticket.PROP_REFUNDED,
+			// Boolean.FALSE));
 			criteria.add(Restrictions.eq(Ticket.PROP_OWNER, user));
 			List list = criteria.list();
 			return list;
@@ -216,7 +219,24 @@ public class TicketDAO extends BaseTicketDAO {
 			closeSession(session);
 		}
 	}
-	
+
+	public Ticket findTicket(int id) {
+		Session session = null;
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.add(Restrictions.eq(Ticket.PROP_ID, id));
+			Object ticket = criteria.uniqueResult();
+			if (ticket != null) {
+				return (Ticket) ticket;
+			} else {
+				return null;
+			}
+		} finally {
+			closeSession(session);
+		}
+	}
+
 	public List<Ticket> findOpenTickets(Date startDate, Date endDate) {
 		Session session = null;
 
@@ -233,29 +253,30 @@ public class TicketDAO extends BaseTicketDAO {
 		}
 	}
 
-//	public Ticket findTicketByTableNumber(int tableNumber) {
-//		Session session = null;
-//
-//		try {
-//			session = getSession();
-//			Criteria criteria = session.createCriteria(getReferenceClass());
-//			criteria.add(Restrictions.eq(Ticket.PROP_CLOSED, Boolean.FALSE));
-//			criteria.add(Restrictions.eq(Ticket.PROP_TABLE_NUMBER, Integer.valueOf(tableNumber)));
-//			
-//			List list = criteria.list();
-//			if(list.size() <= 0) {
-//				return null;
-//			}
-//			
-//			return (Ticket) list.get(0);
-//		} finally {
-//			closeSession(session);
-//		}
-//	}
-	
-//	public boolean hasTicketByTableNumber(int tableNumber) {
-//		return findTicketByTableNumber(tableNumber) != null;
-//	}
+	// public Ticket findTicketByTableNumber(int tableNumber) {
+	// Session session = null;
+	//
+	// try {
+	// session = getSession();
+	// Criteria criteria = session.createCriteria(getReferenceClass());
+	// criteria.add(Restrictions.eq(Ticket.PROP_CLOSED, Boolean.FALSE));
+	// criteria.add(Restrictions.eq(Ticket.PROP_TABLE_NUMBER,
+	// Integer.valueOf(tableNumber)));
+	//
+	// List list = criteria.list();
+	// if(list.size() <= 0) {
+	// return null;
+	// }
+	//
+	// return (Ticket) list.get(0);
+	// } finally {
+	// closeSession(session);
+	// }
+	// }
+
+	// public boolean hasTicketByTableNumber(int tableNumber) {
+	// return findTicketByTableNumber(tableNumber) != null;
+	// }
 
 	public TicketSummary getOpenTicketSummary() {
 		Session session = null;
@@ -315,48 +336,51 @@ public class TicketDAO extends BaseTicketDAO {
 		}
 	}
 
-	//	public void saveTransaction(Ticket ticket, com.floreantpos.model.PosTransaction transaction, Terminal terminal, User user) throws Exception {
-	//		Session session = null;
-	//    	Transaction tx = null;
-	//    	try {
-	//    		if(transaction instanceof CashTransaction) {
-	//    			terminal.setCurrentBalance(terminal.getCurrentBalance() + ticket.getTotalPrice());
-	//    		}
-	//			
-	//			ticket.setVoided(false);
-	//			ticket.setPaid(true);
-	//			ticket.setClosed(true);
-	//			ticket.setDrawerResetted(false);
-	//			ticket.setClosingDate(new Date());
-	//			ticket.setTerminal(terminal);
-	//			
-	//			transaction.setTicket(ticket);
-	//			transaction.setAmount(ticket.getSubTotal());
-	//			transaction.setTaxAmount(ticket.getTotalTax());
-	//			transaction.setAppliedDiscount(ticket.getTotalDiscount());
-	//			transaction.setTerminal(terminal);
-	//			transaction.setUser(user);
-	//			transaction.setTransactionTime(new Date());
-	//			
-	//			session = createNewSession();
-	//			tx = session.beginTransaction();
-	//			
-	//			saveOrUpdate(ticket, session);
-	//			saveOrUpdate(transaction, session);
-	//			saveOrUpdate(terminal, session);
-	//			
-	//			tx.commit();
-	//			
-	//		} catch (Exception e) {
-	//			try {
-	//				tx.rollback();
-	//			}catch (Exception x) {}
-	//			
-	//			throw e;
-	//		} finally {
-	//			closeSession(session);
-	//		}
-	//	}
+	// public void saveTransaction(Ticket ticket,
+	// com.floreantpos.model.PosTransaction transaction, Terminal terminal, User
+	// user) throws Exception {
+	// Session session = null;
+	// Transaction tx = null;
+	// try {
+	// if(transaction instanceof CashTransaction) {
+	// terminal.setCurrentBalance(terminal.getCurrentBalance() +
+	// ticket.getTotalPrice());
+	// }
+	//
+	// ticket.setVoided(false);
+	// ticket.setPaid(true);
+	// ticket.setClosed(true);
+	// ticket.setDrawerResetted(false);
+	// ticket.setClosingDate(new Date());
+	// ticket.setTerminal(terminal);
+	//
+	// transaction.setTicket(ticket);
+	// transaction.setAmount(ticket.getSubTotal());
+	// transaction.setTaxAmount(ticket.getTotalTax());
+	// transaction.setAppliedDiscount(ticket.getTotalDiscount());
+	// transaction.setTerminal(terminal);
+	// transaction.setUser(user);
+	// transaction.setTransactionTime(new Date());
+	//
+	// session = createNewSession();
+	// tx = session.beginTransaction();
+	//
+	// saveOrUpdate(ticket, session);
+	// saveOrUpdate(transaction, session);
+	// saveOrUpdate(terminal, session);
+	//
+	// tx.commit();
+	//
+	// } catch (Exception e) {
+	// try {
+	// tx.rollback();
+	// }catch (Exception x) {}
+	//
+	// throw e;
+	// } finally {
+	// closeSession(session);
+	// }
+	// }
 
 	public List<Ticket> findTickets(Date startDate, Date endDate, boolean closed) {
 		Session session = null;
@@ -365,7 +389,7 @@ public class TicketDAO extends BaseTicketDAO {
 			Criteria criteria = session.createCriteria(getReferenceClass());
 			criteria.add(Restrictions.ge(Ticket.PROP_CREATE_DATE, startDate));
 			criteria.add(Restrictions.le(Ticket.PROP_CREATE_DATE, endDate));
-			//criteria.add(Restrictions.eq(Ticket.PROP_CLOSED, Boolean.TRUE));
+			// criteria.add(Restrictions.eq(Ticket.PROP_CLOSED, Boolean.TRUE));
 			criteria.add(Restrictions.eq(Ticket.PROP_VOIDED, Boolean.FALSE));
 			criteria.add(Restrictions.eq(Ticket.PROP_REFUNDED, Boolean.FALSE));
 			criteria.add(Restrictions.eq(Ticket.PROP_DRAWER_RESETTED, Boolean.valueOf(closed)));
@@ -384,8 +408,8 @@ public class TicketDAO extends BaseTicketDAO {
 			criteria.add(Restrictions.ge(Ticket.PROP_ACTIVE_DATE, startDate));
 			criteria.add(Restrictions.le(Ticket.PROP_ACTIVE_DATE, endDate));
 			criteria.add(Restrictions.eq(Ticket.PROP_CREATION_HOUR, Integer.valueOf(hour)));
-			//criteria.add(Restrictions.eq(Ticket.PROP_CLOSED, Boolean.TRUE));
-			//criteria.add(Restrictions.eq(Ticket.PROP_VOIDED, Boolean.FALSE));
+			// criteria.add(Restrictions.eq(Ticket.PROP_CLOSED, Boolean.TRUE));
+			// criteria.add(Restrictions.eq(Ticket.PROP_VOIDED, Boolean.FALSE));
 
 			if (userType != null) {
 				criteria.createAlias(Ticket.PROP_OWNER, "u");

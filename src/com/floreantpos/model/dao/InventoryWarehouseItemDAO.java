@@ -44,6 +44,9 @@ public class InventoryWarehouseItemDAO extends BaseInventoryWarehouseItemDAO {
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
 			criteria.add(Restrictions.eq(InventoryWarehouseItem.PROP_INVENTORY_ITEM, item));
+//			if(onlyCafe){
+//				criteria.add(Restrictions.eq(InventoryWarehouseItem.PROP_ITEM_LOCATION, InventoryLocationDAO.getInstance().f));
+//			}
 			criteria.addOrder(Order.asc(InventoryWarehouseItem.PROP_ITEM_LOCATION));
 			return criteria.list();
 		} catch (Exception e) {
@@ -55,6 +58,8 @@ public class InventoryWarehouseItemDAO extends BaseInventoryWarehouseItemDAO {
 			}
 		}
 	}
+	
+	
 
 	public InventoryWarehouseItem findByInventoryItemAndInventoryLocation(InventoryItem item, InventoryLocation loc) {
 		Session session = null;

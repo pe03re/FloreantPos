@@ -42,14 +42,14 @@ public class InventoryItem extends BaseInventoryItem {
 		
 		try {
 			
-//			"NAME", "UNIT_PER_PACKAGE", "TOTAL_PACKAGES", "AVERAGE_PACKAGE_PRICE", "TOTAL_RECEPIE_UNITS",
+//			"NAME", "UNIT_PER_PACKAGE", "TOTAL_PACKAGES", "AVERAGE_RUNIT_PRICE", "TOTAL_RECEPIE_UNITS",
 //			"UNIT_PURCHASE_PRICE", "PACKAGE_BARCODE", "UNIT_BARCODE", "PACKAGE_DESC", "SORT_ORDER", "PACKAGE_REORDER_LEVEL",
 //			"PACKAGE_REPLENISH_LEVEL","DESCRIPTION","UNIT_SELLING_PRICE"
 			
 			inventoryItem.setName(strings[index++]);
 			inventoryItem.setUnitPerPackage(POSUtil.parseDouble(strings[index++]));
 //			inventoryItem.setTotalPackages(POSUtil.parseInteger(strings[index++]));
-			inventoryItem.setAveragePackagePrice(POSUtil.parseDouble(strings[index++]));
+			inventoryItem.setAverageRUnitPrice(POSUtil.parseDouble(strings[index++]));
 //			inventoryItem.setTotalRecepieUnits(POSUtil.parseDouble(strings[index++]));
 //			inventoryItem.setUnitPurchasePrice(POSUtil.parseDouble(strings[index++]));
 			inventoryItem.setPackageBarcode(strings[index++]);

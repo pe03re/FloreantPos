@@ -22,7 +22,7 @@ public abstract class BaseInventoryItem  implements Comparable, Serializable {
 	public static String PROP_ITEM_VENDOR = "itemVendor";
 	public static String PROP_ITEM_GROUP = "itemGroup";
 	public static String PROP_VISIBLE = "visible";
-	public static String PROP_AVERAGE_PACKAGE_PRICE = "averagePackagePrice";
+	public static String PROP_AVERAGE_RUNIT_PRICE = "averageRUnitPrice";
 	public static String PROP_SORT_ORDER = "sortOrder";
 	public static String PROP_UNIT_BARCODE = "unitBarcode";
 	public static String PROP_PACKAGE_REPLENISH_LEVEL = "packageReplenishLevel";
@@ -72,7 +72,7 @@ public abstract class BaseInventoryItem  implements Comparable, Serializable {
 		protected java.lang.Integer packageReorderLevel;
 		protected java.lang.Integer packageReplenishLevel;
 		protected java.lang.String description;
-		protected java.lang.Double averagePackagePrice;
+		protected java.lang.Double averageRUnitPrice;
 		protected java.lang.Integer totalPackages;
 		protected java.lang.Double totalRecepieUnits;
 		protected java.lang.Double unitPurchasePrice;
@@ -282,16 +282,16 @@ public abstract class BaseInventoryItem  implements Comparable, Serializable {
 	/**
 	 * Return the value associated with the column: AVERAGE_PACKAGE_PRICE
 	 */
-	public java.lang.Double getAveragePackagePrice () {
-									return averagePackagePrice == null ? Double.valueOf(0) : averagePackagePrice;
+	public java.lang.Double getAverageRUnitPrice () {
+									return averageRUnitPrice == null ? Double.valueOf(0) : averageRUnitPrice;
 					}
 
 	/**
 	 * Set the value related to the column: AVERAGE_PACKAGE_PRICE
 	 * @param averagePackagePrice the AVERAGE_PACKAGE_PRICE value
 	 */
-	public void setAveragePackagePrice (java.lang.Double averagePackagePrice) {
-		this.averagePackagePrice = averagePackagePrice;
+	public void setAverageRUnitPrice (java.lang.Double averagePackagePrice) {
+		this.averageRUnitPrice = averagePackagePrice;
 	}
 
 

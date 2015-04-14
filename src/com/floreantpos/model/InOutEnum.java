@@ -3,7 +3,9 @@ package com.floreantpos.model;
 public enum InOutEnum {
 	IN(1),
 	OUT(-1),
-	MOVEMENT(0);
+	MOVEMENT(0),
+	ADJUSTMENT(2),
+	WASTAGE(3);
 	
 	private int type;
 	
