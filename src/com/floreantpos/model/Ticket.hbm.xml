@@ -49,7 +49,7 @@
 
 		<!-- Associations -->
 		<!-- bi-directional one-to-many association to TicketItem -->
-		<list cascade="all" inverse="false" lazy="true" name="ticketItems">
+		<list cascade="all" inverse="false" lazy="false" name="ticketItems">
 			<key>
 				<column name="TICKET_ID" />
 			</key>

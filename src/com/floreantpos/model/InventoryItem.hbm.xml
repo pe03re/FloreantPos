@@ -20,7 +20,7 @@
         <property column="PACKAGE_REORDER_LEVEL" name="packageReorderLevel" type="java.lang.Integer"/>
         <property column="PACKAGE_REPLENISH_LEVEL" name="packageReplenishLevel" type="java.lang.Integer"/>
         <property column="DESCRIPTION" name="description" type="java.lang.String"/>
-        <property column="AVERAGE_PACKAGE_PRICE" name="averagePackagePrice" type="java.lang.Double"/>
+        <property column="AVERAGE_RUNIT_PRICE" name="averageRUnitPrice" type="java.lang.Double"/>
         
         <property column="TOTAL_PACKAGES" name="totalPackages" type="java.lang.Integer"/>
         <property column="TOTAL_RECEPIE_UNITS" name="totalRecepieUnits" type="java.lang.Double"/>
