@@ -7,7 +7,8 @@ public enum Command {
 	SAVE,
 	CANCEL,
 	NEW_TRANSACTION,
-	UNKNOWN
+	UNKNOWN,
+	NEW_EXPENSE
 	;
 	
 	public static Command fromString(String s) {

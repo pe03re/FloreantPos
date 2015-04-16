@@ -17,6 +17,9 @@ public abstract class BaseInventoryVendor  implements Comparable, Serializable {
 
 	public static String REF = "InventoryVendor";
 	public static String PROP_NAME = "name";
+	public static String PROP_PHONE = "name";
+	public static String PROP_EMAIL = "name";
+	public static String PROP_ADDRESS = "name";
 	public static String PROP_VISIBLE = "visible";
 	public static String PROP_ID = "id";
 
@@ -57,6 +60,9 @@ public abstract class BaseInventoryVendor  implements Comparable, Serializable {
 
 	// fields
 		protected java.lang.String name;
+		protected java.lang.String phone;
+		protected java.lang.String email;
+		protected java.lang.String address;
 		protected java.lang.Boolean visible;
 
 
@@ -98,7 +104,32 @@ public abstract class BaseInventoryVendor  implements Comparable, Serializable {
 		this.name = name;
 	}
 
+	public java.lang.String getPhone() {
+		return phone;
+	}
 
+	public void setPhone(java.lang.String phone) {
+		this.phone = phone;
+	}
+
+
+	
+
+	public java.lang.String getEmail() {
+		return email;
+	}
+
+	public void setEmail(java.lang.String email) {
+		this.email = email;
+	}
+
+	public java.lang.String getAddress() {
+		return address;
+	}
+
+	public void setAddress(java.lang.String address) {
+		this.address = address;
+	}
 
 	/**
 	 * Return the value associated with the column: VISIBLE

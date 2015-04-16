@@ -208,30 +208,35 @@ class LoginPasswordEntryView extends JPanel {
 		
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(btnRegularMode);
-		buttonGroup.add(btnCashierMode);
-		buttonGroup.add(btnKitchenMode);
+//		buttonGroup.add(btnCashierMode);
+//		buttonGroup.add(btnKitchenMode);
 		
 		btnRegularMode.setFocusable(false);
-		btnCashierMode.setFocusable(false);
-		btnKitchenMode.setFocusable(false);
+//		btnCashierMode.setFocusable(false);
+//		btnKitchenMode.setFocusable(false);
 		
 		ModeSelectionListener l = new ModeSelectionListener();
 		btnRegularMode.addActionListener(l);
-		btnCashierMode.addActionListener(l);
-		btnKitchenMode.addActionListener(l);
+//		btnCashierMode.addActionListener(l);
+//		btnKitchenMode.addActionListener(l);
 		
 		btnRegularMode.setSelected(TerminalConfig.isRegularMode());
-		btnCashierMode.setSelected(TerminalConfig.isCashierMode());
-		btnKitchenMode.setSelected(TerminalConfig.isKitchenMode());
+//		btnCashierMode.setSelected(TerminalConfig.isCashierMode());
+//		btnKitchenMode.setSelected(TerminalConfig.isKitchenMode());
 		
-		if(!btnRegularMode.isSelected() && !btnCashierMode.isSelected() && !btnKitchenMode.isSelected()) {
+		if(!btnRegularMode.isSelected()) {
 			btnRegularMode.setSelected(true);
 		}
 		
+//		if(!btnRegularMode.isSelected() && !btnCashierMode.isSelected() && !btnKitchenMode.isSelected()) {
+//			btnRegularMode.setSelected(true);
+//		}
+		
+		
 		JPanel modePanel = new JPanel(new GridLayout(1, 0, 2, 2));
 		modePanel.add(btnRegularMode);
-		modePanel.add(btnCashierMode);
-		modePanel.add(btnKitchenMode);
+//		modePanel.add(btnCashierMode);
+//		modePanel.add(btnKitchenMode);
 		
 		jPanel3.add(modePanel);
 
@@ -379,8 +384,8 @@ class LoginPasswordEntryView extends JPanel {
 	private JLabel lblTerminalId;
 	
 	private JToggleButton btnRegularMode = new JToggleButton("<html><center>REGULAR<br/>MODE</center></html>");
-	private JToggleButton btnCashierMode = new JToggleButton("<html><center>CASHIER<br/>MODE</center></html>");
-	private JToggleButton btnKitchenMode = new JToggleButton("<html><center>KITCHEN<br/>MODE</center></html>");
+//	private JToggleButton btnCashierMode = new JToggleButton("<html><center>CASHIER<br/>MODE</center></html>");
+//	private JToggleButton btnKitchenMode = new JToggleButton("<html><center>KITCHEN<br/>MODE</center></html>");
 
 	public void setFocus() {
 		tfPassword.setText("");
@@ -408,8 +413,8 @@ class LoginPasswordEntryView extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			TerminalConfig.setRegularMode(btnRegularMode.isSelected());
-			TerminalConfig.setCashierMode(btnCashierMode.isSelected());
-			TerminalConfig.setKitchenMode(btnKitchenMode.isSelected());
+//			TerminalConfig.setCashierMode(btnCashierMode.isSelected());
+//			TerminalConfig.setKitchenMode(btnKitchenMode.isSelected());
 		}
 		
 	}

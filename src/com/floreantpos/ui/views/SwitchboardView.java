@@ -710,14 +710,14 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 					}
 					else if (permission.equals(UserPermission.SETTLE_TICKET)) {
 						btnSettleTicket.setEnabled(true);
-						btnGroupSettle.setEnabled(true);
+						//btnGroupSettle.setEnabled(true);
 					}
 					else if (permission.equals(UserPermission.REOPEN_TICKET)) {
 						btnReopenTicket.setEnabled(true);
 					}
-					else if (permission.equals(UserPermission.SPLIT_TICKET)) {
-						btnSplitTicket.setEnabled(true);
-					}
+//					else if (permission.equals(UserPermission.SPLIT_TICKET)) {
+//						btnSplitTicket.setEnabled(true);
+//					}
 					else if (permission.equals(UserPermission.TAKE_OUT)) {
 						btnTakeout.setEnabled(true);
 					}
@@ -727,6 +727,8 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 					else if (permission.equals(UserPermission.CREATE_TICKET)) {
 						btnDineIn.setEnabled(true);
 					}
+					btnSplitTicket.setVisible(false);
+					btnGroupSettle.setVisible(false);
 				}
 			}
 		}
