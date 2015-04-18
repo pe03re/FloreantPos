@@ -81,4 +81,5 @@ public abstract class BeanEditor<E> extends com.floreantpos.swing.TransparentPan
 	public void setEditMode(boolean editMode) {
 		this.editMode = editMode;
 	}
+
 }
