@@ -17,15 +17,11 @@ public class InventoryItemDAO extends BaseInventoryItemDAO {
 	
 	public boolean hasInventoryItemByName(String name) {
 		Session session = null;
-
 		try {
-			
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
 			criteria.add(Restrictions.eq(MenuItem.PROP_NAME, name));
-
 			return criteria.list().size() > 0;
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new PosException("Error occured while finding food items");

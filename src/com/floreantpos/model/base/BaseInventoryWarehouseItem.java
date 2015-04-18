@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 public abstract class BaseInventoryWarehouseItem implements Comparable, Serializable {
 
-	 public static String REF = "InventoryWarehouseItem";
+	public static String REF = "InventoryWarehouseItem";
 	// public static String PROP_PACKAGE_BARCODE = "packageBarcode";
 	// public static String PROP_PACKAGING_UNIT = "packagingUnit";
 	// public static String PROP_DESCRIPTION = "description";

@@ -17,8 +17,6 @@
 
 		<many-to-one class="ExpenseTransactionType" name="transactionType"
 			column="TRANSACTION_TYPE_ID" />
-		<many-to-one class="PurchaseOrder" name="referenceNo"
-			column="REFERENCE_ID" />
 		<many-to-one class="InventoryVendor" name="vendor" column="VENDOR_ID" />
 
 	</class>

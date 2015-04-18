@@ -177,29 +177,22 @@ public class Application {
 		if (isSystemInitialized()) {
 			return;
 		}
-
 		try {
-
 			posWindow.setGlassPaneVisible(true);
 			//posWindow.setGlassPaneMessage(com.floreantpos.POSConstants.LOADING);
-
 			DatabaseUtil.checkConnection(DatabaseUtil.initialize());
-
 			initTerminal();
 			initPrintConfig();
 			refreshRestaurant();
 			loadPrinters();
 			//setTicketActiveSetterScheduler();
 			setSystemInitialized(true);
-
 		} catch (DatabaseConnectionException e) {
 			e.printStackTrace();
 			StringWriter writer = new StringWriter();
 			e.printStackTrace(new PrintWriter(writer));
-
 			if (writer.toString().contains("Another instance of Derby may have already booted")) {
 				POSMessageDialog.showError("Another FloreantPOS instance may be already running.\n" + "Multiple instances cannot be run in Derby single mode");
-
 				return;
 			}
 			else {
@@ -350,7 +343,6 @@ public class Application {
 
 	public synchronized void doLogin(String secretKey) {
 		initializeSystem();
-
 		UserDAO dao = new UserDAO();
 		User user = dao.findUserBySecretKey(secretKey);
 

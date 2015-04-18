@@ -189,7 +189,6 @@ class LoginPasswordEntryView extends JPanel {
 					checkLogin(String.valueOf(e.getKeyChar()));
 				}
 			}
-
 			@Override
 			public void keyPressed(KeyEvent e) {
 			}
@@ -279,7 +278,6 @@ class LoginPasswordEntryView extends JPanel {
 
 	public synchronized void doLogin() {
 		try {
-			
 			tfPassword.setEnabled(false);
 			String secretKey = capturePassword();
 			tfPassword.setText("");

@@ -54,7 +54,6 @@ public abstract class BaseExpenseTransaction implements Comparable, Serializable
 
 	// many to one
 	private com.floreantpos.model.ExpenseTransactionType transactionType;
-	private com.floreantpos.model.PurchaseOrder referenceNo;
 	private com.floreantpos.model.InventoryVendor vendor;
 
 
@@ -160,22 +159,22 @@ public abstract class BaseExpenseTransaction implements Comparable, Serializable
 		this.transactionType = transactionType;
 	}
 
-	/**
-	 * Return the value associated with the column: REFERENCE_ID
-	 */
-	public com.floreantpos.model.PurchaseOrder getReferenceNo() {
-		return referenceNo;
-	}
-
-	/**
-	 * Set the value related to the column: REFERENCE_ID
-	 * 
-	 * @param referenceNo
-	 *            the REFERENCE_ID value
-	 */
-	public void setReferenceNo(com.floreantpos.model.PurchaseOrder referenceNo) {
-		this.referenceNo = referenceNo;
-	}
+//	/**
+//	 * Return the value associated with the column: REFERENCE_ID
+//	 */
+//	public com.floreantpos.model.PurchaseOrder getReferenceNo() {
+//		return referenceNo;
+//	}
+//
+//	/**
+//	 * Set the value related to the column: REFERENCE_ID
+//	 * 
+//	 * @param referenceNo
+//	 *            the REFERENCE_ID value
+//	 */
+//	public void setReferenceNo(com.floreantpos.model.PurchaseOrder referenceNo) {
+//		this.referenceNo = referenceNo;
+//	}
 
 	
 	/**
