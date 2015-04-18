@@ -35,8 +35,6 @@ import com.floreantpos.bo.actions.ItemExplorerAction;
 import com.floreantpos.bo.actions.JournalReportAction;
 import com.floreantpos.bo.actions.KeyStatisticsSalesReportAction;
 import com.floreantpos.bo.actions.MenuUsageReportAction;
-import com.floreantpos.bo.actions.ModifierExplorerAction;
-import com.floreantpos.bo.actions.ModifierGroupExplorerAction;
 import com.floreantpos.bo.actions.OpenTicketSummaryReportAction;
 import com.floreantpos.bo.actions.PayrollReportAction;
 import com.floreantpos.bo.actions.SalesAnalysisReportAction;
@@ -49,7 +47,6 @@ import com.floreantpos.bo.actions.ShiftExplorerAction;
 import com.floreantpos.bo.actions.TaxExplorerAction;
 import com.floreantpos.bo.actions.UserExplorerAction;
 import com.floreantpos.bo.actions.UserTypeExplorerAction;
-import com.floreantpos.bo.actions.ViewGratuitiesAction;
 import com.floreantpos.config.AppConfig;
 import com.floreantpos.extension.InventoryPlugin;
 import com.floreantpos.extension.OrderServiceExtension;
@@ -75,12 +72,11 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 	/** Creates new form BackOfficeWindow */
 	public BackOfficeWindow() {
 		setIconImage(Application.getApplicationIcon().getImage());
-
 		initComponents();
 
 		createMenus();
 		positionWindow();
-
+		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		addWindowListener(new WindowAdapter() {
@@ -190,8 +186,8 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		explorerMenu.add(new CategoryExplorerAction());
 		explorerMenu.add(new GroupExplorerAction());
 		explorerMenu.add(new ItemExplorerAction());
-		explorerMenu.add(new ModifierGroupExplorerAction());
-		explorerMenu.add(new ModifierExplorerAction());
+//		explorerMenu.add(new ModifierGroupExplorerAction());
+//		explorerMenu.add(new ModifierExplorerAction());
 		explorerMenu.add(new ShiftExplorerAction());
 		explorerMenu.add(new CouponExplorerAction());
 		explorerMenu.add(new CookingInstructionExplorerAction());
@@ -210,7 +206,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		adminMenu.add(new ConfigureRestaurantAction());
 		adminMenu.add(new UserExplorerAction());
 		adminMenu.add(new UserTypeExplorerAction());
-		adminMenu.add(new ViewGratuitiesAction());
+//		adminMenu.add(new ViewGratuitiesAction());
 		adminMenu.add(new DrawerPullReportExplorerAction());
 		adminMenu.add(new DataExportAction());
 		adminMenu.add(new DataImportAction());
@@ -238,6 +234,18 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		jPanel1.add(tabbedPane, java.awt.BorderLayout.CENTER);
 
 		getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+		
+//		JPanel centerPanel = new JPanel(new BorderLayout());
+//		centerPanel.setBorder(new CompoundBorder(new EtchedBorder(), new EmptyBorder(15, 15, 15, 15)));
+//		ImageIcon icon = IconFactory.getIcon("/", "logo.png");
+//		
+//		if(icon == null) {
+//			icon = IconFactory.getIcon("floreant-pos.png");
+//		}
+//		
+//		centerPanel.add(new ImageComponent(icon.getImage()));
+//
+//		add(centerPanel);
 
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
