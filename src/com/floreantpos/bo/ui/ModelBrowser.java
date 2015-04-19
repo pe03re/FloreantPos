@@ -136,14 +136,14 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 				break;
 
 			case EDIT:
-					beanEditor.setFieldsEnable(true);
-					beanEditor.setEditMode(true);
-					btnNew.setEnabled(false);
-					btnEdit.setEnabled(false);
-					btnSave.setEnabled(true);
-					btnDelete.setEnabled(false);
-					btnCancel.setEnabled(true);
-					refreshTable();
+				beanEditor.setFieldsEnable(true);
+				beanEditor.setEditMode(true);
+				btnNew.setEnabled(false);
+				btnEdit.setEnabled(false);
+				btnSave.setEnabled(true);
+				btnDelete.setEnabled(false);
+				btnCancel.setEnabled(true);
+				refreshTable();
 				break;
 
 			case CANCEL:
@@ -188,6 +188,46 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 		} catch (Exception e2) {
 			POSMessageDialog.showError(e2.getMessage(), e2);
 		}
+	}
+
+	protected void hideDeleteBtn() {
+		this.btnDelete.setVisible(false);
+	}
+
+	protected void showDeleteBtn() {
+		this.btnDelete.setVisible(true);
+	}
+
+	protected void hideCancelBtn() {
+		this.btnCancel.setVisible(false);
+	}
+
+	protected void showCancelBtn() {
+		this.btnCancel.setVisible(true);
+	}
+
+	protected void hideNewBtn() {
+		this.btnNew.setVisible(false);
+	}
+
+	protected void showNewBtn() {
+		this.btnNew.setVisible(true);
+	}
+
+	protected void hideEditBtn() {
+		this.btnEdit.setVisible(false);
+	}
+
+	protected void showEditBtn() {
+		this.btnEdit.setVisible(true);
+	}
+
+	protected void hideSaveBtn() {
+		this.btnSave.setVisible(false);
+	}
+
+	protected void showSaveBtn() {
+		this.btnSave.setVisible(true);
 	}
 
 	@Override
