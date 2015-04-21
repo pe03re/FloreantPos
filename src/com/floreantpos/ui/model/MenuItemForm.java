@@ -45,6 +45,7 @@ import com.floreantpos.main.Application;
 import com.floreantpos.model.MenuGroup;
 import com.floreantpos.model.MenuItem;
 import com.floreantpos.model.MenuItemShift;
+import com.floreantpos.model.RecepieItem;
 import com.floreantpos.model.Tax;
 import com.floreantpos.model.dao.MenuGroupDAO;
 import com.floreantpos.model.dao.MenuItemDAO;
@@ -99,6 +100,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		if (option == JFileChooser.APPROVE_OPTION) {
 			File imageFile = fileChooser.getSelectedFile();
 			try {
+
 				byte[] itemImage = FileUtils.readFileToByteArray(imageFile);
 				int imageSize = itemImage.length / 1024;
 
@@ -107,12 +109,14 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 					itemImage = null;
 					return;
 				}
+				FileUtils.copyFileToDirectory(imageFile, new File("images/"));
+				String filePath = new String("images/") + imageFile.getName();
 
 				ImageIcon imageIcon = new ImageIcon(new ImageIcon(itemImage).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
 				lblImagePreview.setIcon(imageIcon);
 
 				MenuItem menuItem = (MenuItem) getBean();
-				menuItem.setImage(itemImage);
+				menuItem.setImage(filePath);
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -264,6 +268,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		// tabGeneral.add(tfBarcode, "cell 1 3,growx");
 
 		lblBuyPrice = new JLabel(Messages.getString("LABEL_BUY_PRICE"));
+		lblBuyPrice.setEnabled(false);
 		tabGeneral.add(lblBuyPrice, "cell 0 5");
 
 		tfBuyPrice = new DoubleTextField();
@@ -624,6 +629,8 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tfName.setText(menuItem.getName());
 		// tfTranslatedName.setText(menuItem.getTranslatedName());
 		// tfBarcode.setText(menuItem.getBarcode());
+
+		tfBuyPrice.setText(String.valueOf(getBuyPriceFromInventory(menuItem)));
 		tfPrice.setText(String.valueOf(menuItem.getPrice()));
 		tfDiscountRate.setText(String.valueOf(menuItem.getDiscountRate()));
 		chkVisible.setSelected(menuItem.isVisible());
@@ -654,6 +661,22 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		}
 	}
 
+	private Double getBuyPriceFromInventory(MenuItem menuItem) {
+		double buyPrice = 0.0d;
+		if (menuItem != null && menuItem.getRecepie() != null) {
+			List<RecepieItem> riList = menuItem.getRecepie().getRecepieItems();
+			if (riList != null && !riList.isEmpty()) {
+				for (RecepieItem ri : riList) {
+					if (ri != null && ri.getInventoryItem() != null) {
+						Double itemQty = ri.getPercentage();
+						buyPrice += ri.getInventoryItem().getAverageRUnitPrice() * itemQty;
+					}
+				}
+			}
+		}
+		return buyPrice;
+	}
+
 	@Override
 	protected boolean updateModel() {
 		String itemName = tfName.getText();
@@ -667,6 +690,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		menuItem.setBarcode("");
 		menuItem.setParent((MenuGroup) cbGroup.getSelectedItem());
 		menuItem.setPrice(Double.valueOf(tfPrice.getText()));
+		menuItem.setBuyPrice(Double.valueOf(tfPrice.getText()));
 		menuItem.setTax((Tax) cbTax.getSelectedItem());
 		menuItem.setVisible(chkVisible.isSelected());
 		menuItem.setShowImageOnly(cbShowTextWithImage.isSelected());

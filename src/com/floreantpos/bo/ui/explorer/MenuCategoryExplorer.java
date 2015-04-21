@@ -1,7 +1,6 @@
 package com.floreantpos.bo.ui.explorer;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -26,44 +25,44 @@ import com.floreantpos.ui.model.MenuCategoryForm;
 
 public class MenuCategoryExplorer extends TransparentPanel {
 	private List<MenuCategory> categoryList;
-	
+
 	private JTable table;
 
 	private CategoryExplorerTableModel tableModel;
-	
+
 	public MenuCategoryExplorer() {
 		MenuCategoryDAO dao = new MenuCategoryDAO();
 		categoryList = dao.findAll();
-		
+
 		tableModel = new CategoryExplorerTableModel();
 		table = new JXTable(tableModel);
 		table.setDefaultRenderer(Object.class, new PosTableRenderer());
-		
-		setLayout(new BorderLayout(5,5));
+
+		setLayout(new BorderLayout(5, 5));
 		add(new JScrollPane(table));
-		
+
 		JButton addButton = new JButton(POSConstants.ADD);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					
+
 					MenuCategoryForm editor = new MenuCategoryForm();
 					BeanEditorDialog dialog = new BeanEditorDialog(editor, BackOfficeWindow.getInstance(), true);
 					dialog.open();
-					
+
 					if (dialog.isCanceled())
 						return;
-					
+
 					MenuCategory foodCategory = (MenuCategory) editor.getBean();
 					tableModel.addCategory(foodCategory);
-					
+
 				} catch (Exception x) {
 					BOMessageDialog.showError(POSConstants.ERROR_MESSAGE, x);
 				}
 			}
-			
+
 		});
-		
+
 		JButton editButton = new JButton(POSConstants.EDIT);
 		editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -86,7 +85,7 @@ public class MenuCategoryExplorer extends TransparentPanel {
 					BOMessageDialog.showError(POSConstants.ERROR_MESSAGE, x);
 				}
 			}
-			
+
 		});
 		JButton deleteButton = new JButton(POSConstants.DELETE);
 		deleteButton.addActionListener(new ActionListener() {
@@ -107,7 +106,7 @@ public class MenuCategoryExplorer extends TransparentPanel {
 					BOMessageDialog.showError(POSConstants.ERROR_MESSAGE, x);
 				}
 			}
-			
+
 		});
 
 		TransparentPanel panel = new TransparentPanel();
@@ -116,15 +115,12 @@ public class MenuCategoryExplorer extends TransparentPanel {
 		panel.add(deleteButton);
 		add(panel, BorderLayout.SOUTH);
 	}
-	
+
 	class CategoryExplorerTableModel extends AbstractTableModel {
-		String[] columnNames = {POSConstants.ID, POSConstants.NAME, 
-				POSConstants.TRANSLATED_NAME, POSConstants.BEVERAGE, 
-				POSConstants.VISIBLE, POSConstants.SORT_ORDER, POSConstants.BUTTON_COLOR
-		};
-		
+		String[] columnNames = { POSConstants.NAME, POSConstants.BEVERAGE, POSConstants.VISIBLE, };
+
 		public int getRowCount() {
-			if(categoryList == null) {
+			if (categoryList == null) {
 				return 0;
 			}
 			return categoryList.size();
@@ -133,48 +129,30 @@ public class MenuCategoryExplorer extends TransparentPanel {
 		public int getColumnCount() {
 			return columnNames.length;
 		}
-		
+
 		@Override
 		public String getColumnName(int column) {
 			return columnNames[column];
 		}
-		
+
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
 			return false;
 		}
-		
+
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			if(categoryList == null)
+			if (categoryList == null)
 				return ""; //$NON-NLS-1$
-			
+
 			MenuCategory category = categoryList.get(rowIndex);
-			
-			switch(columnIndex) {
-				case 0:
-					return String.valueOf(category.getId());
-					
-				case 1:
-					return category.getName();
-					
-				case 2:
-					return category.getTranslatedName();
-					
-				case 3:
-					return Boolean.valueOf(category.isBeverage());
-					
-				case 4:
-					return Boolean.valueOf(category.isVisible());
-					
-				case 5:
-					return category.getSortOrder();
-					
-				case 6:
-					if(category.getButtonColor() != null) {
-						return new Color(category.getButtonColor());
-					}
-					
-					return null;
+
+			switch (columnIndex) {
+			case 0:
+				return category.getName();
+			case 1:
+				return Boolean.valueOf(category.isBeverage());
+			case 2:
+				return Boolean.valueOf(category.isVisible());
 			}
 			return null;
 		}
@@ -184,7 +162,7 @@ public class MenuCategoryExplorer extends TransparentPanel {
 			categoryList.add(category);
 			fireTableRowsInserted(size, size);
 		}
-		
+
 		public void deleteCategory(MenuCategory category, int index) {
 			categoryList.remove(category);
 			fireTableRowsDeleted(index, index);

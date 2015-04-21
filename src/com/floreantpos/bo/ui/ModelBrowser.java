@@ -47,7 +47,7 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 		browserTable = new JXTable();
 		browserTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		browserTable.getSelectionModel().addListSelectionListener(this);
-
+		browserTable.setSortable(false);
 		if (tableModel != null) {
 			browserTable.setModel(tableModel);
 		}

@@ -83,7 +83,8 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 	private Timer autoLogoffTimer = new Timer(1000, logoffHandler);
 
-	//private Timer ticketListUpdateTimer = new Timer(10 * 1000, new TicketListUpdaterTask());
+	// private Timer ticketListUpdateTimer = new Timer(10 * 1000, new
+	// TicketListUpdaterTask());
 
 	/** Creates new form SwitchboardView */
 	public SwitchboardView() {
@@ -156,18 +157,18 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			}
 		});
 
-		btnCloseOrder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				doCloseOrder();
-			}
-		});
+		// btnCloseOrder.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// doCloseOrder();
+		// }
+		// });
 
 		centerPanel.add(ticketsAndActivityPanel, java.awt.BorderLayout.CENTER);
-		
+
 		JPanel rightPanel = new JPanel(new BorderLayout(20, 20));
 		TitledBorder titledBorder2 = BorderFactory.createTitledBorder(null, "-", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
 		rightPanel.setBorder(new CompoundBorder(titledBorder2, new EmptyBorder(2, 2, 6, 2)));
-		
+
 		JPanel orderPanel = new JPanel(new MigLayout("ins 2 2 0 2, fill, hidemode 3, flowy", "fill, grow", ""));
 		orderPanel.add(btnDineIn, "grow");
 		orderPanel.add(btnTakeout, "grow");
@@ -177,7 +178,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		orderPanel.add(btnBarTab, "grow");
 
 		setupOrderTypes();
-		
+
 		rightPanel.add(orderPanel);
 
 		PosButton btnOthers = new PosButton("OTHER FUNCTIONS");
@@ -200,7 +201,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		JPanel innerActivityPanel = new JPanel(new MigLayout("hidemode 3, fill, ins 0", "fill, grow", ""));
 
 		JPanel panel1 = new JPanel(new GridLayout(1, 0, 5, 5));
-		
+
 		POSToggleButton btnOrderFilters = new POSToggleButton("ORDER FILTERS");
 		btnOrderFilters.addActionListener(new ActionListener() {
 			@Override
@@ -213,7 +214,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		panel1.add(btnOrderInfo);
 		panel1.add(btnEditTicket);
 		panel1.add(btnSettleTicket);
-		panel1.add(btnCloseOrder);
+		// panel1.add(btnCloseOrder);
 
 		innerActivityPanel.add(panel1);
 
@@ -244,8 +245,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 				if (collapsed) {
 					btnMore.setText(POSConstants.LESS_ACTIVITY_BUTTON_TEXT);
 					btnMore.setBorder(border2);
-				}
-				else {
+				} else {
 					btnMore.setText(POSConstants.MORE_ACTIVITY_BUTTON_TEXT);
 					btnMore.setBorder(border1);
 				}
@@ -257,65 +257,70 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 		return activityPanel;
 
-		//panel1.add(btnPayout);
+		// panel1.add(btnPayout);
 
-		//		cardPanel.add(panel1);
-		//		
-		//		JPanel panel2 = new JPanel(new GridLayout(1, 0, 5, 5));
-		//		panel2.setBorder(border);
-		//		//panel2.setBackground(Color.blue);
-		//		
-		//		cardPanel.add(panel2);
-		//		
-		//		JPanel panel3 = new JPanel(new GridLayout(1, 0, 5, 5));
-		//		panel3.setBorder(border);
-		//		//panel3.setBackground(Color.red);
-		//		panel3.add(btnAuthorize);
-		//		panel3.add(btnManager);
-		//		panel3.add(btnKitchenDisplay);
-		//		panel3.add(btnBackOffice);
-		//		cardPanel.add(panel3);
-		//		
-		//		activityPanel.add(cardPanel);
-		//		
-		//		PosButton btnPrev = new PosButton();
+		// cardPanel.add(panel1);
+		//
+		// JPanel panel2 = new JPanel(new GridLayout(1, 0, 5, 5));
+		// panel2.setBorder(border);
+		// //panel2.setBackground(Color.blue);
+		//
+		// cardPanel.add(panel2);
+		//
+		// JPanel panel3 = new JPanel(new GridLayout(1, 0, 5, 5));
+		// panel3.setBorder(border);
+		// //panel3.setBackground(Color.red);
+		// panel3.add(btnAuthorize);
+		// panel3.add(btnManager);
+		// panel3.add(btnKitchenDisplay);
+		// panel3.add(btnBackOffice);
+		// cardPanel.add(panel3);
+		//
+		// activityPanel.add(cardPanel);
+		//
+		// PosButton btnPrev = new PosButton();
 		//		btnPrev.setIcon(IconFactory.getIcon("previous.png")); //$NON-NLS-1$
-		//		btnPrev.addActionListener(new ActionListener() {
-		//			@Override
-		//			public void actionPerformed(ActionEvent e) {
-		//				cardPanel.showPreviousCard();
-		//			}
-		//		});
-		//		activityPanel.add(btnPrev, BorderLayout.WEST);
+		// btnPrev.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// cardPanel.showPreviousCard();
+		// }
+		// });
+		// activityPanel.add(btnPrev, BorderLayout.WEST);
 		//
-		//		PosButton btnNext = new PosButton();
+		// PosButton btnNext = new PosButton();
 		//		btnNext.setIcon(IconFactory.getIcon("next.png")); //$NON-NLS-1$
-		//		btnNext.addActionListener(new ActionListener() {
-		//			@Override
-		//			public void actionPerformed(ActionEvent e) {
-		//				cardPanel.showNextCard();
-		//			}
-		//		});
-		//		activityPanel.add(btnNext, BorderLayout.EAST);
-		//		
-		//		final FloorLayoutPlugin floorLayoutPlugin = Application.getPluginManager().getPlugin(FloorLayoutPlugin.class);
-		//		if (floorLayoutPlugin != null) {
-		//			btnTableManage = new PosButton(POSConstants.TABLE_MANAGE_BUTTON_TEXT);
-		//			btnTableManage.addActionListener(new ActionListener() {
-		//				@Override
-		//				public void actionPerformed(ActionEvent e) {
-		//					floorLayoutPlugin.openTicketsAndTablesDisplay();
-		//				}
-		//			});
+		// btnNext.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// cardPanel.showNextCard();
+		// }
+		// });
+		// activityPanel.add(btnNext, BorderLayout.EAST);
 		//
-		//			panel3.add(btnTableManage);
-		//		}
+		// final FloorLayoutPlugin floorLayoutPlugin =
+		// Application.getPluginManager().getPlugin(FloorLayoutPlugin.class);
+		// if (floorLayoutPlugin != null) {
+		// btnTableManage = new
+		// PosButton(POSConstants.TABLE_MANAGE_BUTTON_TEXT);
+		// btnTableManage.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// floorLayoutPlugin.openTicketsAndTablesDisplay();
+		// }
+		// });
 		//
-		//		TicketImportPlugin ticketImportPlugin = Application.getPluginManager().getPlugin(TicketImportPlugin.class);
-		//		if (ticketImportPlugin != null) {
-		//			btnOnlineTickets = new PosButton(POSConstants.ONLINE_TICKET_BUTTON_TEXT, new TicketImportAction());
-		//			panel3.add(btnOnlineTickets);
-		//		}
+		// panel3.add(btnTableManage);
+		// }
+		//
+		// TicketImportPlugin ticketImportPlugin =
+		// Application.getPluginManager().getPlugin(TicketImportPlugin.class);
+		// if (ticketImportPlugin != null) {
+		// btnOnlineTickets = new
+		// PosButton(POSConstants.ONLINE_TICKET_BUTTON_TEXT, new
+		// TicketImportAction());
+		// panel3.add(btnOnlineTickets);
+		// }
 	}
 
 	private JXCollapsiblePane createOrderFilters() {
@@ -326,18 +331,18 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		POSToggleButton btnNoPaymentFilter = new POSToggleButton("ALL");
 		POSToggleButton btnFilterByPaid = new POSToggleButton("PAID");
 		POSToggleButton btnFilterByUnPaid = new POSToggleButton("UNPAID");
-		
+
 		ButtonGroup paymentGroup = new ButtonGroup();
 		paymentGroup.add(btnNoPaymentFilter);
 		paymentGroup.add(btnFilterByPaid);
 		paymentGroup.add(btnFilterByUnPaid);
-		
+
 		JPanel filterByPaymentStatusPanel = new JPanel(new MigLayout("", "fill, grow", ""));
 		filterByPaymentStatusPanel.setBorder(new TitledBorder("FILTER BY PAYMENT STATUS"));
 		filterByPaymentStatusPanel.add(btnNoPaymentFilter);
 		filterByPaymentStatusPanel.add(btnFilterByPaid);
 		filterByPaymentStatusPanel.add(btnFilterByUnPaid);
-		
+
 		filterPanel.getContentPane().add(filterByPaymentStatusPanel);
 
 		POSToggleButton btnFilterByOrderTypeALL = new POSToggleButton("ALL");
@@ -347,7 +352,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		POSToggleButton btnFilterByHomeDeli = new POSToggleButton("HOME DELIVERY");
 		POSToggleButton btnFilterByDriveThru = new POSToggleButton("DRIVE THRU");
 		POSToggleButton btnFilterByBarTab = new POSToggleButton("BAR TAB");
-		
+
 		ButtonGroup orderTypeGroup = new ButtonGroup();
 		orderTypeGroup.add(btnFilterByOrderTypeALL);
 		orderTypeGroup.add(btnFilterByDineIn);
@@ -366,9 +371,9 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		filterByOrderPanel.add(btnFilterByHomeDeli);
 		filterByOrderPanel.add(btnFilterByDriveThru);
 		filterByOrderPanel.add(btnFilterByBarTab);
-		
+
 		filterPanel.getContentPane().add(filterByOrderPanel);
-		
+
 		return filterPanel;
 	}
 
@@ -388,8 +393,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 		if (properties == null) {
 			button.setVisible(true);
-		}
-		else {
+		} else {
 			button.setVisible(properties.isVisible());
 		}
 	}
@@ -500,8 +504,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 			if (selectedTickets.size() > 0) {
 				ticket = selectedTickets.get(0);
-			}
-			else {
+			} else {
 				int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
 				ticket = TicketService.getTicket(ticketId);
 			}
@@ -557,8 +560,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 			if (selectedTickets.size() > 0) {
 				ticket = selectedTickets.get(0);
-			}
-			else {
+			} else {
 				int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
 				ticket = TicketService.getTicket(ticketId);
 			}
@@ -608,8 +610,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 			if (selectedTickets.size() > 0) {
 				ticket = selectedTickets.get(0);
-			}
-			else {
+			} else {
 				int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
 				ticket = TicketService.getTicket(ticketId);
 			}
@@ -707,24 +708,21 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 				for (UserPermission permission : permissions) {
 					if (permission.equals(UserPermission.VOID_TICKET)) {
 						btnVoidTicket.setEnabled(true);
-					}
-					else if (permission.equals(UserPermission.SETTLE_TICKET)) {
+					} else if (permission.equals(UserPermission.SETTLE_TICKET)) {
 						btnSettleTicket.setEnabled(true);
-						//btnGroupSettle.setEnabled(true);
-					}
-					else if (permission.equals(UserPermission.REOPEN_TICKET)) {
+						// btnGroupSettle.setEnabled(true);
+					} else if (permission.equals(UserPermission.REOPEN_TICKET)) {
 						btnReopenTicket.setEnabled(true);
 					}
-//					else if (permission.equals(UserPermission.SPLIT_TICKET)) {
-//						btnSplitTicket.setEnabled(true);
-//					}
+					// else if (permission.equals(UserPermission.SPLIT_TICKET))
+					// {
+					// btnSplitTicket.setEnabled(true);
+					// }
 					else if (permission.equals(UserPermission.TAKE_OUT)) {
 						btnTakeout.setEnabled(true);
-					}
-					else if (permission.equals(UserPermission.EDIT_TICKET)) {
+					} else if (permission.equals(UserPermission.EDIT_TICKET)) {
 						btnEditTicket.setEnabled(true);
-					}
-					else if (permission.equals(UserPermission.CREATE_TICKET)) {
+					} else if (permission.equals(UserPermission.CREATE_TICKET)) {
 						btnDineIn.setEnabled(true);
 					}
 					btnSplitTicket.setVisible(false);
@@ -738,7 +736,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 	public synchronized void updateTicketList() {
 		try {
-			//ticketListUpdateTimer.stop();
+			// ticketListUpdateTimer.stop();
 			Application.getPosWindow().setGlassPaneVisible(true);
 
 			User user = Application.getCurrentUser();
@@ -748,8 +746,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 			if (user.canViewAllOpenTickets()) {
 				openTickets = dao.findOpenTickets();
-			}
-			else {
+			} else {
 				openTickets = dao.findOpenTicketsForUser(user);
 			}
 			openTicketList.setTickets(openTickets);
@@ -758,7 +755,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			POSMessageDialog.showError(this, "Error getting open ticket list", e);
 		} finally {
 			Application.getPosWindow().setGlassPaneVisible(false);
-			//ticketListUpdateTimer.restart();
+			// ticketListUpdateTimer.restart();
 		}
 	}
 
@@ -783,7 +780,8 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 	private PosButton btnRefundTicket = new PosButton(POSConstants.REFUND_BUTTON_TEXT, new RefundAction(this));
 
 	private PosButton btnAssignDriver = new PosButton(POSConstants.ASSIGN_DRIVER_BUTTON_TEXT);
-	private PosButton btnCloseOrder = new PosButton(POSConstants.CLOSE_ORDER_BUTTON_TEXT);
+	// private PosButton btnCloseOrder = new
+	// PosButton(POSConstants.CLOSE_ORDER_BUTTON_TEXT);
 
 	private com.floreantpos.ui.TicketListView openTicketList = new com.floreantpos.ui.TicketListView();
 
@@ -804,9 +802,8 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			if (TerminalConfig.isAutoLogoffEnable()) {
 				autoLogoffTimer.start();
 			}
-		}
-		else {
-			//ticketListUpdateTimer.stop();
+		} else {
+			// ticketListUpdateTimer.stop();
 			autoLogoffTimer.stop();
 		}
 	}
@@ -816,41 +813,29 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 		if (source == btnDineIn) {
 			doCreateNewTicket(OrderType.DINE_IN);
-		}
-		else if (source == btnTakeout) {
+		} else if (source == btnTakeout) {
 			OrderUtil.createNewTakeOutOrder(OrderType.TAKE_OUT);
-		}
-		else if (source == btnPickup) {
+		} else if (source == btnPickup) {
 			doHomeDelivery(OrderType.PICKUP);
-		}
-		else if (source == btnHomeDelivery) {
+		} else if (source == btnHomeDelivery) {
 			doHomeDelivery(OrderType.HOME_DELIVERY);
-		}
-		else if (source == btnDriveThrough) {
+		} else if (source == btnDriveThrough) {
 			OrderUtil.createNewTakeOutOrder(OrderType.DRIVE_THRU);
-		}
-		else if (source == btnBarTab) {
+		} else if (source == btnBarTab) {
 			new NewBarTabAction(this).actionPerformed(e);
-		}
-		else if (source == btnEditTicket) {
+		} else if (source == btnEditTicket) {
 			doEditTicket();
-		}
-		else if (source == btnGroupSettle) {
+		} else if (source == btnGroupSettle) {
 			doGroupSettle();
-		}
-		else if (source == btnOrderInfo) {
+		} else if (source == btnOrderInfo) {
 			doShowOrderInfo();
-		}
-		else if (source == btnReopenTicket) {
+		} else if (source == btnReopenTicket) {
 			doReopenTicket();
-		}
-		else if (source == btnSettleTicket) {
+		} else if (source == btnSettleTicket) {
 			doSettleTicket();
-		}
-		else if (source == btnSplitTicket) {
+		} else if (source == btnSplitTicket) {
 			doSplitTicket();
-		}
-		else if (source == btnVoidTicket) {
+		} else if (source == btnVoidTicket) {
 			doVoidTicket();
 		}
 	}
@@ -903,7 +888,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			timerLabel.setText("Aoto logoff in " + min + ":" + sec);
 
 			if (countDown == 0) {
-				//doLogout();
+				// doLogout();
 			}
 		}
 
@@ -913,7 +898,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		}
 
 	}
-	
+
 	@Override
 	public String getViewName() {
 		return VIEW_NAME;

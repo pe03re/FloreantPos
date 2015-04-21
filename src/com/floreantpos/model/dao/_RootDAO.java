@@ -81,7 +81,7 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 	 * (SessionFactory) new
 	 * InitialContext().lookup("java:/{SessionFactoryName}"); }
 	 */
-	
+
 	public static void initialize(String configFileName, Configuration configuration) {
 		com.floreantpos.model.dao._RootDAO.setSessionFactory(configuration.buildSessionFactory());
 	}
@@ -129,33 +129,34 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.addClass(ShopTable.class);
 		configuration = configuration.addClass(ShopTableType.class);
 		configuration = configuration.addClass(OrderTypeProperties.class);
-				
+
 		configuration = configureInventoryClasses(configuration);
-		
+
 		Database defaultDatabase = AppConfig.getDefaultDatabase();
 
 		configuration = configuration.setProperty("hibernate.dialect", defaultDatabase.getHibernateDialect());
 		configuration = configuration.setProperty("hibernate.connection.driver_class", defaultDatabase.getHibernateConnectionDriverClass());
-		
+
 		configuration = configuration.setProperty("hibernate.connection.url", AppConfig.getConnectString());
 		configuration = configuration.setProperty("hibernate.connection.username", AppConfig.getDatabaseUser());
 		configuration = configuration.setProperty("hibernate.connection.password", AppConfig.getDatabasePassword());
 		configuration = configuration.setProperty("hibernate.hbm2ddl.auto", "validate");
 		configuration = configuration.setProperty("hibernate.connection.autocommit", "false");
 		configuration = configuration.setProperty("hibernate.max_fetch_depth", "5");
-		configuration = configuration.setProperty("hibernate.show_sql", "true");
-		configuration =configuration.setProperty("use_sql_comments", "true");
+		configuration = configuration.setProperty("hibernate.show_sql", "false");
+		configuration = configuration.setProperty("use_sql_comments", "true");
 		configuration = configuration.setProperty("hibernate.c3p0.min_size", "2");
 		configuration = configuration.setProperty("hibernate.c3p0.max_size", "10");
 		configuration = configuration.setProperty("hibernate.c3p0.timeout", "300");
 		configuration = configuration.setProperty("hibernate.c3p0.max_statements", "50");
-//		configuration = configuration.setProperty("hibernate.c3p0.idle_test_period", "3000");
+		// configuration =
+		// configuration.setProperty("hibernate.c3p0.idle_test_period", "3000");
 		configuration = configuration.setProperty("hibernate.c3p0.validate", "true");
 		configuration = configuration.setProperty("hibernate.c3p0.breakAfterAcquireFailure", "true");
 
 		return configuration;
 	}
-	
+
 	private static AnnotationConfiguration configureInventoryClasses(AnnotationConfiguration configuration) {
 		configuration = configuration.addClass(InventoryGroup.class);
 		configuration = configuration.addClass(InventoryItem.class);
@@ -172,18 +173,17 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.addClass(InventoryWarehouseItem.class);
 		configuration = configuration.addClass(ExpenseTransaction.class);
 		configuration = configuration.addClass(ExpenseTransactionType.class);
-		
-		
+
 		return configuration;
 	}
-	
+
 	public static Configuration reInitialize() {
 		Configuration configuration = getNewConfiguration(null);
 		com.floreantpos.model.dao._RootDAO.setSessionFactory(configuration.buildSessionFactory());
-		
+
 		return configuration;
 	}
-	
+
 	public void refresh(Object obj) {
 		Session session = createNewSession();
 		super.refresh(obj, session);

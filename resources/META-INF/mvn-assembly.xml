@@ -79,7 +79,20 @@
 				<include>*.properties</include>
 			</includes>
 		</fileSet>
-		
+		<fileSet>
+			<directory>plugins</directory>
+			<outputDirectory>plugins</outputDirectory>
+			<excludes>
+				<exclude>*</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>images</directory>
+			<outputDirectory>images</outputDirectory>
+			<excludes>
+				<exclude>*</exclude>
+			</excludes>
+		</fileSet>
 		<fileSet>
 			<directory>config</directory>
 			<outputDirectory>config</outputDirectory>

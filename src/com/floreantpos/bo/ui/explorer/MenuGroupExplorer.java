@@ -1,7 +1,6 @@
 package com.floreantpos.bo.ui.explorer;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -53,7 +52,7 @@ public class MenuGroupExplorer extends TransparentPanel {
 						return;
 
 					index = table.convertRowIndexToModel(index);
-					
+
 					MenuGroup category = groupList.get(index);
 
 					MenuGroupForm editor = new MenuGroupForm(category);
@@ -63,7 +62,7 @@ public class MenuGroupExplorer extends TransparentPanel {
 						return;
 					table.repaint();
 				} catch (Exception x) {
-				BOMessageDialog.showError(POSConstants.ERROR_MESSAGE, x);
+					BOMessageDialog.showError(POSConstants.ERROR_MESSAGE, x);
 				}
 			}
 
@@ -80,7 +79,7 @@ public class MenuGroupExplorer extends TransparentPanel {
 					MenuGroup foodGroup = (MenuGroup) editor.getBean();
 					tableModel.addGroup(foodGroup);
 				} catch (Exception x) {
-				BOMessageDialog.showError(POSConstants.ERROR_MESSAGE, x);
+					BOMessageDialog.showError(POSConstants.ERROR_MESSAGE, x);
 				}
 			}
 
@@ -92,9 +91,9 @@ public class MenuGroupExplorer extends TransparentPanel {
 					int index = table.getSelectedRow();
 					if (index < 0)
 						return;
-					
+
 					index = table.convertRowIndexToModel(index);
-					
+
 					if (ConfirmDeleteDialog.showMessage(MenuGroupExplorer.this, POSConstants.CONFIRM_DELETE, POSConstants.DELETE) != ConfirmDeleteDialog.NO) {
 						MenuGroup category = groupList.get(index);
 						MenuGroupDAO foodGroupDAO = new MenuGroupDAO();
@@ -102,7 +101,7 @@ public class MenuGroupExplorer extends TransparentPanel {
 						tableModel.deleteGroup(category, index);
 					}
 				} catch (Exception x) {
-				BOMessageDialog.showError(POSConstants.ERROR_MESSAGE, x);
+					BOMessageDialog.showError(POSConstants.ERROR_MESSAGE, x);
 				}
 			}
 
@@ -117,8 +116,7 @@ public class MenuGroupExplorer extends TransparentPanel {
 	}
 
 	class GroupExplorerTableModel extends AbstractTableModel {
-		String[] columnNames = { POSConstants.ID, POSConstants.NAME, POSConstants.TRANSLATED_NAME,
-				POSConstants.VISIBLE, POSConstants.MENU_CATEGORY, POSConstants.SORT_ORDER, POSConstants.BUTTON_COLOR };
+		String[] columnNames = { POSConstants.NAME, POSConstants.VISIBLE, POSConstants.MENU_CATEGORY };
 
 		public int getRowCount() {
 			if (groupList == null) {
@@ -148,30 +146,15 @@ public class MenuGroupExplorer extends TransparentPanel {
 			MenuGroup group = groupList.get(rowIndex);
 
 			switch (columnIndex) {
-				case 0:
-					return String.valueOf(group.getId());
+			case 0:
+				return group.getName();
 
-				case 1:
-					return group.getName();
-					
-				case 2:
-					return group.getTranslatedName();
+			case 1:
+				return Boolean.valueOf(group.isVisible());
 
-				case 3:
-					return Boolean.valueOf(group.isVisible());
+			case 2:
+				return group.getParent().getDisplayName();
 
-				case 4:
-					return group.getParent().getDisplayName();
-					
-				case 5:
-					return group.getSortOrder();
-					
-				case 6:
-					if(group.getButtonColor() != null) {
-						return new Color(group.getButtonColor());
-					}
-					
-					return null;
 			}
 			return null;
 		}

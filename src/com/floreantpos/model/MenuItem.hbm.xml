@@ -21,7 +21,7 @@
 		<property column="BTN_COLOR" name="buttonColor" type="java.lang.Integer" />
 		<property column="TEXT_COLOR" name="textColor" type="java.lang.Integer" />
 
-		<property name="image" column="IMAGE" not-null="false" type="binary" length="20480" />
+		<property name="image" column="IMAGE" not-null="false" type="java.lang.String" length="100" />
 		<property name="showImageOnly" column="SHOW_IMAGE_ONLY" type="java.lang.Boolean" />
 		<!-- <property name="smallImage" column="SMALL_IMAGE" length="120" not-null="false" type="string"/> <property name="largeImage" column="LARGE_IMAGE" length="120" 
 			not-null="false" type="string"/> -->

@@ -1,6 +1,5 @@
 package com.floreantpos.model.base;
 
-import java.lang.Comparable;
 import java.io.Serializable;
 
 /**
@@ -137,7 +136,7 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 	}
 
 	public java.lang.Double getVatPaid() {
-		return vatPaid;
+		return vatPaid == null ? Double.valueOf(0) : vatPaid;
 	}
 
 	public void setVatPaid(java.lang.Double vatPaid) {

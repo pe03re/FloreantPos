@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 public class Messages {
 	private static final String BUNDLE_NAME = "messages"; //$NON-NLS-1$
 
-	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, new ResourceControl());
+	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME, Locale.ENGLISH, new ResourceControl());
 
 	private Messages() {
 	}
@@ -27,8 +27,8 @@ public class Messages {
 
 	private static class ResourceControl extends ResourceBundle.Control {
 		@Override
-		public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) throws IllegalAccessException,
-				InstantiationException, IOException {
+		public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
+				throws IllegalAccessException, InstantiationException, IOException {
 			String bundlename = toBundleName(baseName, locale);
 			String resName = toResourceName(bundlename, "properties"); //$NON-NLS-1$
 			InputStream stream = loader.getResourceAsStream(resName);

@@ -55,7 +55,7 @@ public class MenuItemExplorer extends TransparentPanel {
 						return;
 
 					index = table.convertRowIndexToModel(index);
-					
+
 					MenuItem menuItem = itemList.get(index);
 					menuItem = MenuItemDAO.getInstance().initialize(menuItem);
 					itemList.set(index, menuItem);
@@ -97,7 +97,7 @@ public class MenuItemExplorer extends TransparentPanel {
 					int index = table.getSelectedRow();
 					if (index < 0)
 						return;
-					
+
 					index = table.convertRowIndexToModel(index);
 
 					if (ConfirmDeleteDialog.showMessage(MenuItemExplorer.this, POSConstants.CONFIRM_DELETE, POSConstants.DELETE) != ConfirmDeleteDialog.NO) {
@@ -121,9 +121,8 @@ public class MenuItemExplorer extends TransparentPanel {
 	}
 
 	class MenuItemExplorerTableModel extends ListTableModel {
-		String[] columnNames = { POSConstants.ID, POSConstants.NAME, POSConstants.TRANSLATED_NAME, POSConstants.PRICE + " (" + currencySymbol + ")",
-				POSConstants.VISIBLE, POSConstants.DISCOUNT + "(%)", POSConstants.FOOD_GROUP, POSConstants.TAX + " (%)", POSConstants.SORT_ORDER,
-				POSConstants.BUTTON_COLOR }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		String[] columnNames = { POSConstants.NAME, POSConstants.PRICE + " (" + currencySymbol + ")", POSConstants.TAX + " (%)",
+				POSConstants.DISCOUNT + "(%)", POSConstants.FOOD_GROUP, POSConstants.VISIBLE, "BUY PRICE" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 		MenuItemExplorerTableModel() {
 			setColumnNames(columnNames);
@@ -133,42 +132,26 @@ public class MenuItemExplorer extends TransparentPanel {
 			MenuItem item = (MenuItem) rows.get(rowIndex);
 
 			switch (columnIndex) {
-				case 0:
-					return String.valueOf(item.getId());
-
-				case 1:
-					return item.getName();
-					
-				case 2:
-					return item.getTranslatedName();
-
-				case 3:
-					return Double.valueOf(item.getPrice());
-
-				case 4:
-					return item.isVisible();
-
-				case 5:
-					return Double.valueOf(item.getDiscountRate());
-
-				case 6:
-					if (item.getParent() != null) {
-						return item.getParent().getName();
-					}
-					return ""; //$NON-NLS-1$
-
-				case 7:
-					if (item.getTax() != null) {
-						return Double.valueOf(item.getTax().getRate());
-					}
-					return ""; //$NON-NLS-1$
-					
-				case 8:
-					return item.getSortOrder();
-					
-				case 9:
-					return item.getButtonColor();
-
+			case 0:
+				return item.getName();
+			case 1:
+				return Double.valueOf(item.getPrice());
+			case 2:
+				if (item.getTax() != null) {
+					return Double.valueOf(item.getTax().getRate());
+				}
+				return ""; //$NON-NLS-1$
+			case 3:
+				return Double.valueOf(item.getDiscountRate());
+			case 4:
+				if (item.getParent() != null) {
+					return item.getParent().getName();
+				}
+				return ""; //$NON-NLS-1$
+			case 5:
+				return item.isVisible();
+			case 6:
+				return Double.valueOf(item.getBuyPrice());
 			}
 			return null;
 		}

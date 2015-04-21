@@ -52,7 +52,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="ff68" class="org.jdesktop.swingx.JXDatePicker" binding="dpExperation">
+      <component id="ff68" class="org.jdesktop.swingx.DateTimePicker" binding="dpExperation">
         <constraints>
           <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
