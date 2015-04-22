@@ -8,9 +8,11 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -27,6 +29,12 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 
 	protected JPanel browserPanel = new JPanel(new BorderLayout());
 	private JPanel beanPanel = new JPanel(new BorderLayout());
+	private JButton btnNext = new JButton("NEXT");
+	private JButton btnPrev = new JButton("PREV");
+
+	private JLabel start = new JLabel();
+	private JLabel current = new JLabel();
+	private JLabel end = new JLabel();
 
 	private JButton btnNew = new JButton("NEW");
 	private JButton btnEdit = new JButton("EDIT");
@@ -43,19 +51,93 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 		this.beanEditor = beanEditor;
 	}
 
-	public void init(ListTableModel<E> tableModel) {
+	public void init(final ListTableModel<E> tableModel) {
 		browserTable = new JXTable();
 		browserTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		browserTable.getSelectionModel().addListSelectionListener(this);
 		browserTable.setSortable(false);
 		if (tableModel != null) {
 			browserTable.setModel(tableModel);
+			tableModel.setPageSize(20);
+			start.setText("1");
+			current.setVisible(false);
+			if (tableModel.getPageCount() > 1) {
+				end.setText(Integer.toString(tableModel.getPageCount()));
+				end.setEnabled(false);
+				end.setVisible(true);
+
+			} else {
+				end.setVisible(false);
+			}
+
+			btnNext.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					tableModel.pageDown();
+					if (tableModel.getPageOffset() == tableModel.getPageCount() - 1) {
+						btnNext.setEnabled(false);
+						end.setText(Integer.toString(tableModel.getPageCount()));
+						end.setEnabled(true);
+						current.setVisible(false);
+						start.setEnabled(false);
+						end.setVisible(true);
+					} else {
+						end.setText(Integer.toString(tableModel.getPageCount()));
+						end.setEnabled(false);
+						current.setText(Integer.toString(tableModel.getPageOffset() + 1));
+						current.setVisible(true);
+						start.setEnabled(false);
+						end.setVisible(true);
+
+					}
+					btnPrev.setEnabled(true);
+				}
+			});
+			btnPrev.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					tableModel.pageUp();
+					if (tableModel.getPageOffset() == 0) {
+						end.setText(Integer.toString(tableModel.getPageCount()));
+						btnPrev.setEnabled(false);
+						end.setEnabled(false);
+						end.setVisible(true);
+						current.setVisible(false);
+						start.setEnabled(true);
+					} else {
+						end.setText(Integer.toString(tableModel.getPageCount()));
+						end.setEnabled(false);
+						end.setVisible(true);
+						current.setText(Integer.toString(tableModel.getPageOffset() + 1));
+						current.setVisible(true);
+						start.setEnabled(false);
+					}
+					btnNext.setEnabled(true);
+				}
+			});
+			if (tableModel.getPageCount() <= 1) {
+				btnNext.setEnabled(false);
+				btnPrev.setEnabled(false);
+			}
 		}
 
 		setLayout(new BorderLayout(10, 10));
 		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
 		browserPanel.add(new JScrollPane(browserTable));
+
+		if (tableModel != null) {
+			JPanel buttonPanel1 = new JPanel();
+			// buttonPanel1.setLayout(new BorderLayout(5, 5));
+			buttonPanel1.add(btnPrev);
+			start.setBorder(new EmptyBorder(0, 5, 0, 5));
+			end.setBorder(new EmptyBorder(0, 5, 0, 5));
+			current.setBorder(new EmptyBorder(0, 5, 0, 5));
+			buttonPanel1.add(start);
+			buttonPanel1.add(current);
+			buttonPanel1.add(end);
+			buttonPanel1.add(btnNext);
+			browserPanel.add(buttonPanel1, BorderLayout.SOUTH);
+		}
 
 		JPanel searchPanel = createSearchPanel();
 		if (searchPanel != null) {
@@ -102,7 +184,47 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 	}
 
 	public void refreshTable() {
-
+		ListTableModel tableModel = (ListTableModel) browserTable.getModel();
+		if (tableModel != null) {
+			if (tableModel.getPageCount() <= 1) {
+				end.setText(Integer.toString(tableModel.getPageCount()));
+				btnNext.setEnabled(false);
+				btnPrev.setEnabled(false);
+				end.setEnabled(false);
+				current.setEnabled(false);
+				end.setVisible(false);
+				current.setVisible(false);
+				start.setEnabled(true);
+				start.setVisible(true);
+			} else {
+				if (tableModel.getPageOffset() == 0) {
+					end.setText(Integer.toString(tableModel.getPageCount()));
+					btnNext.setEnabled(true);
+					btnPrev.setEnabled(false);
+					end.setEnabled(false);
+					end.setVisible(true);
+					current.setVisible(false);
+				} else if (tableModel.getPageOffset() == tableModel.getPageCount() - 1) {
+					end.setText(Integer.toString(tableModel.getPageCount()));
+					btnNext.setEnabled(false);
+					btnPrev.setEnabled(true);
+					end.setEnabled(true);
+					end.setVisible(true);
+					current.setVisible(false);
+					start.setEnabled(false);
+				} else {
+					end.setText(Integer.toString(tableModel.getPageCount()));
+					btnNext.setEnabled(true);
+					btnPrev.setEnabled(true);
+					end.setEnabled(false);
+					start.setEnabled(false);
+					end.setVisible(true);
+					start.setVisible(true);
+					current.setText(Integer.toString(tableModel.getPageOffset() + 1));
+					current.setVisible(true);
+				}
+			}
+		}
 	}
 
 	public JPanel createSearchPanel() {
