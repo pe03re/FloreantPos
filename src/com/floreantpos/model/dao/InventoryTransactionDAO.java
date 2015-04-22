@@ -28,7 +28,7 @@ public class InventoryTransactionDAO extends BaseInventoryTransactionDAO {
 			criteria.add(Restrictions.ge(InventoryTransaction.PROP_TRANSACTION_DATE, c.getTime()));
 			List<InventoryTransaction> list = criteria.list();
 			if (list != null && !list.isEmpty()) {
-				return (List<InventoryTransaction>) list.get(0);
+				return list;
 			} else {
 				return null;
 			}
