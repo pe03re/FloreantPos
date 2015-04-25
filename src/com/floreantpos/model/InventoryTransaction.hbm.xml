@@ -19,6 +19,9 @@
         <many-to-one name="inventoryItem" class="com.test.InventoryItem" fetch="select">
             <column name="ITEM_ID" not-null="true" />
         </many-to-one>
+        <many-to-one name="inventoryTransactionType" class="com.test.InventoryTransactionType" fetch="select">
+            <column name="TRANSACTION_TYPE_ID" not-null="true" />
+        </many-to-one>
         <many-to-one name="company" class="com.test.Company" fetch="select">
             <column name="COMPANY_ID" not-null="true" />
         </many-to-one>
@@ -28,7 +31,7 @@
         <many-to-one name="inventoryVendor" class="com.test.InventoryVendor" fetch="select">
             <column name="VENDOR_ID" not-null="true" />
         </many-to-one>
-        <property name="transactionDate" type="timestamp">
+            <property name="transactionDate" type="timestamp">
             <column name="TRANSACTION_DATE" length="19" not-null="true" />
         </property>
         <property name="quantity" type="double">
