@@ -1,7 +1,11 @@
 package com.floreantpos.model.base;
 
-import java.lang.Comparable;
 import java.io.Serializable;
+import java.util.Date;
+
+import com.floreantpos.model.ExpenseHead;
+import com.floreantpos.model.ExpenseTransactionType;
+import com.floreantpos.model.InventoryVendor;
 
 /**
  * This is an object that contains data related to the EXPENSE_TRANSACTION
@@ -14,14 +18,14 @@ import java.io.Serializable;
 public abstract class BaseExpenseTransaction implements Comparable, Serializable {
 
 	public static String REF = "ExpenseTransaction";
-	public static String PROP_VENDOR = "vendor";
+	public static String PROP_VENDOR = "inventoryVendor";
 	public static String PROP_TRANSACTION_DATE = "transactionDate";
 	public static String PROP_ID = "id";
-	public static String PROP_TRANSACTION_TYPE = "transactionType";
+	public static String PROP_TRANSACTION_TYPE = "expenseTransactionType";
 	public static String PROP_AMOUNT = "amount";
 	public static String PROP_VAT_PAID = "vatPaid";
 	public static String PROP_REMARK = "remark";
-	public static String PROP_REFERENCE_NO = "referenceNo";
+	public static String PROP_EXP_HEAD = "expenseHead";
 
 	// constructors
 	public BaseExpenseTransaction() {
@@ -41,160 +45,104 @@ public abstract class BaseExpenseTransaction implements Comparable, Serializable
 
 	private int hashCode = Integer.MIN_VALUE;
 
-	// primary key
-	private java.lang.Integer id;
+	private Integer id;
+	private ExpenseTransactionType expenseTransactionType;
+	private InventoryVendor inventoryVendor;
+	private ExpenseHead expenseHead;
+	private Date transactionDate;
+	private Double amount;
+	private Double vatPaid;
+	private boolean creditCheck;
+	private String remark;
 
-	// fields
-	protected java.util.Date transactionDate;
-	protected java.lang.Double amount;
-	protected java.lang.Double vatPaid;
-
-	protected java.lang.String remark;
-	protected java.lang.Boolean creditCheck;
-
-	// many to one
-	private com.floreantpos.model.ExpenseTransactionType transactionType;
-	private com.floreantpos.model.InventoryVendor vendor;
-
-
-	/**
-	 * Return the unique identifier of this class
-	 * 
-	 * @hibernate.id generator-class="identity" column="ID"
-	 */
-	public java.lang.Integer getId() {
-		return id;
-	}
-
-	/**
-	 * Set the unique identifier of this class
-	 * 
-	 * @param id
-	 *            the new ID
-	 */
-	public void setId(java.lang.Integer id) {
-		this.id = id;
-		this.hashCode = Integer.MIN_VALUE;
-	}
-
-	/**
-	 * Return the value associated with the column: TRANSACTION_DATE
-	 */
-	public java.util.Date getTransactionDate() {
-		return transactionDate;
-	}
-
-	/**
-	 * Set the value related to the column: TRANSACTION_DATE
-	 * 
-	 * @param transactionDate
-	 *            the TRANSACTION_DATE value
-	 */
-	public void setTransactionDate(java.util.Date transactionDate) {
-		this.transactionDate = transactionDate;
-	}
-
-	/**
-	 * Return the value associated with the column: AMOUNT
-	 */
-	public java.lang.Double getAmount() {
-		return amount == null ? Double.valueOf(0) : amount;
-	}
-
-	/**
-	 * Set the value related to the column: AMOUNT
-	 * 
-	 */
-	public void setAmount(java.lang.Double amount) {
-		this.amount = amount;
-	}
-
-	public java.lang.Double getVatPaid() {
-		return vatPaid;
-	}
-
-	public void setVatPaid(java.lang.Double vatPaid) {
-		this.vatPaid = vatPaid;
-	}
-
-	public java.lang.Boolean getCreditCheck() {
-		return creditCheck;
-	}
-
-	public void setCreditCheck(java.lang.Boolean creditCheck) {
+	public BaseExpenseTransaction(boolean creditCheck) {
 		this.creditCheck = creditCheck;
 	}
 
-	/**
-	 * Return the value associated with the column: REMARK
-	 */
-	public java.lang.String getRemark() {
-		return remark;
-	}
-
-	/**
-	 * Set the value related to the column: REMARK
-	 * 
-	 * @param remark
-	 *            the REMARK value
-	 */
-	public void setRemark(java.lang.String remark) {
+	public BaseExpenseTransaction(ExpenseTransactionType expenseTransactionType, InventoryVendor inventoryVendor, ExpenseHead expenseHead, Date transactionDate, Double amount, Double vatPaid,
+			boolean creditCheck, String remark) {
+		this.expenseTransactionType = expenseTransactionType;
+		this.inventoryVendor = inventoryVendor;
+		this.expenseHead = expenseHead;
+		this.transactionDate = transactionDate;
+		this.amount = amount;
+		this.vatPaid = vatPaid;
+		this.creditCheck = creditCheck;
 		this.remark = remark;
 	}
 
-	/**
-	 * Return the value associated with the column: TRANSACTION_TYPE_ID
-	 */
-	public com.floreantpos.model.ExpenseTransactionType getTransactionType() {
-		return transactionType;
+	public Integer getId() {
+		return this.id;
 	}
 
-	/**
-	 * Set the value related to the column: TRANSACTION_TYPE_ID
-	 * 
-	 * @param transactionType
-	 *            the TRANSACTION_TYPE_ID value
-	 */
-	public void setTransactionType(com.floreantpos.model.ExpenseTransactionType transactionType) {
-		this.transactionType = transactionType;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-//	/**
-//	 * Return the value associated with the column: REFERENCE_ID
-//	 */
-//	public com.floreantpos.model.PurchaseOrder getReferenceNo() {
-//		return referenceNo;
-//	}
-//
-//	/**
-//	 * Set the value related to the column: REFERENCE_ID
-//	 * 
-//	 * @param referenceNo
-//	 *            the REFERENCE_ID value
-//	 */
-//	public void setReferenceNo(com.floreantpos.model.PurchaseOrder referenceNo) {
-//		this.referenceNo = referenceNo;
-//	}
-
-	
-	/**
-	 * Return the value associated with the column: VENDOR_ID
-	 */
-	public com.floreantpos.model.InventoryVendor getVendor() {
-		return vendor;
+	public ExpenseTransactionType getExpenseTransactionType() {
+		return this.expenseTransactionType;
 	}
 
-	/**
-	 * Set the value related to the column: VENDOR_ID
-	 * 
-	 * @param vendor
-	 *            the VENDOR_ID value
-	 */
-	public void setVendor(com.floreantpos.model.InventoryVendor vendor) {
-		this.vendor = vendor;
+	public void setExpenseTransactionType(ExpenseTransactionType expenseTransactionType) {
+		this.expenseTransactionType = expenseTransactionType;
 	}
 
-	
+	public InventoryVendor getInventoryVendor() {
+		return this.inventoryVendor;
+	}
+
+	public void setInventoryVendor(InventoryVendor inventoryVendor) {
+		this.inventoryVendor = inventoryVendor;
+	}
+
+	public ExpenseHead getExpenseHead() {
+		return this.expenseHead;
+	}
+
+	public void setExpenseHead(ExpenseHead expenseHead) {
+		this.expenseHead = expenseHead;
+	}
+
+	public Date getTransactionDate() {
+		return this.transactionDate;
+	}
+
+	public void setTransactionDate(Date transactionDate) {
+		this.transactionDate = transactionDate;
+	}
+
+	public Double getAmount() {
+		return this.amount;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+
+	public Double getVatPaid() {
+		return this.vatPaid;
+	}
+
+	public void setVatPaid(Double vatPaid) {
+		this.vatPaid = vatPaid;
+	}
+
+	public boolean isCreditCheck() {
+		return this.creditCheck;
+	}
+
+	public void setCreditCheck(boolean creditCheck) {
+		this.creditCheck = creditCheck;
+	}
+
+	public String getRemark() {
+		return this.remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 	public boolean equals(Object obj) {
 		if (null == obj)
 			return false;

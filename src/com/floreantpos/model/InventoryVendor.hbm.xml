@@ -7,11 +7,60 @@
     </id>
     
     
-    <property column="NAME" length="60" name="name" not-null="true" type="java.lang.String"/>
-    <property column="PHONE" length="60" name="phone" not-null="true" type="java.lang.String"/>
-    <property column="EMAIL" length="60" name="email" not-null="true" type="java.lang.String"/>
-    <property column="ADDRESS" length="60" name="address" not-null="true" type="java.lang.String"/>
-    <property column="VISIBLE" name="visible" type="java.lang.Boolean"/>
+   <many-to-one name="personByP2Id" class="com.test.Person" fetch="select">
+            <column name="P2_ID" />
+        </many-to-one>
+        <many-to-one name="personByP5Id" class="com.test.Person" fetch="select">
+            <column name="P5_ID" />
+        </many-to-one>
+        <many-to-one name="personByP4Id" class="com.test.Person" fetch="select">
+            <column name="P4_ID" />
+        </many-to-one>
+        <many-to-one name="personByP6Id" class="com.test.Person" fetch="select">
+            <column name="P6_ID" />
+        </many-to-one>
+        <many-to-one name="personByP3Id" class="com.test.Person" fetch="select">
+            <column name="P3_ID" />
+        </many-to-one>
+        <many-to-one name="personByP7Id" class="com.test.Person" fetch="select">
+            <column name="P7_ID" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="60" not-null="true" />
+        </property>
+        <property name="phone" type="string">
+            <column name="PHONE" length="100" />
+        </property>
+        <property name="email" type="string">
+            <column name="EMAIL" length="30" />
+        </property>
+        <property name="address" type="string">
+            <column name="ADDRESS" length="250" />
+        </property>
+        <property name="visible" type="java.lang.Boolean">
+            <column name="VISIBLE" />
+        </property>
+        <property name="expenseTypeVendor" type="boolean">
+            <column name="EXPENSE_TYPE_VENDOR" not-null="true" />
+        </property>
+        <set name="expenseTransactions" table="expense_transaction" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="VENDOR_ID" />
+            </key>
+            <one-to-many class="com.test.ExpenseTransaction" />
+        </set>
+        <set name="inventoryTransactions" table="inventory_transaction" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="VENDOR_ID" not-null="true" />
+            </key>
+            <one-to-many class="com.test.InventoryTransaction" />
+        </set>
+        <set name="itemCompVendPacks" table="item_comp_vend_pack" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="VENDOR_ID" not-null="true" />
+            </key>
+            <one-to-many class="com.test.ItemCompVendPack" />
+        </set>
     
   </class>
 </hibernate-mapping>

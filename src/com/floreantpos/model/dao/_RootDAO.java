@@ -62,6 +62,8 @@ import com.floreantpos.model.UserType;
 import com.floreantpos.model.VirtualPrinter;
 import com.floreantpos.model.VoidReason;
 import com.floreantpos.model.ZipCodeVsDeliveryCharge;
+import com.floreantpos.model.base.BaseCompany;
+import com.floreantpos.model.base.BasePerson;
 
 public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 
@@ -92,6 +94,7 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.addClass(AttendenceHistory.class);
 		configuration = configuration.addClass(CashDrawerResetHistory.class);
 		configuration = configuration.addClass(CookingInstruction.class);
+		configuration = configuration.addClass(BaseCompany.class);
 		configuration = configuration.addClass(CouponAndDiscount.class);
 		configuration = configuration.addClass(Gratuity.class);
 		configuration = configuration.addClass(MenuCategory.class);
@@ -115,6 +118,7 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.addClass(TicketItemModifierGroup.class);
 		configuration = configuration.addClass(KitchenTicketItem.class);
 		configuration = configuration.addClass(PosTransaction.class);
+		configuration = configuration.addClass(BasePerson.class);
 		configuration = configuration.addClass(User.class);
 		configuration = configuration.addClass(VirtualPrinter.class);
 		configuration = configuration.addClass(VoidReason.class);

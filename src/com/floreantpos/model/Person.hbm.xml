@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 25 Apr, 2015 1:56:53 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+	<class name="com.test.Person" table="person" catalog="pos">
+		<id name="id" type="java.lang.Integer">
+			<column name="ID" />
+			<generator class="identity" />
+		</id>
+		<property name="name" type="string">
+			<column name="NAME" length="60" not-null="true" />
+		</property>
+		<property name="phone" type="string">
+			<column name="PHONE" length="60" />
+		</property>
+		<property name="email" type="string">
+			<column name="EMAIL" length="30" />
+		</property>
+		<property name="designation" type="string">
+			<column name="DESIGNATION" length="30" />
+		</property>
+		<property name="address" type="string">
+			<column name="ADDRESS" length="250" />
+		</property>
+		<set name="inventoryVendorsForP7Id" table="inventory_vendor"
+			inverse="true" lazy="true" fetch="select">
+			<key>
+				<column name="P7_ID" />
+			</key>
+			<one-to-many class="com.test.InventoryVendor" />
+		</set>
+		<set name="inventoryVendorsForP6Id" table="inventory_vendor"
+			inverse="true" lazy="true" fetch="select">
+			<key>
+				<column name="P6_ID" />
+			</key>
+			<one-to-many class="com.test.InventoryVendor" />
+		</set>
+		<set name="inventoryVendorsForP5Id" table="inventory_vendor"
+			inverse="true" lazy="true" fetch="select">
+			<key>
+				<column name="P5_ID" />
+			</key>
+			<one-to-many class="com.test.InventoryVendor" />
+		</set>
+		<set name="companiesForP1Id" table="company" inverse="true" lazy="true"
+			fetch="select">
+			<key>
+				<column name="P1_ID" />
+			</key>
+			<one-to-many class="com.test.Company" />
+		</set>
+		<set name="inventoryVendorsForP4Id" table="inventory_vendor"
+			inverse="true" lazy="true" fetch="select">
+			<key>
+				<column name="P4_ID" />
+			</key>
+			<one-to-many class="com.test.InventoryVendor" />
+		</set>
+		<set name="companiesForP6Id" table="company" inverse="true" lazy="true"
+			fetch="select">
+			<key>
+				<column name="P6_ID" />
+			</key>
+			<one-to-many class="com.test.Company" />
+		</set>
+		<set name="inventoryVendorsForP3Id" table="inventory_vendor"
+			inverse="true" lazy="true" fetch="select">
+			<key>
+				<column name="P3_ID" />
+			</key>
+			<one-to-many class="com.test.InventoryVendor" />
+		</set>
+		<set name="inventoryVendorsForP2Id" table="inventory_vendor"
+			inverse="true" lazy="true" fetch="select">
+			<key>
+				<column name="P2_ID" />
+			</key>
+			<one-to-many class="com.test.InventoryVendor" />
+		</set>
+
+		<set name="companiesForP3Id" table="company" inverse="true" lazy="true"
+			fetch="select">
+			<key>
+				<column name="P3_ID" />
+			</key>
+			<one-to-many class="com.test.Company" />
+		</set>
+		<set name="companiesForP4Id" table="company" inverse="true" lazy="true"
+			fetch="select">
+			<key>
+				<column name="P4_ID" />
+			</key>
+			<one-to-many class="com.test.Company" />
+		</set>
+
+		<set name="companiesForP5Id" table="company" inverse="true" lazy="true"
+			fetch="select">
+			<key>
+				<column name="P5_ID" />
+			</key>
+			<one-to-many class="com.test.Company" />
+		</set>
+		<set name="companiesForP2Id" table="company" inverse="true" lazy="true"
+			fetch="select">
+			<key>
+				<column name="P2_ID" />
+			</key>
+			<one-to-many class="com.test.Company" />
+		</set>
+
+	</class>
+</hibernate-mapping>

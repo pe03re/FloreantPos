@@ -1,6 +1,17 @@
 package com.floreantpos.model.base;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.floreantpos.model.Company;
+import com.floreantpos.model.InventoryItem;
+import com.floreantpos.model.InventoryTransaction;
+import com.floreantpos.model.InventoryTransactionType;
+import com.floreantpos.model.InventoryVendor;
+import com.floreantpos.model.InventoryWarehouse;
+import com.floreantpos.model.PackSize;
 
 /**
  * This is an object that contains data related to the INVENTORY_TRANSACTION
@@ -15,16 +26,18 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 	public static String REF = "InventoryTransaction";
 	public static String PROP_INVENTORY_ITEM = "inventoryItem";
 	public static String PROP_QUANTITY = "quantity";
-	public static String PROP_TO_WAREHOUSE = "toWarehouse";
-	public static String PROP_VENDOR = "vendor";
+	public static String PROP_TO_WAREHOUSE = "inventoryWarehouseByToWarehouseId";
+	public static String PROP_VENDOR = "inventoryVendor";
 	public static String PROP_TRANSACTION_DATE = "transactionDate";
-	public static String PROP_FROM_WAREHOUSE = "fromWarehouse";
+	public static String PROP_FROM_WAREHOUSE = "inventoryWarehouseByFromWarehouseId";
 	public static String PROP_ID = "id";
 	public static String PROP_TRANSACTION_TYPE = "transactionType";
-	public static String PROP_UNIT_PRICE = "unitPrice";
+	public static String PROP_TOTAL_PRICE = "totalPrice";
 	public static String PROP_VAT_PAID = "vatPaid";
+	public static String PROP_CREDIT_CHECK = "creditCheck";
 	public static String PROP_REMARK = "remark";
-	public static String PROP_REFERENCE_NO = "referenceNo";
+	public static String PROP_DISCOUNT = "discount";
+	public static String PROP_PACK_SIZE = "packSize";
 
 	// constructors
 	public BaseInventoryTransaction() {
@@ -44,230 +57,193 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 
 	private int hashCode = Integer.MIN_VALUE;
 
-	// primary key
-	private java.lang.Integer id;
+	private Integer id;
+	private InventoryTransaction inventoryTransaction;
+	private InventoryTransactionType inventoryTransactionType;
+	private InventoryWarehouse inventoryWarehouseByFromWarehouseId;
+	private InventoryWarehouse inventoryWarehouseByToWarehouseId;
+	private InventoryItem inventoryItem;
+	private Company company;
+	private PackSize packSize;
+	private InventoryVendor inventoryVendor;
+	private Date transactionDate;
+	private double quantity;
+	private double totalPrice;
+	private double vatPaid;
+	private boolean creditCheck;
+	private String remark;
+	private double discount;
+	private Set<InventoryTransaction> inventoryTransactions = new HashSet<InventoryTransaction>(0);
 
-	// fields
-	protected java.util.Date transactionDate;
-	protected java.lang.Double quantity;
-	protected java.lang.Double unitPrice;
-	protected java.lang.Double vatPaid;
-
-	protected java.lang.String remark;
-	protected java.lang.Boolean creditCheck;
-
-	// many to one
-	private com.floreantpos.model.InventoryTransactionType transactionType;
-	private com.floreantpos.model.PurchaseOrder referenceNo;
-	private com.floreantpos.model.InventoryItem inventoryItem;
-	private com.floreantpos.model.InventoryVendor vendor;
-	private com.floreantpos.model.InventoryWarehouse fromWarehouse;
-	private com.floreantpos.model.InventoryWarehouse toWarehouse;
-
-	/**
-	 * Return the unique identifier of this class
-	 * 
-	 * @hibernate.id generator-class="identity" column="ID"
-	 */
-	public java.lang.Integer getId() {
-		return id;
-	}
-
-	/**
-	 * Set the unique identifier of this class
-	 * 
-	 * @param id
-	 *            the new ID
-	 */
-	public void setId(java.lang.Integer id) {
-		this.id = id;
-		this.hashCode = Integer.MIN_VALUE;
-	}
-
-	/**
-	 * Return the value associated with the column: TRANSACTION_DATE
-	 */
-	public java.util.Date getTransactionDate() {
-		return transactionDate;
-	}
-
-	/**
-	 * Set the value related to the column: TRANSACTION_DATE
-	 * 
-	 * @param transactionDate
-	 *            the TRANSACTION_DATE value
-	 */
-	public void setTransactionDate(java.util.Date transactionDate) {
+	public BaseInventoryTransaction(InventoryTransaction inventoryTransaction, InventoryItem inventoryItem, Company company, PackSize packSize, InventoryVendor inventoryVendor, Date transactionDate,
+			double quantity, double totalPrice, double vatPaid, boolean creditCheck, double discount) {
+		this.inventoryTransaction = inventoryTransaction;
+		this.inventoryItem = inventoryItem;
+		this.company = company;
+		this.packSize = packSize;
+		this.inventoryVendor = inventoryVendor;
 		this.transactionDate = transactionDate;
-	}
-
-	/**
-	 * Return the value associated with the column: QUANTITY
-	 */
-	public java.lang.Double getQuantity() {
-		return quantity == null ? Double.valueOf(0) : quantity;
-	}
-
-	/**
-	 * Set the value related to the column: QUANTITY
-	 * 
-	 * @param quantity
-	 *            the QUANTITY value
-	 */
-	public void setQuantity(java.lang.Double quantity) {
 		this.quantity = quantity;
-	}
-
-	/**
-	 * Return the value associated with the column: UNIT_PRICE
-	 */
-	public java.lang.Double getUnitPrice() {
-		return unitPrice == null ? Double.valueOf(0) : unitPrice;
-	}
-
-	/**
-	 * Set the value related to the column: UNIT_PRICE
-	 * 
-	 * @param unitPrice
-	 *            the UNIT_PRICE value
-	 */
-	public void setUnitPrice(java.lang.Double unitPrice) {
-		this.unitPrice = unitPrice;
-	}
-
-	public java.lang.Double getVatPaid() {
-		return vatPaid == null ? Double.valueOf(0) : vatPaid;
-	}
-
-	public void setVatPaid(java.lang.Double vatPaid) {
+		this.totalPrice = totalPrice;
 		this.vatPaid = vatPaid;
-	}
-
-	public java.lang.Boolean getCreditCheck() {
-		return creditCheck;
-	}
-
-	public void setCreditCheck(java.lang.Boolean creditCheck) {
 		this.creditCheck = creditCheck;
+		this.discount = discount;
 	}
 
-	/**
-	 * Return the value associated with the column: REMARK
-	 */
-	public java.lang.String getRemark() {
-		return remark;
-	}
-
-	/**
-	 * Set the value related to the column: REMARK
-	 * 
-	 * @param remark
-	 *            the REMARK value
-	 */
-	public void setRemark(java.lang.String remark) {
+	public BaseInventoryTransaction(InventoryTransaction inventoryTransaction, InventoryWarehouse inventoryWarehouseByFromWarehouseId, InventoryWarehouse inventoryWarehouseByToWarehouseId,
+			InventoryItem inventoryItem, Company company, PackSize packSize, InventoryVendor inventoryVendor, Date transactionDate, double quantity, double totalPrice, double vatPaid,
+			boolean creditCheck, String remark, double discount, Set<InventoryTransaction> inventoryTransactions) {
+		this.inventoryTransaction = inventoryTransaction;
+		this.inventoryWarehouseByFromWarehouseId = inventoryWarehouseByFromWarehouseId;
+		this.inventoryWarehouseByToWarehouseId = inventoryWarehouseByToWarehouseId;
+		this.inventoryItem = inventoryItem;
+		this.company = company;
+		this.packSize = packSize;
+		this.inventoryVendor = inventoryVendor;
+		this.transactionDate = transactionDate;
+		this.quantity = quantity;
+		this.totalPrice = totalPrice;
+		this.vatPaid = vatPaid;
+		this.creditCheck = creditCheck;
 		this.remark = remark;
+		this.discount = discount;
+		this.inventoryTransactions = inventoryTransactions;
 	}
 
-	/**
-	 * Return the value associated with the column: TRANSACTION_TYPE_ID
-	 */
-	public com.floreantpos.model.InventoryTransactionType getTransactionType() {
-		return transactionType;
+	public Integer getId() {
+		return this.id;
 	}
 
-	/**
-	 * Set the value related to the column: TRANSACTION_TYPE_ID
-	 * 
-	 * @param transactionType
-	 *            the TRANSACTION_TYPE_ID value
-	 */
-	public void setTransactionType(com.floreantpos.model.InventoryTransactionType transactionType) {
-		this.transactionType = transactionType;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	/**
-	 * Return the value associated with the column: REFERENCE_ID
-	 */
-	public com.floreantpos.model.PurchaseOrder getReferenceNo() {
-		return referenceNo;
+	public InventoryTransaction getInventoryTransaction() {
+		return this.inventoryTransaction;
 	}
 
-	/**
-	 * Set the value related to the column: REFERENCE_ID
-	 * 
-	 * @param referenceNo
-	 *            the REFERENCE_ID value
-	 */
-	public void setReferenceNo(com.floreantpos.model.PurchaseOrder referenceNo) {
-		this.referenceNo = referenceNo;
+	public void setInventoryTransaction(InventoryTransaction inventoryTransaction) {
+		this.inventoryTransaction = inventoryTransaction;
 	}
 
-	/**
-	 * Return the value associated with the column: ITEM_ID
-	 */
-	public com.floreantpos.model.InventoryItem getInventoryItem() {
-		return inventoryItem;
+	public InventoryWarehouse getInventoryWarehouseByFromWarehouseId() {
+		return this.inventoryWarehouseByFromWarehouseId;
 	}
 
-	/**
-	 * Set the value related to the column: ITEM_ID
-	 * 
-	 * @param inventoryItem
-	 *            the ITEM_ID value
-	 */
-	public void setInventoryItem(com.floreantpos.model.InventoryItem inventoryItem) {
+	public void setInventoryWarehouseByFromWarehouseId(InventoryWarehouse inventoryWarehouseByFromWarehouseId) {
+		this.inventoryWarehouseByFromWarehouseId = inventoryWarehouseByFromWarehouseId;
+	}
+
+	public InventoryWarehouse getInventoryWarehouseByToWarehouseId() {
+		return this.inventoryWarehouseByToWarehouseId;
+	}
+
+	public void setInventoryWarehouseByToWarehouseId(InventoryWarehouse inventoryWarehouseByToWarehouseId) {
+		this.inventoryWarehouseByToWarehouseId = inventoryWarehouseByToWarehouseId;
+	}
+
+	public InventoryItem getInventoryItem() {
+		return this.inventoryItem;
+	}
+
+	public void setInventoryItem(InventoryItem inventoryItem) {
 		this.inventoryItem = inventoryItem;
 	}
 
-	/**
-	 * Return the value associated with the column: VENDOR_ID
-	 */
-	public com.floreantpos.model.InventoryVendor getVendor() {
-		return vendor;
+	public Company getCompany() {
+		return this.company;
 	}
 
-	/**
-	 * Set the value related to the column: VENDOR_ID
-	 * 
-	 * @param vendor
-	 *            the VENDOR_ID value
-	 */
-	public void setVendor(com.floreantpos.model.InventoryVendor vendor) {
-		this.vendor = vendor;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
-	/**
-	 * Return the value associated with the column: FROM_WAREHOUSE_ID
-	 */
-	public com.floreantpos.model.InventoryWarehouse getFromWarehouse() {
-		return fromWarehouse;
+	public PackSize getPackSize() {
+		return this.packSize;
 	}
 
-	/**
-	 * Set the value related to the column: FROM_WAREHOUSE_ID
-	 * 
-	 * @param fromWarehouse
-	 *            the FROM_WAREHOUSE_ID value
-	 */
-	public void setFromWarehouse(com.floreantpos.model.InventoryWarehouse fromWarehouse) {
-		this.fromWarehouse = fromWarehouse;
+	public void setPackSize(PackSize packSize) {
+		this.packSize = packSize;
 	}
 
-	/**
-	 * Return the value associated with the column: TO_WAREHOUSE_ID
-	 */
-	public com.floreantpos.model.InventoryWarehouse getToWarehouse() {
-		return toWarehouse;
+	public InventoryVendor getInventoryVendor() {
+		return this.inventoryVendor;
 	}
 
-	/**
-	 * Set the value related to the column: TO_WAREHOUSE_ID
-	 * 
-	 * @param toWarehouse
-	 *            the TO_WAREHOUSE_ID value
-	 */
-	public void setToWarehouse(com.floreantpos.model.InventoryWarehouse toWarehouse) {
-		this.toWarehouse = toWarehouse;
+	public void setInventoryVendor(InventoryVendor inventoryVendor) {
+		this.inventoryVendor = inventoryVendor;
+	}
+
+	public Date getTransactionDate() {
+		return this.transactionDate;
+	}
+
+	public void setTransactionDate(Date transactionDate) {
+		this.transactionDate = transactionDate;
+	}
+
+	public double getQuantity() {
+		return this.quantity;
+	}
+
+	public void setQuantity(double quantity) {
+		this.quantity = quantity;
+	}
+
+	public double getTotalPrice() {
+		return this.totalPrice;
+	}
+
+	public void setTotalPrice(double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public double getVatPaid() {
+		return this.vatPaid;
+	}
+
+	public void setVatPaid(double vatPaid) {
+		this.vatPaid = vatPaid;
+	}
+
+	public boolean isCreditCheck() {
+		return this.creditCheck;
+	}
+
+	public void setCreditCheck(boolean creditCheck) {
+		this.creditCheck = creditCheck;
+	}
+
+	public String getRemark() {
+		return this.remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public double getDiscount() {
+		return this.discount;
+	}
+
+	public void setDiscount(double discount) {
+		this.discount = discount;
+	}
+
+	public Set<InventoryTransaction> getInventoryTransactions() {
+		return this.inventoryTransactions;
+	}
+
+	public void setInventoryTransactions(Set<InventoryTransaction> inventoryTransactions) {
+		this.inventoryTransactions = inventoryTransactions;
+	}
+
+	public InventoryTransactionType getInventoryTransactionType() {
+		return inventoryTransactionType;
+	}
+
+	public void setInventoryTransactionType(InventoryTransactionType inventoryTransactionType) {
+		this.inventoryTransactionType = inventoryTransactionType;
 	}
 
 	public boolean equals(Object obj) {

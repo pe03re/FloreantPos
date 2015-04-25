@@ -8,16 +8,33 @@
 		</id>
 
 
-		<property column="TRANSACTION_DATE" name="transactionDate"
-			type="java.util.Date" />
-		<property column="AMOUNT" name="amount" type="java.lang.Double" />
-		<property column="VAT_PAID" name="vatPaid" type="java.lang.Double" />
-		<property column="CREDIT_CHECK" name="creditCheck" type="java.lang.Boolean" />
-		<property column="REMARK" name="remark" type="string" length="255" />
-
-		<many-to-one class="ExpenseTransactionType" name="transactionType"
-			column="TRANSACTION_TYPE_ID" />
-		<many-to-one class="InventoryVendor" name="vendor" column="VENDOR_ID" />
+		<many-to-one name="expenseTransactionType" class="com.test.ExpenseTransactionType"
+			fetch="select">
+			<column name="TRANSACTION_TYPE_ID" />
+		</many-to-one>
+		<many-to-one name="inventoryVendor" class="com.test.InventoryVendor"
+			fetch="select">
+			<column name="VENDOR_ID" />
+		</many-to-one>
+		<many-to-one name="expenseHead" class="com.test.ExpenseHead"
+			fetch="select">
+			<column name="EXPENSE_HEAD_ID" />
+		</many-to-one>
+		<property name="transactionDate" type="timestamp">
+			<column name="TRANSACTION_DATE" length="19" />
+		</property>
+		<property name="amount" type="java.lang.Double">
+			<column name="AMOUNT" precision="22" scale="0" />
+		</property>
+		<property name="vatPaid" type="java.lang.Double">
+			<column name="VAT_PAID" precision="22" scale="0" />
+		</property>
+		<property name="creditCheck" type="boolean">
+			<column name="CREDIT_CHECK" not-null="true" />
+		</property>
+		<property name="remark" type="string">
+			<column name="REMARK" />
+		</property>
 
 	</class>
 </hibernate-mapping>

@@ -398,8 +398,8 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 
 		btnAddShift.setText(com.floreantpos.POSConstants.ADD_SHIFT);
 
-		shiftTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null },
-				{ null, null, null, null }, { null, null, null, null } }, new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
+		shiftTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } },
+				new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
 		jScrollPane2.setViewportView(shiftTable);
 
 		org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(tabShift);
@@ -408,17 +408,12 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 				jPanel3Layout
 						.createSequentialGroup()
 						.addContainerGap(76, Short.MAX_VALUE)
-						.add(jPanel3Layout
-								.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-								.add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 387,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-								.add(org.jdesktop.layout.GroupLayout.TRAILING,
-										jPanel3Layout.createSequentialGroup().add(btnAddShift).add(5, 5, 5).add(btnDeleteShift))).addContainerGap()));
+						.add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+								.add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 387, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+								.add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel3Layout.createSequentialGroup().add(btnAddShift).add(5, 5, 5).add(btnDeleteShift))).addContainerGap()));
 		jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-				jPanel3Layout.createSequentialGroup()
-						.add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 281, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-						.add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(btnAddShift).add(btnDeleteShift))
+				jPanel3Layout.createSequentialGroup().add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 281, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE).add(btnAddShift).add(btnDeleteShift))
 						.addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
 		tabbedPane.addTab(com.floreantpos.POSConstants.SHIFTS, tabShift);
@@ -669,7 +664,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 				for (RecepieItem ri : riList) {
 					if (ri != null && ri.getInventoryItem() != null) {
 						Double itemQty = ri.getPercentage();
-						buyPrice += ri.getInventoryItem().getAverageRUnitPrice() * itemQty;
+						buyPrice += ri.getInventoryItem().getAverageRunitPrice() * itemQty;
 					}
 				}
 			}
