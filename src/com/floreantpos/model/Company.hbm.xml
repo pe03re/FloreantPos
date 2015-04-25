@@ -3,27 +3,27 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 25 Apr, 2015 1:56:53 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.test.Company" table="company" catalog="pos">
+    <class name="com.floreantpos.model.Company" table="company" catalog="pos">
         <id name="id" type="java.lang.Integer">
             <column name="ID" />
             <generator class="identity" />
         </id>
-        <many-to-one name="personByP2Id" class="com.test.Person" fetch="select">
+        <many-to-one name="personByP2Id" class="com.floreantpos.model.Person" fetch="select">
             <column name="P2_ID" />
         </many-to-one>
-        <many-to-one name="personByP5Id" class="com.test.Person" fetch="select">
+        <many-to-one name="personByP5Id" class="com.floreantpos.model.Person" fetch="select">
             <column name="P5_ID" />
         </many-to-one>
-        <many-to-one name="personByP4Id" class="com.test.Person" fetch="select">
+        <many-to-one name="personByP4Id" class="com.floreantpos.model.Person" fetch="select">
             <column name="P4_ID" />
         </many-to-one>
-        <many-to-one name="personByP6Id" class="com.test.Person" fetch="select">
+        <many-to-one name="personByP6Id" class="com.floreantpos.model.Person" fetch="select">
             <column name="P6_ID" />
         </many-to-one>
-        <many-to-one name="personByP1Id" class="com.test.Person" fetch="select">
+        <many-to-one name="personByP1Id" class="com.floreantpos.model.Person" fetch="select">
             <column name="P1_ID" />
         </many-to-one>
-        <many-to-one name="personByP3Id" class="com.test.Person" fetch="select">
+        <many-to-one name="personByP3Id" class="com.floreantpos.model.Person" fetch="select">
             <column name="P3_ID" />
         </many-to-one>
         <property name="name" type="string">
@@ -42,13 +42,13 @@
             <key>
                 <column name="COMPANY_ID" not-null="true" />
             </key>
-            <one-to-many class="com.test.ItemCompVendPack" />
+            <one-to-many class="com.floreantpos.model.ItemCompVendPack" />
         </set>
         <set name="inventoryTransactions" table="inventory_transaction" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="COMPANY_ID" not-null="true" />
             </key>
-            <one-to-many class="com.test.InventoryTransaction" />
+            <one-to-many class="com.floreantpos.model.InventoryTransaction" />
         </set>
     </class>
 </hibernate-mapping>

@@ -3,21 +3,21 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 25 Apr, 2015 1:56:53 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-    <class name="com.test.ItemCompVendPack" table="item_comp_vend_pack" catalog="pos">
+    <class name="com.floreantpos.model.ItemCompVendPack" table="item_comp_vend_pack" catalog="pos">
         <id name="id" type="java.lang.Integer">
             <column name="ID" />
             <generator class="identity" />
         </id>
-        <many-to-one name="packSize" class="com.test.PackSize" fetch="select">
+        <many-to-one name="packSize" class="com.floreantpos.model.PackSize" fetch="select">
             <column name="PACK_SIZE_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="company" class="com.test.Company" fetch="select">
+        <many-to-one name="company" class="com.floreantpos.model.Company" fetch="select">
             <column name="COMPANY_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="inventoryVendor" class="com.test.InventoryVendor" fetch="select">
+        <many-to-one name="inventoryVendor" class="com.floreantpos.model.InventoryVendor" fetch="select">
             <column name="VENDOR_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="inventoryItem" class="com.test.InventoryItem" fetch="select">
+        <many-to-one name="inventoryItem" class="com.floreantpos.model.InventoryItem" fetch="select">
             <column name="INV_ITEM_ID" not-null="true" />
         </many-to-one>
     </class>

@@ -18,7 +18,7 @@
             <key>
                 <column name="EXPENSE_HEAD_ID" />
             </key>
-            <one-to-many class="com.test.ExpenseTransaction" />
+            <one-to-many class="com.floreantpos.model.ExpenseTransaction" />
         </set>
     </class>
 </hibernate-mapping>

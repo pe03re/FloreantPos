@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 25 Apr, 2015 1:56:53 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-	<class name="com.test.Person" table="person" catalog="pos">
+	<class name="com.floreantpos.model.Person" table="person" catalog="pos">
 		<id name="id" type="java.lang.Integer">
 			<column name="ID" />
 			<generator class="identity" />
@@ -28,56 +28,56 @@
 			<key>
 				<column name="P7_ID" />
 			</key>
-			<one-to-many class="com.test.InventoryVendor" />
+			<one-to-many class="com.floreantpos.model.InventoryVendor" />
 		</set>
 		<set name="inventoryVendorsForP6Id" table="inventory_vendor"
 			inverse="true" lazy="true" fetch="select">
 			<key>
 				<column name="P6_ID" />
 			</key>
-			<one-to-many class="com.test.InventoryVendor" />
+			<one-to-many class="com.floreantpos.model.InventoryVendor" />
 		</set>
 		<set name="inventoryVendorsForP5Id" table="inventory_vendor"
 			inverse="true" lazy="true" fetch="select">
 			<key>
 				<column name="P5_ID" />
 			</key>
-			<one-to-many class="com.test.InventoryVendor" />
+			<one-to-many class="com.floreantpos.model.InventoryVendor" />
 		</set>
 		<set name="companiesForP1Id" table="company" inverse="true" lazy="true"
 			fetch="select">
 			<key>
 				<column name="P1_ID" />
 			</key>
-			<one-to-many class="com.test.Company" />
+			<one-to-many class="com.floreantpos.model.Company" />
 		</set>
 		<set name="inventoryVendorsForP4Id" table="inventory_vendor"
 			inverse="true" lazy="true" fetch="select">
 			<key>
 				<column name="P4_ID" />
 			</key>
-			<one-to-many class="com.test.InventoryVendor" />
+			<one-to-many class="com.floreantpos.model.InventoryVendor" />
 		</set>
 		<set name="companiesForP6Id" table="company" inverse="true" lazy="true"
 			fetch="select">
 			<key>
 				<column name="P6_ID" />
 			</key>
-			<one-to-many class="com.test.Company" />
+			<one-to-many class="com.floreantpos.model.Company" />
 		</set>
 		<set name="inventoryVendorsForP3Id" table="inventory_vendor"
 			inverse="true" lazy="true" fetch="select">
 			<key>
 				<column name="P3_ID" />
 			</key>
-			<one-to-many class="com.test.InventoryVendor" />
+			<one-to-many class="com.floreantpos.model.InventoryVendor" />
 		</set>
 		<set name="inventoryVendorsForP2Id" table="inventory_vendor"
 			inverse="true" lazy="true" fetch="select">
 			<key>
 				<column name="P2_ID" />
 			</key>
-			<one-to-many class="com.test.InventoryVendor" />
+			<one-to-many class="com.floreantpos.model.InventoryVendor" />
 		</set>
 
 		<set name="companiesForP3Id" table="company" inverse="true" lazy="true"
@@ -85,14 +85,14 @@
 			<key>
 				<column name="P3_ID" />
 			</key>
-			<one-to-many class="com.test.Company" />
+			<one-to-many class="com.floreantpos.model.Company" />
 		</set>
 		<set name="companiesForP4Id" table="company" inverse="true" lazy="true"
 			fetch="select">
 			<key>
 				<column name="P4_ID" />
 			</key>
-			<one-to-many class="com.test.Company" />
+			<one-to-many class="com.floreantpos.model.Company" />
 		</set>
 
 		<set name="companiesForP5Id" table="company" inverse="true" lazy="true"
@@ -100,14 +100,14 @@
 			<key>
 				<column name="P5_ID" />
 			</key>
-			<one-to-many class="com.test.Company" />
+			<one-to-many class="com.floreantpos.model.Company" />
 		</set>
 		<set name="companiesForP2Id" table="company" inverse="true" lazy="true"
 			fetch="select">
 			<key>
 				<column name="P2_ID" />
 			</key>
-			<one-to-many class="com.test.Company" />
+			<one-to-many class="com.floreantpos.model.Company" />
 		</set>
 
 	</class>

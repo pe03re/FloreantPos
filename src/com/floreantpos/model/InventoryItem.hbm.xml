@@ -9,11 +9,11 @@
 		</id>
 
 
-			<many-to-one name="packagingUnit" class="com.test.PackagingUnit"
+			<many-to-one name="packagingUnit" class="com.floreantpos.model.PackagingUnit"
 			fetch="select">
 			<column name="PUNIT_ID" not-null="true" />
 		</many-to-one>
-		<many-to-one name="inventoryGroup" class="com.test.InventoryGroup"
+		<many-to-one name="inventoryGroup" class="com.floreantpos.model.InventoryGroup"
 			fetch="select">
 			<column name="ITEM_GROUP_ID" />
 		</many-to-one>
@@ -53,35 +53,35 @@
 			<key>
 				<column name="INVENTORY_ITEM" />
 			</key>
-			<one-to-many class="com.test.RecepieItem" />
+			<one-to-many class="com.floreantpos.model.RecepieItem" />
 		</set>
 		<set name="recepieItems_1" table="recepie_item" inverse="true"
 			lazy="true" fetch="select">
 			<key>
 				<column name="INVENTORY_ITEM" />
 			</key>
-			<one-to-many class="com.test.RecepieItem" />
+			<one-to-many class="com.floreantpos.model.RecepieItem" />
 		</set>
 		<set name="itemCompVendPacks" table="item_comp_vend_pack" inverse="true"
 			lazy="true" fetch="select">
 			<key>
 				<column name="INV_ITEM_ID" not-null="true" />
 			</key>
-			<one-to-many class="com.test.ItemCompVendPack" />
+			<one-to-many class="com.floreantpos.model.ItemCompVendPack" />
 		</set>
 		<set name="inventoryWarehouseItems" table="inventory_warehouse_item"
 			inverse="true" lazy="true" fetch="select">
 			<key>
 				<column name="INVENTORY_ITEM_ID" />
 			</key>
-			<one-to-many class="com.test.InventoryWarehouseItem" />
+			<one-to-many class="com.floreantpos.model.InventoryWarehouseItem" />
 		</set>
 		<set name="inventoryTransactions" table="inventory_transaction"
 			inverse="true" lazy="true" fetch="select">
 			<key>
 				<column name="ITEM_ID" not-null="true" />
 			</key>
-			<one-to-many class="com.test.InventoryTransaction" />
+			<one-to-many class="com.floreantpos.model.InventoryTransaction" />
 		</set>
 
 	</class>

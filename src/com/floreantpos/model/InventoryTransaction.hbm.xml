@@ -7,28 +7,28 @@
     </id>
     
     
-    <many-to-one name="inventoryTransaction" class="com.test.InventoryTransaction" fetch="select">
+    <many-to-one name="inventoryTransaction" class="com.floreantpos.model.InventoryTransaction" fetch="select">
             <column name="TRANSACTION_TYPE_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="inventoryWarehouseByFromWarehouseId" class="com.test.InventoryWarehouse" fetch="select">
+        <many-to-one name="inventoryWarehouseByFromWarehouseId" class="com.floreantpos.model.InventoryWarehouse" fetch="select">
             <column name="FROM_WAREHOUSE_ID" />
         </many-to-one>
-        <many-to-one name="inventoryWarehouseByToWarehouseId" class="com.test.InventoryWarehouse" fetch="select">
+        <many-to-one name="inventoryWarehouseByToWarehouseId" class="com.floreantpos.model.InventoryWarehouse" fetch="select">
             <column name="TO_WAREHOUSE_ID" />
         </many-to-one>
-        <many-to-one name="inventoryItem" class="com.test.InventoryItem" fetch="select">
+        <many-to-one name="inventoryItem" class="com.floreantpos.model.InventoryItem" fetch="select">
             <column name="ITEM_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="inventoryTransactionType" class="com.test.InventoryTransactionType" fetch="select">
+        <many-to-one name="inventoryTransactionType" class="com.floreantpos.model.InventoryTransactionType" fetch="select">
             <column name="TRANSACTION_TYPE_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="company" class="com.test.Company" fetch="select">
+        <many-to-one name="company" class="com.floreantpos.model.Company" fetch="select">
             <column name="COMPANY_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="packSize" class="com.test.PackSize" fetch="select">
+        <many-to-one name="packSize" class="com.floreantpos.model.PackSize" fetch="select">
             <column name="SIZE_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="inventoryVendor" class="com.test.InventoryVendor" fetch="select">
+        <many-to-one name="inventoryVendor" class="com.floreantpos.model.InventoryVendor" fetch="select">
             <column name="VENDOR_ID" not-null="true" />
         </many-to-one>
             <property name="transactionDate" type="timestamp">
@@ -56,7 +56,7 @@
             <key>
                 <column name="TRANSACTION_TYPE_ID" not-null="true" />
             </key>
-            <one-to-many class="com.test.InventoryTransaction" />
+            <one-to-many class="com.floreantpos.model.InventoryTransaction" />
         </set>
     
   </class>

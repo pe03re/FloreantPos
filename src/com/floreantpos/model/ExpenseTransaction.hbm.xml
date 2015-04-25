@@ -8,15 +8,15 @@
 		</id>
 
 
-		<many-to-one name="expenseTransactionType" class="com.test.ExpenseTransactionType"
+		<many-to-one name="expenseTransactionType" class="com.floreantpos.model.ExpenseTransactionType"
 			fetch="select">
 			<column name="TRANSACTION_TYPE_ID" />
 		</many-to-one>
-		<many-to-one name="inventoryVendor" class="com.test.InventoryVendor"
+		<many-to-one name="inventoryVendor" class="com.floreantpos.model.InventoryVendor"
 			fetch="select">
 			<column name="VENDOR_ID" />
 		</many-to-one>
-		<many-to-one name="expenseHead" class="com.test.ExpenseHead"
+		<many-to-one name="expenseHead" class="com.floreantpos.model.ExpenseHead"
 			fetch="select">
 			<column name="EXPENSE_HEAD_ID" />
 		</many-to-one>
