@@ -45,8 +45,8 @@ public abstract class BaseInventoryItem implements Comparable, Serializable {
 	protected String name;
 	protected String packageBarcode;
 	protected Integer sortOrder;
-	protected int packageReorderLevel;
-	protected int packageReplenishLevel;
+	protected Integer packageReorderLevel;
+	protected Integer packageReplenishLevel;
 	protected String description;
 	protected double averageRunitPrice;
 	protected boolean visible;
@@ -158,7 +158,7 @@ public abstract class BaseInventoryItem implements Comparable, Serializable {
 	}
 
 	public Integer getSortOrder() {
-		return this.sortOrder;
+		return sortOrder == null ? Integer.valueOf(0) : sortOrder;
 	}
 
 	public void setSortOrder(Integer sortOrder) {
@@ -166,7 +166,7 @@ public abstract class BaseInventoryItem implements Comparable, Serializable {
 	}
 
 	public int getPackageReorderLevel() {
-		return this.packageReorderLevel;
+		return packageReorderLevel == null ? Integer.valueOf(0) : packageReorderLevel;
 	}
 
 	public void setPackageReorderLevel(int packageReorderLevel) {
@@ -174,7 +174,7 @@ public abstract class BaseInventoryItem implements Comparable, Serializable {
 	}
 
 	public int getPackageReplenishLevel() {
-		return this.packageReplenishLevel;
+		return packageReplenishLevel == null ? Integer.valueOf(0) : packageReplenishLevel;
 	}
 
 	public void setPackageReplenishLevel(int packageReplenishLevel) {
@@ -240,14 +240,14 @@ public abstract class BaseInventoryItem implements Comparable, Serializable {
 	public boolean equals(Object obj) {
 		if (null == obj)
 			return false;
-		if (!(obj instanceof com.floreantpos.model.InventoryTransaction))
+		if (!(obj instanceof BaseInventoryItem))
 			return false;
 		else {
-			com.floreantpos.model.InventoryTransaction inventoryTransaction = (com.floreantpos.model.InventoryTransaction) obj;
-			if (null == this.getId() || null == inventoryTransaction.getId())
+			BaseInventoryItem inventoryItem = (BaseInventoryItem) obj;
+			if (null == this.getId() || null == inventoryItem.getId())
 				return false;
 			else
-				return (this.getId().equals(inventoryTransaction.getId()));
+				return (this.getId().equals(inventoryItem.getId()));
 		}
 	}
 

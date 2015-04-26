@@ -62,4 +62,9 @@ public class BaseExpenseHead implements java.io.Serializable {
 		this.expenseTransactions = expenseTransactions;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
 }

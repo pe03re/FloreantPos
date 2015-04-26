@@ -9,10 +9,12 @@ import com.floreantpos.config.AppConfig;
 import com.floreantpos.model.ActionHistory;
 import com.floreantpos.model.AttendenceHistory;
 import com.floreantpos.model.CashDrawerResetHistory;
+import com.floreantpos.model.Company;
 import com.floreantpos.model.CookingInstruction;
 import com.floreantpos.model.CouponAndDiscount;
 import com.floreantpos.model.Customer;
 import com.floreantpos.model.DrawerPullReport;
+import com.floreantpos.model.ExpenseHead;
 import com.floreantpos.model.ExpenseTransaction;
 import com.floreantpos.model.ExpenseTransactionType;
 import com.floreantpos.model.Gratuity;
@@ -26,6 +28,7 @@ import com.floreantpos.model.InventoryUnit;
 import com.floreantpos.model.InventoryVendor;
 import com.floreantpos.model.InventoryWarehouse;
 import com.floreantpos.model.InventoryWarehouseItem;
+import com.floreantpos.model.ItemCompVendPack;
 import com.floreantpos.model.KitchenTicket;
 import com.floreantpos.model.KitchenTicketItem;
 import com.floreantpos.model.MenuCategory;
@@ -36,9 +39,11 @@ import com.floreantpos.model.MenuItemShift;
 import com.floreantpos.model.MenuModifier;
 import com.floreantpos.model.MenuModifierGroup;
 import com.floreantpos.model.OrderTypeProperties;
+import com.floreantpos.model.PackSize;
 import com.floreantpos.model.PackagingUnit;
 import com.floreantpos.model.PayoutReason;
 import com.floreantpos.model.PayoutRecepient;
+import com.floreantpos.model.Person;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.PrinterConfiguration;
 import com.floreantpos.model.PurchaseOrder;
@@ -62,8 +67,6 @@ import com.floreantpos.model.UserType;
 import com.floreantpos.model.VirtualPrinter;
 import com.floreantpos.model.VoidReason;
 import com.floreantpos.model.ZipCodeVsDeliveryCharge;
-import com.floreantpos.model.base.BaseCompany;
-import com.floreantpos.model.base.BasePerson;
 
 public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 
@@ -94,7 +97,6 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.addClass(AttendenceHistory.class);
 		configuration = configuration.addClass(CashDrawerResetHistory.class);
 		configuration = configuration.addClass(CookingInstruction.class);
-		configuration = configuration.addClass(BaseCompany.class);
 		configuration = configuration.addClass(CouponAndDiscount.class);
 		configuration = configuration.addClass(Gratuity.class);
 		configuration = configuration.addClass(MenuCategory.class);
@@ -118,7 +120,6 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.addClass(TicketItemModifierGroup.class);
 		configuration = configuration.addClass(KitchenTicketItem.class);
 		configuration = configuration.addClass(PosTransaction.class);
-		configuration = configuration.addClass(BasePerson.class);
 		configuration = configuration.addClass(User.class);
 		configuration = configuration.addClass(VirtualPrinter.class);
 		configuration = configuration.addClass(VoidReason.class);
@@ -133,6 +134,12 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.addClass(ShopTable.class);
 		configuration = configuration.addClass(ShopTableType.class);
 		configuration = configuration.addClass(OrderTypeProperties.class);
+
+		configuration = configuration.addClass(Company.class);
+		configuration = configuration.addClass(ExpenseHead.class);
+		configuration = configuration.addClass(PackSize.class);
+		configuration = configuration.addClass(Person.class);
+		configuration = configuration.addClass(ItemCompVendPack.class);
 
 		configuration = configureInventoryClasses(configuration);
 

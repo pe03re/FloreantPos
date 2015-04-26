@@ -27,7 +27,7 @@ public abstract class BasePackSizeDAO extends com.floreantpos.model.dao._RootDAO
 	}
 
 	public Order getDefaultOrder() {
-		return Order.asc("name");
+		return Order.asc("size");
 	}
 
 	/**

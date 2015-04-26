@@ -99,8 +99,7 @@ public abstract class ListTableModel<E> extends AbstractTableModel {
 	}
 
 	public void setRows(List<E> rows) {
-		if (rows != null && this.rows != null
-				&& (rows.size() < this.rows.size() && (this.getPageOffset() > Math.ceil(rows.size() / this.getPageSize())))) {
+		if (rows != null && this.rows != null && (rows.size() < this.rows.size() && (this.getPageOffset() > Math.ceil(rows.size() / this.getPageSize())))) {
 			this.pageOffset = (int) (Math.ceil(rows.size() / this.getPageSize()));
 		}
 		this.rows = rows;
@@ -149,5 +148,25 @@ public abstract class ListTableModel<E> extends AbstractTableModel {
 
 	public void updateItem(int index) {
 		fireTableRowsUpdated(index, index);
+	}
+
+	public int navigateToItem(E item) {
+		int rowI = -1;
+		for (int i = 0; i < rows.size(); i++) {
+			if (rows.get(i).equals(item)) {
+				rowI = i;
+				break;
+			}
+		}
+		this.pageOffset = (int) (Math.ceil(rowI / this.getPageSize()));
+		fireTableDataChanged();
+		return rowI - (this.pageOffset * this.getPageSize());
+	}
+
+	public void setPageOffset(int offset) {
+		if (offset < rows.size() / pageSize) {
+			this.pageOffset = offset;
+			fireTableDataChanged();
+		}
 	}
 }

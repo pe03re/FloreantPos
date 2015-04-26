@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.floreantpos.model">
-  <class lazy="false" name="com.floreantpos.model.PackagingUnit" table="PACKAGING_UNIT">
-    <id column="ID" name="id" type="java.lang.Integer">
-      <generator class="identity"/>
-    </id>
-    <property column="NAME" name="name" type="java.lang.String" length="30" unique="true"/>
-    <property column="SHORT_NAME" name="shortName" type="java.lang.String" length="10"/>
-    <property column="FACTOR" name="factor" type="java.lang.Double"/>
-    <property column="BASEUNIT" name="baseUnit" type="java.lang.Boolean"/>
-   	<property column="DIMENSION" name="dimension" type="java.lang.String" length="30"/>
-  </class>
+  <class name="com.floreantpos.model.PackagingUnit" table="packaging_unit" catalog="pos">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="30" unique="true" />
+        </property>
+        <property name="recepieUnitName" type="string">
+            <column name="RECEPIE_UNIT_NAME" length="30" />
+        </property>
+        <property name="factor" type="java.lang.Double">
+            <column name="FACTOR" precision="22" scale="0" />
+        </property>
+        <set name="inventoryItems" table="inventory_item" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PUNIT_ID" not-null="true" />
+            </key>
+            <one-to-many class="com.floreantpos.model.InventoryItem" />
+        </set>
+    </class>
 </hibernate-mapping>

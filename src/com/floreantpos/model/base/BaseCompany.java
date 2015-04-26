@@ -12,6 +12,11 @@ import com.floreantpos.model.InventoryTransaction;
  */
 public class BaseCompany implements java.io.Serializable {
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
 	private Integer id;
 	private BasePerson personByP2Id;
 	private BasePerson personByP5Id;
@@ -33,9 +38,8 @@ public class BaseCompany implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public BaseCompany(BasePerson personByP2Id, BasePerson personByP5Id, BasePerson personByP4Id, BasePerson personByP6Id, BasePerson personByP1Id, BasePerson personByP3Id,
-			String name, String phone, String email, String address, Set<BaseItemCompVendPack> itemCompVendPacks,
-			Set<InventoryTransaction> inventoryTransactions) {
+	public BaseCompany(BasePerson personByP2Id, BasePerson personByP5Id, BasePerson personByP4Id, BasePerson personByP6Id, BasePerson personByP1Id, BasePerson personByP3Id, String name, String phone,
+			String email, String address, Set<BaseItemCompVendPack> itemCompVendPacks, Set<InventoryTransaction> inventoryTransactions) {
 		this.personByP2Id = personByP2Id;
 		this.personByP5Id = personByP5Id;
 		this.personByP4Id = personByP4Id;

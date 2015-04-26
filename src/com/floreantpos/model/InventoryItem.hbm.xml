@@ -10,11 +10,11 @@
 
 
 			<many-to-one name="packagingUnit" class="com.floreantpos.model.PackagingUnit"
-			fetch="select">
+			fetch="select" lazy="false">
 			<column name="PUNIT_ID" not-null="true" />
 		</many-to-one>
 		<many-to-one name="inventoryGroup" class="com.floreantpos.model.InventoryGroup"
-			fetch="select">
+			fetch="select" lazy="false">
 			<column name="ITEM_GROUP_ID" />
 		</many-to-one>
 		<property name="createTime" type="timestamp">
@@ -50,13 +50,6 @@
 		</property>
 		<set name="recepieItems" table="recepie_item" inverse="true" lazy="true"
 			fetch="select">
-			<key>
-				<column name="INVENTORY_ITEM" />
-			</key>
-			<one-to-many class="com.floreantpos.model.RecepieItem" />
-		</set>
-		<set name="recepieItems_1" table="recepie_item" inverse="true"
-			lazy="true" fetch="select">
 			<key>
 				<column name="INVENTORY_ITEM" />
 			</key>

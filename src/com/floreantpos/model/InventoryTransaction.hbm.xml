@@ -7,9 +7,6 @@
     </id>
     
     
-    <many-to-one name="inventoryTransaction" class="com.floreantpos.model.InventoryTransaction" fetch="select">
-            <column name="TRANSACTION_TYPE_ID" not-null="true" />
-        </many-to-one>
         <many-to-one name="inventoryWarehouseByFromWarehouseId" class="com.floreantpos.model.InventoryWarehouse" fetch="select">
             <column name="FROM_WAREHOUSE_ID" />
         </many-to-one>

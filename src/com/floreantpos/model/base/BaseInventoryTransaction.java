@@ -58,7 +58,6 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 	private int hashCode = Integer.MIN_VALUE;
 
 	private Integer id;
-	private InventoryTransaction inventoryTransaction;
 	private InventoryTransactionType inventoryTransactionType;
 	private InventoryWarehouse inventoryWarehouseByFromWarehouseId;
 	private InventoryWarehouse inventoryWarehouseByToWarehouseId;
@@ -77,7 +76,7 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 
 	public BaseInventoryTransaction(InventoryTransaction inventoryTransaction, InventoryItem inventoryItem, Company company, PackSize packSize, InventoryVendor inventoryVendor, Date transactionDate,
 			double quantity, double totalPrice, double vatPaid, boolean creditCheck, double discount) {
-		this.inventoryTransaction = inventoryTransaction;
+		this.inventoryTransactionType = inventoryTransactionType;
 		this.inventoryItem = inventoryItem;
 		this.company = company;
 		this.packSize = packSize;
@@ -93,7 +92,7 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 	public BaseInventoryTransaction(InventoryTransaction inventoryTransaction, InventoryWarehouse inventoryWarehouseByFromWarehouseId, InventoryWarehouse inventoryWarehouseByToWarehouseId,
 			InventoryItem inventoryItem, Company company, PackSize packSize, InventoryVendor inventoryVendor, Date transactionDate, double quantity, double totalPrice, double vatPaid,
 			boolean creditCheck, String remark, double discount, Set<InventoryTransaction> inventoryTransactions) {
-		this.inventoryTransaction = inventoryTransaction;
+		this.inventoryTransactionType = inventoryTransactionType;
 		this.inventoryWarehouseByFromWarehouseId = inventoryWarehouseByFromWarehouseId;
 		this.inventoryWarehouseByToWarehouseId = inventoryWarehouseByToWarehouseId;
 		this.inventoryItem = inventoryItem;
@@ -116,14 +115,6 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public InventoryTransaction getInventoryTransaction() {
-		return this.inventoryTransaction;
-	}
-
-	public void setInventoryTransaction(InventoryTransaction inventoryTransaction) {
-		this.inventoryTransaction = inventoryTransaction;
 	}
 
 	public InventoryWarehouse getInventoryWarehouseByFromWarehouseId() {

@@ -85,6 +85,11 @@
 		<mapping resource="com/floreantpos/model/VirtualPrinter.hbm.xml" />
 		<mapping resource="com/floreantpos/model/VoidReason.hbm.xml" />
 		<mapping resource="com/floreantpos/model/ZipCodeVsDeliveryCharge.hbm.xml" />
+		<mapping resource="com/floreantpos/model/Company.hbm.xml" />
+		<mapping resource="com/floreantpos/model/ExpenseHead.hbm.xml" />
+		<mapping resource="com/floreantpos/model/ItemCompVendPack.hbm.xml" />
+		<mapping resource="com/floreantpos/model/Person.hbm.xml" />
+		<mapping resource="com/floreantpos/model/PackSize.hbm.xml" />
 		
 		
 		

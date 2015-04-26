@@ -123,7 +123,9 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 
 		setLayout(new BorderLayout(10, 10));
 		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		browserPanel.add(new JScrollPane(browserTable));
+		JScrollPane jsp = new JScrollPane(browserTable);
+		jsp.setPreferredSize(new Dimension(300, 400));
+		browserPanel.add(jsp);
 
 		if (tableModel != null) {
 			JPanel buttonPanel1 = new JPanel();
@@ -162,7 +164,7 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 		buttonPanel.add(btnSave);
 		buttonPanel.add(btnDelete);
 		buttonPanel.add(btnCancel);
-		beanPanel.setPreferredSize(new Dimension(500, 400));
+		beanPanel.setPreferredSize(new Dimension(650, 400));
 		beanPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 		add(beanPanel, BorderLayout.EAST);
@@ -254,7 +256,7 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 				btnDelete.setEnabled(false);
 				btnCancel.setEnabled(true);
 				browserTable.setFocusable(false);
-				refreshTable();
+				// refreshTable();
 				break;
 
 			case EDIT:
@@ -265,7 +267,7 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 				btnSave.setEnabled(true);
 				btnDelete.setEnabled(false);
 				btnCancel.setEnabled(true);
-				refreshTable();
+				// refreshTable();
 				break;
 
 			case CANCEL:
@@ -287,6 +289,9 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 					btnDelete.setEnabled(false);
 					btnCancel.setEnabled(false);
 					refreshTable();
+					ListTableModel tableModel = (ListTableModel) browserTable.getModel();
+					int pos = tableModel.navigateToItem(beanEditor.getBean());
+					browserTable.getSelectionModel().setSelectionInterval(0, pos);
 				}
 				break;
 
@@ -299,7 +304,10 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 					btnSave.setEnabled(false);
 					btnDelete.setEnabled(false);
 					btnCancel.setEnabled(false);
+					ListTableModel tableModel = (ListTableModel) browserTable.getModel();
+					int pos = tableModel.getPageOffset();
 					refreshTable();
+					tableModel.setPageOffset(pos);
 				}
 				break;
 

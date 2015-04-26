@@ -38,10 +38,9 @@ public class BasePerson implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public BasePerson(String name, String phone, String email, String designation, String address, Set<InventoryVendor> inventoryVendorsForP7Id,
-			Set<InventoryVendor> inventoryVendorsForP6Id, Set<InventoryVendor> inventoryVendorsForP5Id, Set<BaseCompany> companiesForP1Id,
-			Set<InventoryVendor> inventoryVendorsForP4Id, Set<BaseCompany> companiesForP6Id, Set<InventoryVendor> inventoryVendorsForP3Id,
-			Set<InventoryVendor> inventoryVendorsForP2Id, Set<BaseCompany> companiesForP3Id, Set<BaseCompany> companiesForP4Id,
+	public BasePerson(String name, String phone, String email, String designation, String address, Set<InventoryVendor> inventoryVendorsForP7Id, Set<InventoryVendor> inventoryVendorsForP6Id,
+			Set<InventoryVendor> inventoryVendorsForP5Id, Set<BaseCompany> companiesForP1Id, Set<InventoryVendor> inventoryVendorsForP4Id, Set<BaseCompany> companiesForP6Id,
+			Set<InventoryVendor> inventoryVendorsForP3Id, Set<InventoryVendor> inventoryVendorsForP2Id, Set<BaseCompany> companiesForP3Id, Set<BaseCompany> companiesForP4Id,
 			Set<BaseCompany> companiesForP5Id, Set<BaseCompany> companiesForP2Id) {
 		this.name = name;
 		this.phone = phone;
@@ -206,4 +205,8 @@ public class BasePerson implements java.io.Serializable {
 		this.companiesForP2Id = companiesForP2Id;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
 }

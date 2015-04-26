@@ -12,6 +12,11 @@ import com.floreantpos.model.InventoryTransaction;
  */
 public class BasePackSize implements java.io.Serializable {
 
+	public static String REF = "PackagingSize";
+	public static String PROP_SIZE = "size";
+	public static String PROP_ID = "id";
+	public static String PROP_VISIBLE = "visible";
+
 	private Integer id;
 	private int size;
 	private Boolean visible;
@@ -70,6 +75,11 @@ public class BasePackSize implements java.io.Serializable {
 
 	public void setItemCompVendPacks(Set<BaseItemCompVendPack> itemCompVendPacks) {
 		this.itemCompVendPacks = itemCompVendPacks;
+	}
+
+	@Override
+	public String toString() {
+		return Integer.toString(size);
 	}
 
 }
