@@ -134,6 +134,9 @@ public abstract class ListTableModel<E> extends AbstractTableModel {
 		}
 		int size = rows.size();
 		rows.add(data);
+		if (pageSize == rows.size() - 1) {
+			pageSize = rows.size();
+		}
 		fireTableRowsInserted(size, size);
 	}
 

@@ -1,5 +1,6 @@
 package com.floreantpos.model.dao;
 
+
 public class CompanyDAO extends BaseCompanyDAO {
 
 	/**

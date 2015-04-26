@@ -5,6 +5,7 @@ package com.floreantpos.model.base;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.floreantpos.model.ExpenseHead;
 import com.floreantpos.model.ExpenseTransaction;
 
 /**
@@ -16,6 +17,7 @@ public class BaseExpenseHead implements java.io.Serializable {
 	private String name;
 	private Boolean visible;
 	private Set<ExpenseTransaction> expenseTransactions = new HashSet<ExpenseTransaction>(0);
+	private int hashCode = Integer.MIN_VALUE;
 
 	public BaseExpenseHead() {
 	}
@@ -65,6 +67,41 @@ public class BaseExpenseHead implements java.io.Serializable {
 	@Override
 	public String toString() {
 		return name;
+	}
+
+	public boolean equals(Object obj) {
+		if (null == obj)
+			return false;
+		if (!(obj instanceof ExpenseHead))
+			return false;
+		else {
+			ExpenseHead expHead = (ExpenseHead) obj;
+			if (null == this.getId() || null == expHead.getId())
+				return false;
+			else
+				return (this.getId().equals(expHead.getId()));
+		}
+	}
+
+	public int hashCode() {
+		if (Integer.MIN_VALUE == this.hashCode) {
+			if (null == this.getId())
+				return super.hashCode();
+			else {
+				String hashStr = this.getClass().getName() + ":" + this.getId().hashCode();
+				this.hashCode = hashStr.hashCode();
+			}
+		}
+		return this.hashCode;
+	}
+
+	public int compareTo(Object obj) {
+		if (obj.hashCode() > hashCode())
+			return 1;
+		else if (obj.hashCode() < hashCode())
+			return -1;
+		else
+			return 0;
 	}
 
 }

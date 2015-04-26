@@ -23,7 +23,7 @@ public class ItemCompVendPackDAO extends BaseItemCompVendPackDAO {
 		try {
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
-			criteria.add(Restrictions.ge(ItemCompVendPack.PROP_INV_ITEM, item));
+			criteria.add(Restrictions.eq(ItemCompVendPack.PROP_INV_ITEM, item));
 			List<ItemCompVendPack> list = criteria.list();
 			if (list != null && !list.isEmpty()) {
 				return list;
