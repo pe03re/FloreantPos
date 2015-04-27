@@ -10,6 +10,7 @@ import com.floreantpos.model.ActionHistory;
 import com.floreantpos.model.AttendenceHistory;
 import com.floreantpos.model.CashDrawerResetHistory;
 import com.floreantpos.model.Company;
+import com.floreantpos.model.CompanyPerson;
 import com.floreantpos.model.CookingInstruction;
 import com.floreantpos.model.CouponAndDiscount;
 import com.floreantpos.model.Customer;
@@ -64,6 +65,7 @@ import com.floreantpos.model.TicketItemModifierGroup;
 import com.floreantpos.model.User;
 import com.floreantpos.model.UserPermission;
 import com.floreantpos.model.UserType;
+import com.floreantpos.model.VendorPerson;
 import com.floreantpos.model.VirtualPrinter;
 import com.floreantpos.model.VoidReason;
 import com.floreantpos.model.ZipCodeVsDeliveryCharge;
@@ -140,6 +142,8 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.addClass(PackSize.class);
 		configuration = configuration.addClass(Person.class);
 		configuration = configuration.addClass(ItemCompVendPack.class);
+		configuration = configuration.addClass(CompanyPerson.class);
+		configuration = configuration.addClass(VendorPerson.class);
 
 		configuration = configureInventoryClasses(configuration);
 

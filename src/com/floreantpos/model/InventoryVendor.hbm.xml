@@ -6,25 +6,6 @@
       <generator class="identity"/>
     </id>
     
-    
-   <many-to-one name="personByP2Id" class="com.floreantpos.model.Person" fetch="select">
-            <column name="P2_ID" />
-        </many-to-one>
-        <many-to-one name="personByP5Id" class="com.floreantpos.model.Person" fetch="select">
-            <column name="P5_ID" />
-        </many-to-one>
-        <many-to-one name="personByP4Id" class="com.floreantpos.model.Person" fetch="select">
-            <column name="P4_ID" />
-        </many-to-one>
-        <many-to-one name="personByP6Id" class="com.floreantpos.model.Person" fetch="select">
-            <column name="P6_ID" />
-        </many-to-one>
-        <many-to-one name="personByP3Id" class="com.floreantpos.model.Person" fetch="select">
-            <column name="P3_ID" />
-        </many-to-one>
-        <many-to-one name="personByP7Id" class="com.floreantpos.model.Person" fetch="select">
-            <column name="P7_ID" />
-        </many-to-one>
         <property name="name" type="string">
             <column name="NAME" length="60" not-null="true" />
         </property>

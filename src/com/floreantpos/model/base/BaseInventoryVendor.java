@@ -7,7 +7,6 @@ import java.util.Set;
 import com.floreantpos.model.ExpenseTransaction;
 import com.floreantpos.model.InventoryTransaction;
 import com.floreantpos.model.ItemCompVendPack;
-import com.floreantpos.model.Person;
 
 /**
  * This is an object that contains data related to the INVENTORY_VENDOR table.
@@ -27,12 +26,6 @@ public abstract class BaseInventoryVendor implements Comparable, Serializable {
 	public static String PROP_VISIBLE = "visible";
 	public static String PROP_ID = "id";
 	public static String PROP_EXP_TYPE_VENDOR = "expenseTypeVendor";
-	public static String PROP_PERSON_P2 = "personByP2Id";
-	public static String PROP_PERSON_P3 = "personByP3Id";
-	public static String PROP_PERSON_P4 = "personByP4Id";
-	public static String PROP_PERSON_P5 = "personByP5Id";
-	public static String PROP_PERSON_P6 = "personByP6Id";
-	public static String PROP_PERSON_P7 = "personByP7Id";
 
 	// constructors
 	public BaseInventoryVendor() {
@@ -64,12 +57,6 @@ public abstract class BaseInventoryVendor implements Comparable, Serializable {
 
 	// primary key
 	private Integer id;
-	private Person personByP2Id;
-	private Person personByP5Id;
-	private Person personByP4Id;
-	private Person personByP6Id;
-	private Person personByP3Id;
-	private Person personByP7Id;
 	private String name;
 	private String phone;
 	private String email;
@@ -85,15 +72,8 @@ public abstract class BaseInventoryVendor implements Comparable, Serializable {
 		this.expenseTypeVendor = expenseTypeVendor;
 	}
 
-	public BaseInventoryVendor(Person personByP2Id, Person personByP5Id, Person personByP4Id, Person personByP6Id, Person personByP3Id, Person personByP7Id, String name, String phone, String email,
-			String address, Boolean visible, boolean expenseTypeVendor, Set<ExpenseTransaction> expenseTransactions, Set<InventoryTransaction> inventoryTransactions,
-			Set<ItemCompVendPack> itemCompVendPacks) {
-		this.personByP2Id = personByP2Id;
-		this.personByP5Id = personByP5Id;
-		this.personByP4Id = personByP4Id;
-		this.personByP6Id = personByP6Id;
-		this.personByP3Id = personByP3Id;
-		this.personByP7Id = personByP7Id;
+	public BaseInventoryVendor(String name, String phone, String email, String address, Boolean visible, boolean expenseTypeVendor, Set<ExpenseTransaction> expenseTransactions,
+			Set<InventoryTransaction> inventoryTransactions, Set<ItemCompVendPack> itemCompVendPacks) {
 		this.name = name;
 		this.phone = phone;
 		this.email = email;
@@ -111,54 +91,6 @@ public abstract class BaseInventoryVendor implements Comparable, Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Person getPersonByP2Id() {
-		return this.personByP2Id;
-	}
-
-	public void setPersonByP2Id(Person personByP2Id) {
-		this.personByP2Id = personByP2Id;
-	}
-
-	public Person getPersonByP5Id() {
-		return this.personByP5Id;
-	}
-
-	public void setPersonByP5Id(Person personByP5Id) {
-		this.personByP5Id = personByP5Id;
-	}
-
-	public Person getPersonByP4Id() {
-		return this.personByP4Id;
-	}
-
-	public void setPersonByP4Id(Person personByP4Id) {
-		this.personByP4Id = personByP4Id;
-	}
-
-	public Person getPersonByP6Id() {
-		return this.personByP6Id;
-	}
-
-	public void setPersonByP6Id(Person personByP6Id) {
-		this.personByP6Id = personByP6Id;
-	}
-
-	public Person getPersonByP3Id() {
-		return this.personByP3Id;
-	}
-
-	public void setPersonByP3Id(Person personByP3Id) {
-		this.personByP3Id = personByP3Id;
-	}
-
-	public Person getPersonByP7Id() {
-		return this.personByP7Id;
-	}
-
-	public void setPersonByP7Id(Person personByP7Id) {
-		this.personByP7Id = personByP7Id;
 	}
 
 	public String getName() {
