@@ -185,6 +185,11 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 		beanEditor.setFieldsEnable(false);
 	}
 
+	private void refreshPageAttr() {
+		// TODO Auto-generated method stub
+
+	}
+
 	public void refreshTable() {
 		ListTableModel tableModel = (ListTableModel) browserTable.getModel();
 		if (tableModel != null) {
@@ -289,9 +294,15 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 					btnDelete.setEnabled(false);
 					btnCancel.setEnabled(false);
 					refreshTable();
-					ListTableModel tableModel = (ListTableModel) browserTable.getModel();
-					int pos = tableModel.navigateToItem(beanEditor.getBean());
-					browserTable.getSelectionModel().setSelectionInterval(0, pos);
+					// ListTableModel tableModel = (ListTableModel)
+					// browserTable.getModel();
+					// int pos =
+					// tableModel.navigateToItem(beanEditor.getBean());
+					// int current = tableModel.getPageOffset();
+					// //
+					// browserTable.getSelectionModel().setSelectionInterval(0,
+					// // pos);
+					// refreshPageAttr();
 				}
 				break;
 

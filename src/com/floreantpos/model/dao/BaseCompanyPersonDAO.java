@@ -23,7 +23,7 @@ public abstract class BaseCompanyPersonDAO extends com.floreantpos.model.dao._Ro
 	}
 
 	public Class getReferenceClass() {
-		return com.floreantpos.model.Company.class;
+		return com.floreantpos.model.CompanyPerson.class;
 	}
 
 	public Order getDefaultOrder() {

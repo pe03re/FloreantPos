@@ -17,12 +17,12 @@ public class InventoryVendorDAO extends BaseInventoryVendorDAO {
 	public InventoryVendorDAO() {
 	}
 
-	public List<InventoryVendor> findAllNonExpenseVendors() {
+	public List<InventoryVendor> findAllExpenseVendors(boolean expVendors) {
 		Session session = null;
 		try {
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
-			criteria.add(Restrictions.eq(InventoryVendor.PROP_EXP_TYPE_VENDOR, false));
+			criteria.add(Restrictions.eq(InventoryVendor.PROP_EXP_TYPE_VENDOR, expVendors));
 			List<InventoryVendor> list = criteria.list();
 			if (list != null && !list.isEmpty()) {
 				return list;

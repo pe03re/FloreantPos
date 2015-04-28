@@ -12,6 +12,9 @@
 		<property name="name" type="string">
 			<column name="NAME" length="60" not-null="true" />
 		</property>
+		<property name="ref" type="string">
+			<column name="REFERENCE" length="60" not-null="true" />
+		</property>
 		<property name="phone" type="string">
 			<column name="PHONE" length="60" />
 		</property>
