@@ -65,7 +65,7 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 	private Company company;
 	private PackSize packSize;
 	private InventoryVendor inventoryVendor;
-	private DateTime transactionDate;
+	private Date transactionDate;
 	private double quantity;
 	private double totalPrice;
 	private double vatPaid;
