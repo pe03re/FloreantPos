@@ -91,7 +91,7 @@ public class BasePerson implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return name + " (" + ref + ")";
+		return name + "-" + ref;
 	}
 
 	public boolean equals(Object obj) {

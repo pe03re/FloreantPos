@@ -201,7 +201,7 @@ public abstract class BaseInventoryVendor implements Comparable, Serializable {
 	}
 
 	public String toString() {
-		return super.toString();
+		return name;
 	}
 
 }

@@ -13,11 +13,6 @@ import com.floreantpos.model.InventoryTransaction;
  */
 public class BaseCompany implements java.io.Serializable {
 
-	@Override
-	public String toString() {
-		return name;
-	}
-
 	private Integer id;
 	private String name;
 	private String phone;
@@ -132,6 +127,10 @@ public class BaseCompany implements java.io.Serializable {
 			return -1;
 		else
 			return 0;
+	}
+
+	public String toString() {
+		return name;
 	}
 
 }

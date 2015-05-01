@@ -186,8 +186,29 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 	}
 
 	private void refreshPageAttr() {
-		// TODO Auto-generated method stub
+		ListTableModel tableModel = (ListTableModel) browserTable.getModel();
+		int currentPage = tableModel.getPageOffset();
+		int pageSize = tableModel.getPageSize();
+		int pos = tableModel.getRows().indexOf((beanEditor.getBean()));
+		int newPage = pos / pageSize;
 
+		int pageToMove = newPage - currentPage;
+		if (pageToMove > 0) {
+			for (int i = 0; i < pageToMove; i++) {
+				this.btnNext.doClick();
+				// this.btnNext.dispatchEvent(new MouseEvent(this.btnNew, 0, 1,
+				// 0, 0, 0, 1, true));
+			}
+		} else {
+			if (pageToMove < 0) {
+				for (int i = 0; i < pageToMove; i++) {
+					this.btnPrev.doClick();
+					// this.btnPrev.dispatchEvent(new MouseEvent(this.btnPrev,
+					// 0, 1, 0, 0, 0, 1, true));
+				}
+			}
+		}
+		browserTable.getSelectionModel().setSelectionInterval(0, pos % pageSize);
 	}
 
 	public void refreshTable() {
@@ -294,15 +315,7 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 					btnDelete.setEnabled(false);
 					btnCancel.setEnabled(false);
 					refreshTable();
-					// ListTableModel tableModel = (ListTableModel)
-					// browserTable.getModel();
-					// int pos =
-					// tableModel.navigateToItem(beanEditor.getBean());
-					// int current = tableModel.getPageOffset();
-					// //
-					// browserTable.getSelectionModel().setSelectionInterval(0,
-					// // pos);
-					// refreshPageAttr();
+					refreshPageAttr();
 				}
 				break;
 

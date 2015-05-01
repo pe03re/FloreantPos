@@ -49,7 +49,7 @@ public class BaseExpenseHead implements java.io.Serializable {
 	}
 
 	public Boolean getVisible() {
-		return this.visible;
+		return visible == null ? true : visible;
 	}
 
 	public void setVisible(Boolean visible) {
