@@ -19,13 +19,13 @@
         <many-to-one name="inventoryTransactionType" class="com.floreantpos.model.InventoryTransactionType" fetch="select">
             <column name="TRANSACTION_TYPE_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="company" class="com.floreantpos.model.Company" fetch="select">
+        <many-to-one name="company" class="com.floreantpos.model.Company" fetch="select" lazy="false" >
             <column name="COMPANY_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="packSize" class="com.floreantpos.model.PackSize" fetch="select">
+        <many-to-one name="packSize" class="com.floreantpos.model.PackSize" fetch="select" lazy="false" >
             <column name="SIZE_ID" not-null="true" />
         </many-to-one>
-        <many-to-one name="inventoryVendor" class="com.floreantpos.model.InventoryVendor" fetch="select">
+        <many-to-one name="inventoryVendor" class="com.floreantpos.model.InventoryVendor" fetch="select" lazy="false" >
             <column name="VENDOR_ID" not-null="true" />
         </many-to-one>
             <property name="transactionDate" type="timestamp">
