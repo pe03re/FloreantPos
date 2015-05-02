@@ -8,26 +8,28 @@
 		</id>
 
 
-		<many-to-one name="expenseTransactionType" class="com.floreantpos.model.ExpenseTransactionType"
-			fetch="select">
+		<many-to-one name="expenseTransactionType"
+			class="com.floreantpos.model.ExpenseTransactionType" fetch="select"
+			lazy="false">
 			<column name="TRANSACTION_TYPE_ID" />
 		</many-to-one>
 		<many-to-one name="inventoryVendor" class="com.floreantpos.model.InventoryVendor"
-			fetch="select">
+			fetch="select" lazy="false">
 			<column name="VENDOR_ID" />
 		</many-to-one>
 		<many-to-one name="expenseHead" class="com.floreantpos.model.ExpenseHead"
-			fetch="select">
+			fetch="select" lazy="false">
 			<column name="EXPENSE_HEAD_ID" />
+		</many-to-one>
+		<many-to-one name="vatPaid" class="com.floreantpos.model.Tax"
+			fetch="select" lazy="false">
+			<column name="VAT_ID" />
 		</many-to-one>
 		<property name="transactionDate" type="timestamp">
 			<column name="TRANSACTION_DATE" length="19" />
 		</property>
 		<property name="amount" type="java.lang.Double">
 			<column name="AMOUNT" precision="22" scale="0" />
-		</property>
-		<property name="vatPaid" type="java.lang.Double">
-			<column name="VAT_PAID" precision="22" scale="0" />
 		</property>
 		<property name="creditCheck" type="boolean">
 			<column name="CREDIT_CHECK" not-null="true" />
