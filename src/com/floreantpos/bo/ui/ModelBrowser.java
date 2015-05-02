@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,13 +17,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.jdesktop.swingx.JXComboBox;
 import org.jdesktop.swingx.JXTable;
 
 import com.floreantpos.bo.ui.explorer.ListTableModel;
 import com.floreantpos.ui.BeanEditor;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 
-public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelectionListener {
+public abstract class ModelBrowser<E> extends JPanel implements ActionListener, ListSelectionListener {
 
 	protected JXTable browserTable;
 	protected BeanEditor<E> beanEditor;
@@ -41,6 +43,8 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 	private JButton btnSave = new JButton("SAVE");
 	private JButton btnDelete = new JButton("DELETE");
 	private JButton btnCancel = new JButton("CANCEL");
+	private JXComboBox cbPageSize;
+	private JButton btnRefresh = new JButton("REFRESH");;
 
 	public ModelBrowser() {
 		this(null);
@@ -51,21 +55,20 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 		this.beanEditor = beanEditor;
 	}
 
-	public void init(final ListTableModel<E> tableModel) {
+	public void init(final ListTableModel<E> tableModel, Dimension scrollPaneDimension, Dimension beanPaneDimension) {
 		browserTable = new JXTable();
 		browserTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		browserTable.getSelectionModel().addListSelectionListener(this);
-		browserTable.setSortable(false);
+		browserTable.setSortable(true);
 		if (tableModel != null) {
 			browserTable.setModel(tableModel);
-			tableModel.setPageSize(20);
+			tableModel.setPageSize(30);
 			start.setText("1");
 			current.setVisible(false);
 			if (tableModel.getPageCount() > 1) {
 				end.setText(Integer.toString(tableModel.getPageCount()));
 				end.setEnabled(false);
 				end.setVisible(true);
-
 			} else {
 				end.setVisible(false);
 			}
@@ -88,11 +91,11 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 						current.setVisible(true);
 						start.setEnabled(false);
 						end.setVisible(true);
-
 					}
 					btnPrev.setEnabled(true);
 				}
 			});
+
 			btnPrev.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -124,12 +127,35 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 		setLayout(new BorderLayout(10, 10));
 		setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		JScrollPane jsp = new JScrollPane(browserTable);
-		jsp.setPreferredSize(new Dimension(300, 400));
+		jsp.setPreferredSize(scrollPaneDimension);
 		browserPanel.add(jsp);
+
+		btnRefresh.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int page = ((ListTableModel) ModelBrowser.this.browserTable.getModel()).getPageOffset();
+				ModelBrowser.this.refreshTable();
+				for (int i = 0; i < page; i++) {
+					ModelBrowser.this.btnNext.doClick();
+				}
+			}
+		});
+		cbPageSize = new JXComboBox();
+		cbPageSize.setModel(new DefaultComboBoxModel(new Integer[] { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 }));
+		cbPageSize.setSelectedItem(new Integer(30));
+		cbPageSize.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int size = (Integer) ((JXComboBox) e.getSource()).getSelectedItem();
+				((ListTableModel) ModelBrowser.this.browserTable.getModel()).setPageSize(size);
+				ModelBrowser.this.refreshTable();
+			}
+		});
 
 		if (tableModel != null) {
 			JPanel buttonPanel1 = new JPanel();
 			// buttonPanel1.setLayout(new BorderLayout(5, 5));
+			buttonPanel1.add(cbPageSize, BorderLayout.WEST);
 			buttonPanel1.add(btnPrev);
 			start.setBorder(new EmptyBorder(0, 5, 0, 5));
 			end.setBorder(new EmptyBorder(0, 5, 0, 5));
@@ -138,6 +164,7 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 			buttonPanel1.add(current);
 			buttonPanel1.add(end);
 			buttonPanel1.add(btnNext);
+			buttonPanel1.add(btnRefresh, BorderLayout.EAST);
 			browserPanel.add(buttonPanel1, BorderLayout.SOUTH);
 		}
 
@@ -164,7 +191,7 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 		buttonPanel.add(btnSave);
 		buttonPanel.add(btnDelete);
 		buttonPanel.add(btnCancel);
-		beanPanel.setPreferredSize(new Dimension(650, 400));
+		beanPanel.setPreferredSize(beanPaneDimension);
 		beanPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 		add(beanPanel, BorderLayout.EAST);
@@ -232,6 +259,8 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 					end.setEnabled(false);
 					end.setVisible(true);
 					current.setVisible(false);
+					start.setEnabled(true);
+					start.setVisible(true);
 				} else if (tableModel.getPageOffset() == tableModel.getPageCount() - 1) {
 					end.setText(Integer.toString(tableModel.getPageCount()));
 					btnNext.setEnabled(false);
@@ -250,6 +279,7 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 					start.setVisible(true);
 					current.setText(Integer.toString(tableModel.getPageOffset() + 1));
 					current.setVisible(true);
+					current.setEnabled(true);
 				}
 			}
 		}
@@ -297,10 +327,12 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 				break;
 
 			case CANCEL:
-				beanEditor.setBean(null);
+				// browserTable.clearSelection();
+				// beanEditor.setBean(null);
+				beanEditor.setBean(beanEditor.getBean());
 				beanEditor.setFieldsEnable(false);
 				btnNew.setEnabled(true);
-				btnEdit.setEnabled(false);
+				btnEdit.setEnabled(true);
 				btnSave.setEnabled(false);
 				btnDelete.setEnabled(false);
 				btnCancel.setEnabled(false);
@@ -384,6 +416,8 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 		this.btnSave.setVisible(true);
 	}
 
+	abstract protected void loadData();
+
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (e.getValueIsAdjusting()) {
@@ -398,7 +432,7 @@ public class ModelBrowser<E> extends JPanel implements ActionListener, ListSelec
 
 		E data = (E) model.getRowData(selectedRow);
 		beanEditor.setBean(data);
-
+		beanEditor.setEnabled(false);
 		btnNew.setEnabled(true);
 		btnEdit.setEnabled(true);
 		btnSave.setEnabled(false);

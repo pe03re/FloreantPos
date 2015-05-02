@@ -15,9 +15,11 @@ public interface InventoryPlugin extends Plugin {
 	// void showInventoryVendorEntryDialog();
 	// void showInventoryWarehouseEntryDialog();
 
-	AbstractAction[] getActions();
+	AbstractAction[] getInventoryActions();
+
+	AbstractAction[] getExpenseActions();
 
 	void addRecepieView(JTabbedPane tabbedPane, MenuItem m);
 
-	AbstractAction[] getBrowserActions();
+	AbstractAction[] getEntityActions();
 }

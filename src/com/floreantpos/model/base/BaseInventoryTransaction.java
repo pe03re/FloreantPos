@@ -12,6 +12,7 @@ import com.floreantpos.model.InventoryTransactionType;
 import com.floreantpos.model.InventoryVendor;
 import com.floreantpos.model.InventoryWarehouse;
 import com.floreantpos.model.PackSize;
+import com.floreantpos.model.Tax;
 
 /**
  * This is an object that contains data related to the INVENTORY_TRANSACTION
@@ -68,14 +69,14 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 	private Date transactionDate;
 	private double quantity;
 	private double totalPrice;
-	private double vatPaid;
+	private Tax vatPaid;
 	private boolean creditCheck;
 	private String remark;
 	private double discount;
 	private Set<InventoryTransaction> inventoryTransactions = new HashSet<InventoryTransaction>(0);
 
 	public BaseInventoryTransaction(InventoryTransaction inventoryTransaction, InventoryItem inventoryItem, Company company, PackSize packSize, InventoryVendor inventoryVendor, Date transactionDate,
-			double quantity, double totalPrice, double vatPaid, boolean creditCheck, double discount) {
+			double quantity, double totalPrice, Tax vatPaid, boolean creditCheck, double discount) {
 		this.inventoryTransactionType = inventoryTransactionType;
 		this.inventoryItem = inventoryItem;
 		this.company = company;
@@ -90,7 +91,7 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 	}
 
 	public BaseInventoryTransaction(InventoryTransaction inventoryTransaction, InventoryWarehouse inventoryWarehouseByFromWarehouseId, InventoryWarehouse inventoryWarehouseByToWarehouseId,
-			InventoryItem inventoryItem, Company company, PackSize packSize, InventoryVendor inventoryVendor, Date transactionDate, double quantity, double totalPrice, double vatPaid,
+			InventoryItem inventoryItem, Company company, PackSize packSize, InventoryVendor inventoryVendor, Date transactionDate, double quantity, double totalPrice, Tax vatPaid,
 			boolean creditCheck, String remark, double discount, Set<InventoryTransaction> inventoryTransactions) {
 		this.inventoryTransactionType = inventoryTransactionType;
 		this.inventoryWarehouseByFromWarehouseId = inventoryWarehouseByFromWarehouseId;
@@ -189,11 +190,11 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 		this.totalPrice = totalPrice;
 	}
 
-	public double getVatPaid() {
+	public Tax getVatPaid() {
 		return this.vatPaid;
 	}
 
-	public void setVatPaid(double vatPaid) {
+	public void setVatPaid(Tax vatPaid) {
 		this.vatPaid = vatPaid;
 	}
 

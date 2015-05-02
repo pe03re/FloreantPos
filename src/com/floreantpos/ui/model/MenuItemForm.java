@@ -218,54 +218,11 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		chkVisible.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
 		tabbedPane.addTab(com.floreantpos.POSConstants.GENERAL, tabGeneral);
-
-		// btnNewModifierGroup.setText(com.floreantpos.POSConstants.ADD);
-		// btnNewModifierGroup.setActionCommand("AddModifierGroup");
-		// btnNewModifierGroup.addActionListener(new
-		// java.awt.event.ActionListener() {
-		// public void actionPerformed(java.awt.event.ActionEvent evt) {
-		// btnNewModifierGroupActionPerformed(evt);
-		// }
-		// });
-
-		// btnDeleteModifierGroup.setText(com.floreantpos.POSConstants.DELETE);
-		// btnDeleteModifierGroup.setActionCommand("DeleteModifierGroup");
-		//
-		// btnEditModifierGroup.setText(com.floreantpos.POSConstants.EDIT);
-		// btnEditModifierGroup.setActionCommand("EditModifierGroup");
-
-		// menuItemMGListModel = new MenuItemMGListModel();
-		// tableTicketItemModifierGroups.setModel(menuItemMGListModel);
-
-		// btnNewModifierGroup.addActionListener(this);
-		// btnEditModifierGroup.addActionListener(this);
-		// btnDeleteModifierGroup.addActionListener(this);
 		btnAddShift.addActionListener(this);
 		btnDeleteShift.addActionListener(this);
 
 		tfDiscountRate.setDocument(new DoubleDocument());
 		tabGeneral.setLayout(new MigLayout("", "[104px][100px,grow][][49px]", "[19px][][][][25px][][19px][19px][25px][][][][][][15px]"));
-
-		//		lblTranslatedName = new JLabel(Messages.getString("MenuItemForm.lblTranslatedName.text")); //$NON-NLS-1$
-		// tabGeneral.add(lblTranslatedName, "cell 0 1,alignx leading");
-		//
-		// tfTranslatedName = new FixedLengthTextField();
-		// tfTranslatedName.setLength(120);
-		// tabGeneral.add(tfTranslatedName, "cell 1 1 3 1,growx");
-
-		//lblSortOrder = new JLabel(Messages.getString("MenuItemForm.lblSortOrder.text")); //$NON-NLS-1$
-		// tabGeneral.add(lblSortOrder, "cell 0 2");
-		//
-		// tfSortOrder = new IntegerTextField();
-		// tfSortOrder.setColumns(10);
-		//		tfSortOrder.setText(Messages.getString("MenuItemForm.integerTextField.text")); //$NON-NLS-1$
-		// tabGeneral.add(tfSortOrder, "cell 1 2");
-		//
-		//		lblBarcode = new JLabel(Messages.getString("MenuItemForm.lblBarcode.text")); //$NON-NLS-1$
-		// tabGeneral.add(lblBarcode, "cell 0 3,alignx leading");
-		//
-		// tfBarcode = new FixedLengthTextField(120);
-		// tabGeneral.add(tfBarcode, "cell 1 3,growx");
 
 		lblBuyPrice = new JLabel(Messages.getString("LABEL_BUY_PRICE"));
 		lblBuyPrice.setEnabled(false);

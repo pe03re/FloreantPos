@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.floreantpos.PosException;
@@ -24,8 +25,9 @@ public class ExpenseTransactionDAO extends BaseExpenseTransactionDAO {
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
 			Calendar c = Calendar.getInstance();
-			c.add(Calendar.DATE, -15);
+			c.add(Calendar.DATE, -60);
 			criteria.add(Restrictions.ge(ExpenseTransaction.PROP_TRANSACTION_DATE, c.getTime()));
+			criteria.addOrder(Order.desc(ExpenseTransaction.PROP_TRANSACTION_DATE));
 			List<ExpenseTransaction> list = criteria.list();
 			if (list != null && !list.isEmpty()) {
 				return list;

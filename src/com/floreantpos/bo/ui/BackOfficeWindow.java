@@ -147,24 +147,31 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 			return;
 		}
 
-		AbstractAction[] actions = plugin.getActions();
-		AbstractAction[] browserActions = plugin.getBrowserActions();
-		if (actions == null && browserActions == null) {
+		AbstractAction[] invActions = plugin.getInventoryActions();
+		AbstractAction[] expActions = plugin.getExpenseActions();
+		AbstractAction[] entityActions = plugin.getEntityActions();
+		if (invActions == null && entityActions == null && expActions == null) {
 			return;
 		}
 
 		JMenu inventoryMenu = new JMenu("Inventory");
-		for (AbstractAction abstractAction : actions) {
-			inventoryMenu.add(abstractAction);
+		for (AbstractAction abstractInvAction : invActions) {
+			inventoryMenu.add(abstractInvAction);
 		}
 
-		JMenu browserMenu = new JMenu("Browsers");
-		for (AbstractAction abstractBrowserAction : browserActions) {
-			browserMenu.add(abstractBrowserAction);
+		JMenu expenseMenu = new JMenu("Expense");
+		for (AbstractAction abstractExpAction : expActions) {
+			expenseMenu.add(abstractExpAction);
+		}
+
+		JMenu entityMenu = new JMenu("Entities");
+		for (AbstractAction abstractEntityAction : entityActions) {
+			entityMenu.add(abstractEntityAction);
 		}
 
 		menuBar.add(inventoryMenu);
-		menuBar.add(browserMenu);
+		menuBar.add(expenseMenu);
+		menuBar.add(entityMenu);
 	}
 
 	private void createReportMenu(JMenuBar menuBar) {

@@ -6,6 +6,7 @@ import java.util.Date;
 import com.floreantpos.model.ExpenseHead;
 import com.floreantpos.model.ExpenseTransactionType;
 import com.floreantpos.model.InventoryVendor;
+import com.floreantpos.model.Tax;
 
 /**
  * This is an object that contains data related to the EXPENSE_TRANSACTION
@@ -51,7 +52,7 @@ public abstract class BaseExpenseTransaction implements Comparable, Serializable
 	private ExpenseHead expenseHead;
 	private Date transactionDate;
 	private Double amount;
-	private Double vatPaid;
+	private Tax vatPaid;
 	private boolean creditCheck;
 	private String remark;
 
@@ -59,7 +60,7 @@ public abstract class BaseExpenseTransaction implements Comparable, Serializable
 		this.creditCheck = creditCheck;
 	}
 
-	public BaseExpenseTransaction(ExpenseTransactionType expenseTransactionType, InventoryVendor inventoryVendor, ExpenseHead expenseHead, Date transactionDate, Double amount, Double vatPaid,
+	public BaseExpenseTransaction(ExpenseTransactionType expenseTransactionType, InventoryVendor inventoryVendor, ExpenseHead expenseHead, Date transactionDate, Double amount, Tax vatPaid,
 			boolean creditCheck, String remark) {
 		this.expenseTransactionType = expenseTransactionType;
 		this.inventoryVendor = inventoryVendor;
@@ -119,11 +120,11 @@ public abstract class BaseExpenseTransaction implements Comparable, Serializable
 		this.amount = amount;
 	}
 
-	public Double getVatPaid() {
+	public Tax getVatPaid() {
 		return this.vatPaid;
 	}
 
-	public void setVatPaid(Double vatPaid) {
+	public void setVatPaid(Tax vatPaid) {
 		this.vatPaid = vatPaid;
 	}
 

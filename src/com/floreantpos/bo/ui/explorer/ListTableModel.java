@@ -104,7 +104,6 @@ public abstract class ListTableModel<E> extends AbstractTableModel {
 		}
 		this.rows = rows;
 		if (rows != null) {
-			this.pageSize = rows.size();
 			this.pageOffset = 0;
 		}
 		fireTableDataChanged();
