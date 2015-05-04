@@ -1,5 +1,7 @@
 package com.floreantpos.bo.ui.explorer;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,11 @@ public abstract class ListTableModel<E> extends AbstractTableModel {
 			return 0;
 		}
 		return Math.min(pageSize, rows.size() - (pageOffset * pageSize));
+	}
+
+	protected String formatDouble(double d) {
+		NumberFormat f = new DecimalFormat("0.##");
+		return f.format(d);
 	}
 
 	// Use this method to figure out which page you are on.

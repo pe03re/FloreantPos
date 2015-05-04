@@ -59,7 +59,7 @@ public abstract class ModelBrowser<E> extends JPanel implements ActionListener, 
 		browserTable = new JXTable();
 		browserTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		browserTable.getSelectionModel().addListSelectionListener(this);
-		browserTable.setSortable(true);
+		// browserTable.setSortable(true);
 		if (tableModel != null) {
 			browserTable.setModel(tableModel);
 			tableModel.setPageSize(30);
@@ -152,10 +152,14 @@ public abstract class ModelBrowser<E> extends JPanel implements ActionListener, 
 			}
 		});
 
+		JLabel empty1 = new JLabel("                                 ");
+		JLabel empty2 = new JLabel("                                 ");
+
 		if (tableModel != null) {
 			JPanel buttonPanel1 = new JPanel();
 			// buttonPanel1.setLayout(new BorderLayout(5, 5));
 			buttonPanel1.add(cbPageSize, BorderLayout.WEST);
+			buttonPanel1.add(empty1);
 			buttonPanel1.add(btnPrev);
 			start.setBorder(new EmptyBorder(0, 5, 0, 5));
 			end.setBorder(new EmptyBorder(0, 5, 0, 5));
@@ -164,6 +168,7 @@ public abstract class ModelBrowser<E> extends JPanel implements ActionListener, 
 			buttonPanel1.add(current);
 			buttonPanel1.add(end);
 			buttonPanel1.add(btnNext);
+			buttonPanel1.add(empty2);
 			buttonPanel1.add(btnRefresh, BorderLayout.EAST);
 			browserPanel.add(buttonPanel1, BorderLayout.SOUTH);
 		}

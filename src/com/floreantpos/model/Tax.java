@@ -4,42 +4,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.floreantpos.model.base.BaseTax;
 
-@XmlRootElement(name="tax")
+@XmlRootElement(name = "tax")
 public class Tax extends BaseTax {
 	private static final long serialVersionUID = 1L;
 
-	/*[CONSTRUCTOR MARKER BEGIN]*/
-	public Tax () {
+	/* [CONSTRUCTOR MARKER BEGIN] */
+	public Tax() {
 		super();
 	}
 
 	/**
 	 * Constructor for primary key
 	 */
-	public Tax (java.lang.Integer id) {
+	public Tax(java.lang.Integer id) {
 		super(id);
 	}
 
 	/**
 	 * Constructor for required fields
 	 */
-	public Tax (
-		java.lang.Integer id,
-		java.lang.String name) {
+	public Tax(java.lang.Integer id, java.lang.String name) {
 
-		super (
-			id,
-			name);
+		super(id, name);
 	}
 
-	/*[CONSTRUCTOR MARKER END]*/
-	
+	/* [CONSTRUCTOR MARKER END] */
+
 	public String getUniqueId() {
 		return ("tax_" + getName() + "_" + getId()).replaceAll("\\s+", "_");
 	}
 
 	@Override
 	public String toString() {
-		return getName();
+		return getName() + " (" + getRate().toString() + "%)";
 	}
 }

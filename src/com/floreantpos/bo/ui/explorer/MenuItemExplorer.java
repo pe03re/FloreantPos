@@ -37,6 +37,7 @@ public class MenuItemExplorer extends TransparentPanel {
 
 		tableModel = new MenuItemExplorerTableModel();
 		tableModel.setRows(itemList);
+		tableModel.setPageSize(1000);
 		table = new JXTable(tableModel);
 		table.setDefaultRenderer(Object.class, new PosTableRenderer());
 
@@ -114,6 +115,7 @@ public class MenuItemExplorer extends TransparentPanel {
 		});
 
 		TransparentPanel panel = new TransparentPanel();
+
 		panel.add(addButton);
 		panel.add(editButton);
 		panel.add(deleteButton);
@@ -121,8 +123,7 @@ public class MenuItemExplorer extends TransparentPanel {
 	}
 
 	class MenuItemExplorerTableModel extends ListTableModel {
-		String[] columnNames = { POSConstants.NAME, POSConstants.PRICE + " (" + currencySymbol + ")", POSConstants.TAX + " (%)",
-				POSConstants.DISCOUNT + "(%)", POSConstants.FOOD_GROUP, POSConstants.VISIBLE, "BUY PRICE" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		String[] columnNames = { POSConstants.NAME, POSConstants.PRICE + " (" + currencySymbol + ")", POSConstants.TAX + " (%)", POSConstants.FOOD_GROUP, POSConstants.VISIBLE, "BUY PRICE" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 		MenuItemExplorerTableModel() {
 			setColumnNames(columnNames);
@@ -135,23 +136,25 @@ public class MenuItemExplorer extends TransparentPanel {
 			case 0:
 				return item.getName();
 			case 1:
-				return Double.valueOf(item.getPrice());
+				return "₹ " + formatDouble(item.getPrice());
 			case 2:
 				if (item.getTax() != null) {
-					return Double.valueOf(item.getTax().getRate());
+					return formatDouble(item.getTax().getRate()) + " %";
 				}
-				return ""; //$NON-NLS-1$
+				return "";
 			case 3:
-				return Double.valueOf(item.getDiscountRate());
-			case 4:
 				if (item.getParent() != null) {
 					return item.getParent().getName();
 				}
-				return ""; //$NON-NLS-1$
+				return "";
+			case 4:
+				if (item.isVisible()) {
+					return "T";
+				} else {
+					return "F";
+				}
 			case 5:
-				return item.isVisible();
-			case 6:
-				return Double.valueOf(item.getBuyPrice());
+				return "₹ " + formatDouble(item.getBuyPrice());
 			}
 			return null;
 		}
