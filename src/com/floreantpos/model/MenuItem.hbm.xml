@@ -26,15 +26,15 @@
 		<!-- <property name="smallImage" column="SMALL_IMAGE" length="120" not-null="false" type="string"/> <property name="largeImage" column="LARGE_IMAGE" length="120" 
 			not-null="false" type="string"/> -->
 		<!-- uni-directional many-to-one association to FoodGroup -->
-		<many-to-one class="com.floreantpos.model.MenuGroup" name="parent">
+		<many-to-one class="com.floreantpos.model.MenuGroup" name="parent" lazy="false">
 			<column name="GROUP_ID" />
 		</many-to-one>
-		<list cascade="all" inverse="false" lazy="true" name="shifts" table="MENUITEM_SHIFT">
+		<list cascade="all" inverse="false" lazy="false" name="shifts" table="MENUITEM_SHIFT">
 			<key column="MENUITEM_ID" />
 			<list-index column="SHIFT_ORDER" />
 			<one-to-many class="MenuItemShift" />
 		</list>
-		<list cascade="all" inverse="false" lazy="true" name="menuItemModiferGroups">
+		<list cascade="all" inverse="false" lazy="false" name="menuItemModiferGroups">
 			<key>
 				<column name="MENUITEM_MODIFIERGROUP_ID" />
 			</key>

@@ -3,8 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 25 Apr, 2015 1:56:53 PM by Hibernate Tools 3.4.0.CR1 -->
 <hibernate-mapping>
-	<class name="com.floreantpos.model.Person" table="person"
-		catalog="pos">
+	<class name="com.floreantpos.model.Person" table="person" >
 		<id name="id" type="java.lang.Integer">
 			<column name="ID" />
 			<generator class="identity" />
