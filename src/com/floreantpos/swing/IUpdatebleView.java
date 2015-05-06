@@ -8,4 +8,6 @@ public interface IUpdatebleView<E> {
 	boolean updateModel(E e);
 
 	void clearTableModel();
+
+	void setFieldsEnable(boolean enable);
 }

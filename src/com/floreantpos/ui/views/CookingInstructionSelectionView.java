@@ -17,7 +17,7 @@ import com.floreantpos.ui.dialog.POSMessageDialog;
 
 public class CookingInstructionSelectionView extends BeanEditor {
 	private JTable table;
-	
+
 	private List<TicketItemCookingInstruction> ticketItemCookingInstructions;
 
 	public CookingInstructionSelectionView() {
@@ -33,23 +33,23 @@ public class CookingInstructionSelectionView extends BeanEditor {
 		table = new JTable();
 		table.setRowHeight(35);
 		scrollPane.setViewportView(table);
-		
+
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 	}
 
 	@Override
 	public boolean save() {
 		int[] selectedRows = table.getSelectedRows();
-		
-		if(selectedRows.length == 0) {
+
+		if (selectedRows.length == 0) {
 			POSMessageDialog.showError("No cooking instruction selected");
 			return false;
 		}
-		
-		if(ticketItemCookingInstructions == null) {
+
+		if (ticketItemCookingInstructions == null) {
 			ticketItemCookingInstructions = new ArrayList<TicketItemCookingInstruction>(selectedRows.length);
 		}
-		
+
 		CookingInstructionTableModel model = (CookingInstructionTableModel) table.getModel();
 		for (int i = 0; i < selectedRows.length; i++) {
 			CookingInstruction ci = model.rowsList.get(selectedRows[i]);
@@ -57,7 +57,7 @@ public class CookingInstructionSelectionView extends BeanEditor {
 			cookingInstruction.setDescription(ci.getDescription());
 			ticketItemCookingInstructions.add(cookingInstruction);
 		}
-		
+
 		return true;
 	}
 
@@ -76,7 +76,7 @@ public class CookingInstructionSelectionView extends BeanEditor {
 	public String getDisplayText() {
 		return "Select cooking instructions";
 	}
-	
+
 	public List<TicketItemCookingInstruction> getTicketItemCookingInstructions() {
 		return ticketItemCookingInstructions;
 	}
@@ -121,10 +121,16 @@ public class CookingInstructionSelectionView extends BeanEditor {
 			CookingInstruction row = rowsList.get(rowIndex);
 
 			switch (columnIndex) {
-				case 0:
-					return row.getDescription();
+			case 0:
+				return row.getDescription();
 			}
 			return null;
 		}
+	}
+
+	@Override
+	public void clearTableModel() {
+		// TODO Auto-generated method stub
+
 	}
 }

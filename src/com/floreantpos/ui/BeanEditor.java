@@ -26,13 +26,13 @@ public abstract class BeanEditor<E> extends com.floreantpos.swing.TransparentPan
 	public void clearFields() {
 
 	}
-	
+
 	public boolean delete() {
 		return false;
 	}
-	
+
 	public void setFieldsEnable(boolean enable) {
-		
+
 	}
 
 	public abstract boolean save();
@@ -56,10 +56,17 @@ public abstract class BeanEditor<E> extends com.floreantpos.swing.TransparentPan
 
 		if (bean == null) {
 			clearFields();
-		}
-		else if (updateView) {
+		} else if (updateView) {
 			updateView();
 		}
+	}
+
+	public void clearTableModel() {
+
+	}
+
+	public void setFieldsEnableEdit() {
+
 	}
 
 	public Frame getParentFrame() {

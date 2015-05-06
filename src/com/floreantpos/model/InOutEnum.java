@@ -1,7 +1,7 @@
 package com.floreantpos.model;
 
 public enum InOutEnum {
-	IN(1), OUT(-1), MOVEMENT(0), ADJUSTMENT(2), WASTAGE(3), SELF_CONSUMPTION(4);
+	IN(1), OUT(-1), MOVEMENT(0), ADJUSTMENT(2), WASTAGE(3), CONSUMPTION(4);
 
 	private int type;
 

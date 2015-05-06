@@ -57,7 +57,6 @@ import com.floreantpos.swing.DoubleDocument;
 import com.floreantpos.swing.DoubleTextField;
 import com.floreantpos.swing.IUpdatebleView;
 import com.floreantpos.ui.BeanEditor;
-import com.floreantpos.ui.dialog.BeanEditorDialog;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.util.POSUtil;
 import com.floreantpos.util.ShiftUtil;
@@ -67,8 +66,8 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 
 	private javax.swing.JButton btnAddShift;
 	private javax.swing.JButton btnDeleteShift;
-	private javax.swing.JButton btnNewGroup;
-	private javax.swing.JButton btnNewTax;
+	// private javax.swing.JButton btnNewGroup;
+	// private javax.swing.JButton btnNewTax;
 	private javax.swing.JComboBox cbGroup;
 	private javax.swing.JComboBox cbTax;
 	private javax.swing.JCheckBox chkVisible;
@@ -92,6 +91,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	private DoubleTextField tfPrice;
 	private JLabel lblImagePreview;
 	private JButton btnClearImage;
+	private JButton btnSelectImage = new JButton("...");
 	private JFileChooser fileChooser = new JFileChooser();
 	private JLabel lblImage = new JLabel("Image:");
 	private JCheckBox cbShowTextWithImage;
@@ -121,15 +121,29 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		shiftTable.setModel(shiftTableModel = new ShiftTableModel(menuItem.getShifts()));
 		setBean(menuItem);
 		addRecepieExtension();
+
 		setFieldsEnable(false);
+	}
+
+	public void createNew() {
+		MenuItem newMenu = new MenuItem();
+		setBean(newMenu);
+		if (tabReciepe != null && tabReciepe instanceof IUpdatebleView) {
+			IUpdatebleView view = (IUpdatebleView) tabReciepe;
+			view.clearTableModel();
+			view.setFieldsEnable(true);
+		}
+		// check whether to make new recipe
 	}
 
 	public void setFieldsEnable(boolean enable) {
 		this.tfName.setEnabled(enable);
 		this.btnAddShift.setEnabled(enable);
 		this.btnDeleteShift.setEnabled(enable);
-		this.btnNewGroup.setEnabled(enable);
-		this.btnNewTax.setEnabled(enable);
+		/*
+		 * this.btnNewGroup.setEnabled(enable);
+		 * this.btnNewTax.setEnabled(enable);
+		 */
 		this.cbGroup.setEnabled(enable);
 		this.cbTax.setEnabled(enable);
 		this.jLabel1.setEnabled(enable);
@@ -144,14 +158,17 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		this.lblImagePreview.setEnabled(enable);
 		this.btnClearImage.setEnabled(enable);
 		this.fileChooser.setEnabled(enable);
+		this.btnSelectImage.setEnabled(enable);
 		this.lblImage.setEnabled(enable);
 		this.cbShowTextWithImage.setEnabled(enable);
-		this.lblBuyPrice.setEnabled(enable);
-		this.tfBuyPrice.setEnabled(enable);
 		this.lblButtonColor.setEnabled(enable);
 		this.lblTextColor.setEnabled(enable);
 		this.btnButtonColor.setEnabled(enable);
 		this.btnTextColor.setEnabled(enable);
+		if (tabReciepe != null && tabReciepe instanceof IUpdatebleView) {
+			IUpdatebleView view = (IUpdatebleView) tabReciepe;
+			view.setFieldsEnable(enable);
+		}
 	}
 
 	public void clearFields() {
@@ -244,14 +261,14 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		jLabel4 = new javax.swing.JLabel();
 		jLabel4.setHorizontalAlignment(SwingConstants.TRAILING);
 		cbGroup = new javax.swing.JComboBox();
-		btnNewGroup = new javax.swing.JButton();
+		// btnNewGroup = new javax.swing.JButton();
 		jLabel3 = new javax.swing.JLabel();
 		jLabel3.setHorizontalAlignment(SwingConstants.TRAILING);
 		tfPrice = new DoubleTextField();
 		jLabel6 = new javax.swing.JLabel();
 		jLabel6.setHorizontalAlignment(SwingConstants.TRAILING);
 		cbTax = new javax.swing.JComboBox();
-		btnNewTax = new javax.swing.JButton();
+		// btnNewTax = new javax.swing.JButton();
 		jLabel2 = new javax.swing.JLabel();
 		jLabel2.setHorizontalAlignment(SwingConstants.TRAILING);
 		jLabel5 = new javax.swing.JLabel();
@@ -269,12 +286,12 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		jLabel1.setText(Messages.getString("LABEL_NAME"));
 		jLabel4.setText(Messages.getString("LABEL_GROUP"));
 
-		btnNewGroup.setText("...");
-		btnNewGroup.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				doCreateNewGroup(evt);
-			}
-		});
+		// btnNewGroup.setText("...");
+		// btnNewGroup.addActionListener(new java.awt.event.ActionListener() {
+		// public void actionPerformed(java.awt.event.ActionEvent evt) {
+		// doCreateNewGroup(evt);
+		// }
+		// });
 
 		if (Application.getInstance().isPriceIncludesTax()) {
 			jLabel3.setText(Messages.getString("LABEL_SALES_PRICE_INCLUDING_TAX"));
@@ -286,12 +303,12 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 
 		jLabel6.setText(Messages.getString("LABEL_TAX"));
 
-		btnNewTax.setText("...");
-		btnNewTax.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				btnNewTaxdoCreateNewTax(evt);
-			}
-		});
+		// btnNewTax.setText("...");
+		// btnNewTax.addActionListener(new java.awt.event.ActionListener() {
+		// public void actionPerformed(java.awt.event.ActionEvent evt) {
+		// btnNewTaxdoCreateNewTax(evt);
+		// }
+		// });
 
 		jLabel2.setText(com.floreantpos.POSConstants.DISCOUNT_RATE + ":");
 
@@ -324,7 +341,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tabGeneral.add(jLabel1, "cell 0 0,alignx left,aligny center"); //$NON-NLS-1$
 		tabGeneral.add(tfName, "cell 1 0 3 1,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(cbGroup, "cell 1 4,growx,aligny top"); //$NON-NLS-1$
-		tabGeneral.add(btnNewGroup, "cell 3 4,growx,aligny top"); //$NON-NLS-1$
+		//		tabGeneral.add(btnNewGroup, "cell 3 4,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(tfDiscountRate, "cell 1 7,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(cbTax, "cell 1 8,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(tfPrice, "cell 1 6,growx,aligny top"); //$NON-NLS-1$
@@ -337,7 +354,6 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		lblImagePreview.setPreferredSize(new Dimension(100, 100));
 		tabGeneral.add(lblImagePreview, "cell 1 10");
 
-		JButton btnSelectImage = new JButton("...");
 		btnSelectImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				doSelectImageFile();
@@ -371,7 +387,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		cbShowTextWithImage.setActionCommand("Show Text with Image");
 		tabGeneral.add(cbShowTextWithImage, "cell 1 13"); //$NON-NLS-1$
 		tabGeneral.add(chkVisible, "cell 1 14,alignx left,aligny top"); //$NON-NLS-1$
-		tabGeneral.add(btnNewTax, "cell 2 8,alignx left,aligny top"); //$NON-NLS-1$
+		//		tabGeneral.add(btnNewTax, "cell 2 8,alignx left,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(jLabel5, "cell 2 7"); //$NON-NLS-1$
 		add(tabbedPane);
 
@@ -421,22 +437,24 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tabbedPane.addChangeListener(this);
 	}
 
-	private void btnNewTaxdoCreateNewTax(java.awt.event.ActionEvent evt) {
-		BeanEditorDialog dialog = new BeanEditorDialog(new TaxForm(), BackOfficeWindow.getInstance(), true);
-		dialog.open();
-	}
-
-	private void doCreateNewGroup(java.awt.event.ActionEvent evt) {
-		MenuGroupForm editor = new MenuGroupForm();
-		BeanEditorDialog dialog = new BeanEditorDialog(editor, getParentFrame(), true);
-		dialog.open();
-		if (!dialog.isCanceled()) {
-			MenuGroup foodGroup = (MenuGroup) editor.getBean();
-			ComboBoxModel model = (ComboBoxModel) cbGroup.getModel();
-			model.addElement(foodGroup);
-			model.setSelectedItem(foodGroup);
-		}
-	}
+	// private void btnNewTaxdoCreateNewTax(java.awt.event.ActionEvent evt) {
+	// BeanEditorDialog dialog = new BeanEditorDialog(new TaxForm(),
+	// BackOfficeWindow.getInstance(), true);
+	// dialog.open();
+	// }
+	//
+	// private void doCreateNewGroup(java.awt.event.ActionEvent evt) {
+	// MenuGroupForm editor = new MenuGroupForm();
+	// BeanEditorDialog dialog = new BeanEditorDialog(editor, getParentFrame(),
+	// true);
+	// dialog.open();
+	// if (!dialog.isCanceled()) {
+	// MenuGroup foodGroup = (MenuGroup) editor.getBean();
+	// ComboBoxModel model = (ComboBoxModel) cbGroup.getModel();
+	// model.addElement(foodGroup);
+	// model.setSelectedItem(foodGroup);
+	// }
+	// }
 
 	@Override
 	public boolean save() {
