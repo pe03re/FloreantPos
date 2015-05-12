@@ -1,13 +1,19 @@
 package com.floreantpos.bo.ui.explorer;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 
+import com.floreantpos.bo.ui.Command;
 import com.floreantpos.bo.ui.ModelBrowser;
 import com.floreantpos.model.MenuItem;
+import com.floreantpos.model.RecepieItem;
 import com.floreantpos.model.dao.MenuItemDAO;
 import com.floreantpos.ui.model.MenuItemForm;
 
@@ -16,13 +22,15 @@ public class MenuItemBrowser extends ModelBrowser<MenuItem> {
 	 * 
 	 */
 	private static final long serialVersionUID = -3216688728242415755L;
-	private static MenuItemForm mf = new MenuItemForm();
+	private JButton btnRefreshPrice = new JButton("REFRESH PRICE");
 
 	public MenuItemBrowser() {
-		super(mf);
+		super(new MenuItemForm());
 		JPanel buttonPanel = new JPanel();
-		this.browserPanel.add(buttonPanel, "South");
-		init(new MenuItemTableModel(), new Dimension(300, 400), new Dimension(650, 400));
+		this.browserPanel.add(buttonPanel, BorderLayout.SOUTH);
+		this.btnRefreshPrice.setActionCommand(Command.REFRESH_BUY_PRICE.name());
+		this.btnRefreshPrice.setEnabled(true);
+		init(new MenuItemTableModel(), new Dimension(500, 400), new Dimension(500, 400));
 		browserTable.getColumn("NAME").setPreferredWidth(125);
 		browserTable.getColumn("SELL PRICE").setPreferredWidth(25);
 		browserTable.getColumn("BUY PRICE").setPreferredWidth(25);
@@ -31,12 +39,46 @@ public class MenuItemBrowser extends ModelBrowser<MenuItem> {
 		browserTable.getColumn("VISIBLE").setPreferredWidth(10);
 		hideDeleteBtn();
 		refreshTable();
+		btnRefreshPrice.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				refreshBuyPrice();
+			}
+		});
+		buttonPanel1.add(btnRefreshPrice);
 	}
 
 	public void loadData() {
 		List<MenuItem> itemList = MenuItemDAO.getInstance().findAll();
 		MenuItemTableModel tableModel = (MenuItemTableModel) this.browserTable.getModel();
 		tableModel.setRows(itemList);
+	}
+
+	private void refreshBuyPrice() {
+		MenuItemDAO menuItemDAO = new MenuItemDAO();
+		List<MenuItem> itemList = MenuItemDAO.getInstance().findAll();
+		for (MenuItem m : itemList) {
+			m.setBuyPrice(getBuyPriceFromInventory(m));
+			menuItemDAO.saveOrUpdate(m);
+		}
+		MenuItemTableModel tableModel = (MenuItemTableModel) this.browserTable.getModel();
+		tableModel.setRows(itemList);
+	}
+
+	private static Double getBuyPriceFromInventory(MenuItem menuItem) {
+		double buyPrice = 0.0d;
+		if (menuItem != null && menuItem.getRecepie() != null) {
+			List<RecepieItem> riList = menuItem.getRecepie().getRecepieItems();
+			if (riList != null && !riList.isEmpty()) {
+				for (RecepieItem ri : riList) {
+					if (ri != null && ri.getInventoryItem() != null) {
+						Double itemQty = ri.getPercentage();
+						buyPrice += ri.getInventoryItem().getAverageRunitPrice() * itemQty;
+					}
+				}
+			}
+		}
+		return buyPrice;
 	}
 
 	public void refreshTable() {
@@ -50,7 +92,7 @@ public class MenuItemBrowser extends ModelBrowser<MenuItem> {
 
 	public void valueChanged(ListSelectionEvent e) {
 		super.valueChanged(e);
-		mf.setFieldsEnable(false);
+		beanEditor.setFieldsEnable(false);
 	}
 
 	static class MenuItemTableModel extends ListTableModel<MenuItem> {
@@ -70,9 +112,9 @@ public class MenuItemBrowser extends ModelBrowser<MenuItem> {
 			case 0:
 				return item.getName();
 			case 1:
-				return "₹ " + formatDouble(item.getPrice());
+				return "Rs " + formatDouble(item.getPrice());
 			case 2:
-				return "₹ " + formatDouble(item.getBuyPrice());
+				return "Rs " + formatDouble(item.getBuyPrice());
 			case 3:
 				if (item.getTax() != null) {
 					return formatDouble(item.getTax().getRate()) + " %";

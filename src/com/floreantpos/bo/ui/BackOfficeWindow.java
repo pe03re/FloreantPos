@@ -29,8 +29,11 @@ import com.floreantpos.bo.actions.CreditCardReportAction;
 import com.floreantpos.bo.actions.DataExportAction;
 import com.floreantpos.bo.actions.DataImportAction;
 import com.floreantpos.bo.actions.DrawerPullReportExplorerAction;
+import com.floreantpos.bo.actions.ExpenseTransactionReportAction;
 import com.floreantpos.bo.actions.GroupExplorerAction;
 import com.floreantpos.bo.actions.HourlyLaborReportAction;
+import com.floreantpos.bo.actions.InventoryItemReportAction;
+import com.floreantpos.bo.actions.InventoryTransactionReportAction;
 import com.floreantpos.bo.actions.ItemExplorerAction;
 import com.floreantpos.bo.actions.JournalReportAction;
 import com.floreantpos.bo.actions.KeyStatisticsSalesReportAction;
@@ -189,6 +192,9 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		reportMenu.add(new SalesBalanceReportAction());
 		reportMenu.add(new SalesExceptionReportAction());
 		reportMenu.add(new SalesDetailReportAction());
+		reportMenu.add(new InventoryTransactionReportAction());
+		reportMenu.add(new ExpenseTransactionReportAction());
+		reportMenu.add(new InventoryItemReportAction());
 		menuBar.add(reportMenu);
 	}
 

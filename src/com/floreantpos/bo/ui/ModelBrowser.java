@@ -38,6 +38,7 @@ public abstract class ModelBrowser<E> extends JPanel implements ActionListener, 
 	private JLabel current = new JLabel();
 	private JLabel end = new JLabel();
 
+	protected JPanel buttonPanel1 = new JPanel();
 	private JButton btnNew = new JButton("NEW");
 	private JButton btnEdit = new JButton("EDIT");
 	private JButton btnSave = new JButton("SAVE");
@@ -152,11 +153,11 @@ public abstract class ModelBrowser<E> extends JPanel implements ActionListener, 
 			}
 		});
 
-		JLabel empty1 = new JLabel("                                 ");
-		JLabel empty2 = new JLabel("                                 ");
+		JLabel empty1 = new JLabel("      ");
+		JLabel empty2 = new JLabel("      ");
 
 		if (tableModel != null) {
-			JPanel buttonPanel1 = new JPanel();
+
 			// buttonPanel1.setLayout(new BorderLayout(5, 5));
 			buttonPanel1.add(cbPageSize, BorderLayout.WEST);
 			buttonPanel1.add(empty1);
@@ -217,7 +218,7 @@ public abstract class ModelBrowser<E> extends JPanel implements ActionListener, 
 		beanEditor.setFieldsEnable(false);
 	}
 
-	private void refreshPageAttr() {
+	protected void refreshPageAttr() {
 		ListTableModel tableModel = (ListTableModel) browserTable.getModel();
 		int currentPage = tableModel.getPageOffset();
 		int pageSize = tableModel.getPageSize();
@@ -228,15 +229,11 @@ public abstract class ModelBrowser<E> extends JPanel implements ActionListener, 
 		if (pageToMove > 0) {
 			for (int i = 0; i < pageToMove; i++) {
 				this.btnNext.doClick();
-				// this.btnNext.dispatchEvent(new MouseEvent(this.btnNew, 0, 1,
-				// 0, 0, 0, 1, true));
 			}
 		} else {
 			if (pageToMove < 0) {
 				for (int i = 0; i < pageToMove; i++) {
 					this.btnPrev.doClick();
-					// this.btnPrev.dispatchEvent(new MouseEvent(this.btnPrev,
-					// 0, 1, 0, 0, 0, 1, true));
 				}
 			}
 		}

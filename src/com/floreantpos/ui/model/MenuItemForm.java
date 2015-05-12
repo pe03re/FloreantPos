@@ -47,7 +47,6 @@ import com.floreantpos.main.Application;
 import com.floreantpos.model.MenuGroup;
 import com.floreantpos.model.MenuItem;
 import com.floreantpos.model.MenuItemShift;
-import com.floreantpos.model.RecepieItem;
 import com.floreantpos.model.Tax;
 import com.floreantpos.model.dao.MenuGroupDAO;
 import com.floreantpos.model.dao.MenuItemDAO;
@@ -508,7 +507,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	protected void updateView() {
 		MenuItem menuItem = getBean();
 		tfName.setText(menuItem.getName());
-		tfBuyPrice.setText(formatDouble(getBuyPriceFromInventory(menuItem)));
+		tfBuyPrice.setText(String.valueOf(formatDouble(menuItem.getBuyPrice())));
 		tfPrice.setText(String.valueOf(menuItem.getPrice()));
 		tfDiscountRate.setText(String.valueOf(menuItem.getDiscountRate()));
 		chkVisible.setSelected(menuItem.isVisible());
@@ -539,22 +538,6 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 			IUpdatebleView view = (IUpdatebleView) tabReciepe;
 			view.updateView(menuItem);
 		}
-	}
-
-	private Double getBuyPriceFromInventory(MenuItem menuItem) {
-		double buyPrice = 0.0d;
-		if (menuItem != null && menuItem.getRecepie() != null) {
-			List<RecepieItem> riList = menuItem.getRecepie().getRecepieItems();
-			if (riList != null && !riList.isEmpty()) {
-				for (RecepieItem ri : riList) {
-					if (ri != null && ri.getInventoryItem() != null) {
-						Double itemQty = ri.getPercentage();
-						buyPrice += ri.getInventoryItem().getAverageRunitPrice() * itemQty;
-					}
-				}
-			}
-		}
-		return buyPrice;
 	}
 
 	@Override

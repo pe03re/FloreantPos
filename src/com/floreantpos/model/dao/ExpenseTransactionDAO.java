@@ -1,6 +1,8 @@
 package com.floreantpos.model.dao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -37,6 +39,29 @@ public class ExpenseTransactionDAO extends BaseExpenseTransactionDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new PosException("Error occured while finding expense transaction");
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+
+	public List<ExpenseTransaction> findTransactions(Date from, Date to) {
+		Session session = null;
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(ExpenseTransaction.class);
+			criteria.add(Restrictions.ge(ExpenseTransaction.PROP_TRANSACTION_DATE, from));
+			criteria.add(Restrictions.le(ExpenseTransaction.PROP_TRANSACTION_DATE, to));
+			criteria.addOrder(Order.asc(ExpenseTransaction.PROP_TRANSACTION_DATE));
+			ArrayList<ExpenseTransaction> list = (ArrayList<ExpenseTransaction>) criteria.list();
+			if (list != null && !list.isEmpty()) {
+				return list;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			throw new PosException("Error occured while finding expense transactions", e);
 		} finally {
 			if (session != null) {
 				session.close();

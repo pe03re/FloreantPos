@@ -41,6 +41,7 @@ import com.floreantpos.PosException;
 import com.floreantpos.actions.NewBarTabAction;
 import com.floreantpos.actions.RefundAction;
 import com.floreantpos.actions.SettleTicketAction;
+import com.floreantpos.bo.ui.BackOfficeWindow;
 import com.floreantpos.config.TerminalConfig;
 import com.floreantpos.extension.OrderServiceExtension;
 import com.floreantpos.main.Application;
@@ -139,8 +140,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		javax.swing.JPanel centerPanel = new javax.swing.JPanel(new java.awt.BorderLayout(5, 5));
 		javax.swing.JPanel ticketsAndActivityPanel = new javax.swing.JPanel(new java.awt.BorderLayout(10, 10));
 
-		TitledBorder titledBorder = BorderFactory.createTitledBorder(null, POSConstants.OPEN_TICKETS_AND_ACTIVITY, TitledBorder.CENTER,
-				TitledBorder.DEFAULT_POSITION);
+		TitledBorder titledBorder = BorderFactory.createTitledBorder(null, POSConstants.OPEN_TICKETS_AND_ACTIVITY, TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION);
 		ticketsAndActivityPanel.setBorder(new CompoundBorder(titledBorder, new EmptyBorder(2, 2, 2, 2)));
 
 		orderFiltersPanel = createOrderFilters();
@@ -181,15 +181,31 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 		rightPanel.add(orderPanel);
 
-		PosButton btnOthers = new PosButton("OTHER FUNCTIONS");
-		btnOthers.addActionListener(new ActionListener() {
+		// PosButton btnOthers = new PosButton("OTHER FUNCTIONS");
+		// btnOthers.addActionListener(new ActionListener() {
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// SwitchboardOtherFunctionsDialog dialog = new
+		// SwitchboardOtherFunctionsDialog(SwitchboardView.this);
+		// dialog.open();
+		// }
+		// });
+
+		PosButton btnBackOffice = new PosButton(POSConstants.BACK_OFFICE_BUTTON_TEXT);
+		btnBackOffice.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SwitchboardOtherFunctionsDialog dialog = new SwitchboardOtherFunctionsDialog(SwitchboardView.this);
-				dialog.open();
+				BackOfficeWindow window = BackOfficeWindow.getInstance();
+				if (window == null) {
+					window = new BackOfficeWindow();
+					Application.getInstance().setBackOfficeWindow(window);
+				}
+				window.setVisible(true);
+				window.toFront();
 			}
 		});
-		rightPanel.add(btnOthers, BorderLayout.SOUTH);
+
+		rightPanel.add(btnBackOffice, BorderLayout.SOUTH);
 
 		centerPanel.add(rightPanel, java.awt.BorderLayout.EAST);
 
@@ -407,8 +423,8 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			return;
 		}
 
-		int option = JOptionPane.showOptionDialog(Application.getPosWindow(), "Ticket# " + ticket.getId() + " will be closed.", "Confirm",
-				JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+		int option = JOptionPane.showOptionDialog(Application.getPosWindow(), "Ticket# " + ticket.getId() + " will be closed.", "Confirm", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
 		if (option != JOptionPane.OK_OPTION) {
 			return;
@@ -435,8 +451,8 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 			User assignedDriver = ticket.getAssignedDriver();
 			if (assignedDriver != null) {
-				int option = JOptionPane.showOptionDialog(Application.getPosWindow(), "Driver already assigned. Do you want to reassign?", "Confirm",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+				int option = JOptionPane.showOptionDialog(Application.getPosWindow(), "Driver already assigned. Do you want to reassign?", "Confirm", JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 				if (option != JOptionPane.YES_OPTION) {
 					return;
@@ -642,8 +658,8 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 		} catch (TicketAlreadyExistsException e) {
 
-			int option = JOptionPane.showOptionDialog(Application.getPosWindow(), POSConstants.EDIT_TICKET_CONFIRMATION, POSConstants.CONFIRM,
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+			int option = JOptionPane.showOptionDialog(Application.getPosWindow(), POSConstants.EDIT_TICKET_CONFIRMATION, POSConstants.CONFIRM, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null, null, null);
 			if (option == JOptionPane.YES_OPTION) {
 				editTicket(e.getTicket());
 				return;
@@ -658,8 +674,8 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 		} catch (TicketAlreadyExistsException e) {
 
-			int option = JOptionPane.showOptionDialog(Application.getPosWindow(), POSConstants.EDIT_TICKET_CONFIRMATION, POSConstants.CONFIRM,
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+			int option = JOptionPane.showOptionDialog(Application.getPosWindow(), POSConstants.EDIT_TICKET_CONFIRMATION, POSConstants.CONFIRM, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null, null, null);
 			if (option == JOptionPane.YES_OPTION) {
 				editTicket(e.getTicket());
 				return;

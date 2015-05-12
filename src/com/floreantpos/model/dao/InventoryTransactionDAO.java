@@ -1,6 +1,8 @@
 package com.floreantpos.model.dao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -37,6 +39,29 @@ public class InventoryTransactionDAO extends BaseInventoryTransactionDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new PosException("Error occured while finding inventory transaction");
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+
+	public List<InventoryTransaction> findTransactions(Date from, Date to) {
+		Session session = null;
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(InventoryTransaction.class);
+			criteria.add(Restrictions.ge(InventoryTransaction.PROP_TRANSACTION_DATE, from));
+			criteria.add(Restrictions.le(InventoryTransaction.PROP_TRANSACTION_DATE, to));
+			criteria.addOrder(Order.asc(InventoryTransaction.PROP_TRANSACTION_DATE));
+			ArrayList<InventoryTransaction> list = (ArrayList<InventoryTransaction>) criteria.list();
+			if (list != null && !list.isEmpty()) {
+				return list;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			throw new PosException("Error occured while finding inventory transactions", e);
 		} finally {
 			if (session != null) {
 				session.close();
