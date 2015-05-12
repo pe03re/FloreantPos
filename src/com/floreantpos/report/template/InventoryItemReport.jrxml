@@ -95,7 +95,7 @@
 				</box>
 				<textElement>
 					<font isBold="true"/>
-					
+					<textElement textAlignment="Center">
 				</textElement>
 				<text><![CDATA[Report date:]]></text>
 			</staticText>
