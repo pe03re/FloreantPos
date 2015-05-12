@@ -48,7 +48,7 @@
 		<property name="visible" type="boolean">
 			<column name="VISIBLE" not-null="true" />
 		</property>
-		<set name="recepieItems" table="recepie_item" inverse="true" lazy="true"
+		<set name="recepieItems" table="recepie_item" inverse="true" lazy="false"
 			fetch="select">
 			<key>
 				<column name="INVENTORY_ITEM" />
