@@ -11,7 +11,11 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.floreantpos.PosException;
+import com.floreantpos.model.Company;
+import com.floreantpos.model.InventoryItem;
 import com.floreantpos.model.InventoryTransaction;
+import com.floreantpos.model.InventoryTransactionType;
+import com.floreantpos.model.InventoryVendor;
 
 public class InventoryTransactionDAO extends BaseInventoryTransactionDAO {
 
@@ -46,13 +50,25 @@ public class InventoryTransactionDAO extends BaseInventoryTransactionDAO {
 		}
 	}
 
-	public List<InventoryTransaction> findTransactions(Date from, Date to) {
+	public List<InventoryTransaction> findTransactions(Date from, Date to, List<InventoryItem> item, List<Company> comp, List<InventoryVendor> dist, List<InventoryTransactionType> type) {
 		Session session = null;
 		try {
 			session = getSession();
 			Criteria criteria = session.createCriteria(InventoryTransaction.class);
 			criteria.add(Restrictions.ge(InventoryTransaction.PROP_TRANSACTION_DATE, from));
 			criteria.add(Restrictions.le(InventoryTransaction.PROP_TRANSACTION_DATE, to));
+			if (item != null && !item.isEmpty()) {
+				criteria.add(Restrictions.in(InventoryTransaction.PROP_INVENTORY_ITEM, item));
+			}
+			if (comp != null && !comp.isEmpty()) {
+				criteria.add(Restrictions.in(InventoryTransaction.PROP_COMPANY, comp));
+			}
+			if (dist != null && !dist.isEmpty()) {
+				criteria.add(Restrictions.in(InventoryTransaction.PROP_DISTRIBUTOR, dist));
+			}
+			if (type != null && !type.isEmpty()) {
+				criteria.add(Restrictions.in(InventoryTransaction.PROP_TRANSACTION_TYPE, type));
+			}
 			criteria.addOrder(Order.asc(InventoryTransaction.PROP_TRANSACTION_DATE));
 			ArrayList<InventoryTransaction> list = (ArrayList<InventoryTransaction>) criteria.list();
 			if (list != null && !list.isEmpty()) {

@@ -43,13 +43,11 @@ public abstract class BaseReportView extends TransparentPanel {
 	private JXDatePicker fromDatePicker;
 	private JXDatePicker toDatePicker;
 	private JPanel reportPanel;
-	private JPanel contentPane;
+	protected JPanel contentPane;
 
 	public BaseReportView() {
-
 		setLayout(new BorderLayout());
 		add(contentPane);
-
 		btnGo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				viewReport();
@@ -65,18 +63,10 @@ public abstract class BaseReportView extends TransparentPanel {
 
 	}
 
-	// public boolean checkTime(Date toDate, Date fromDate) {
-	// long fromTime = fromDate.getTime();
-	// long toTime = toDate.getTime();
-	//
-	// long milliseconds = toTime - fromTime;
-	// if (milliseconds < 0) {
-	// // message
-	// return false;
-	// } else {
-	// return true;
-	// }
-	// }
+	public void hideDateFields(boolean hide) {
+		this.fromDatePicker.setVisible(hide);
+		this.toDatePicker.setVisible(hide);
+	}
 
 	private void viewReport() {
 		Date fromDate = fromDatePicker.getDate();
@@ -139,7 +129,8 @@ public abstract class BaseReportView extends TransparentPanel {
 		contentPane = new JPanel();
 		contentPane.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
 		final JPanel panel1 = new JPanel();
-		panel1.setLayout(new GridLayoutManager(6, 3, new Insets(0, 0, 0, 0), -1, -1));
+		panel1.setName("panel1");
+		panel1.setLayout(new GridLayoutManager(6, 8, new Insets(0, 0, 0, 0), -1, -1));
 		contentPane.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
 				1, null, null, null, 0, false));
 		final JLabel label1 = new JLabel();
@@ -165,10 +156,15 @@ public abstract class BaseReportView extends TransparentPanel {
 		final JSeparator separator1 = new JSeparator();
 		panel1.add(separator1, new GridConstraints(5, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW,
 				null, null, null, 0, false));
+
 		reportPanel = new JPanel();
 		reportPanel.setLayout(new BorderLayout(0, 0));
 		contentPane.add(reportPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK
 				| GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+	}
+
+	protected void addExtraParams() {
+
 	}
 
 	public JComponent $$$getRootComponent$$$() {

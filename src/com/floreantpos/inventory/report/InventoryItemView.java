@@ -15,6 +15,11 @@ import com.floreantpos.model.dao.InventoryItemDAO;
  */
 public class InventoryItemView extends BaseReportView {
 
+	public InventoryItemView() {
+		super();
+		hideDateFields(true);
+	}
+
 	@Override
 	protected ListTableModel getData(Date toDate, Date fromDate, HashMap properties) {
 		List<InventoryItem> inventoryItems = InventoryItemDAO.getInstance().findAll();

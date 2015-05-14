@@ -32,7 +32,9 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 	public static String PROP_TRANSACTION_DATE = "transactionDate";
 	public static String PROP_FROM_WAREHOUSE = "inventoryWarehouseByFromWarehouseId";
 	public static String PROP_ID = "id";
-	public static String PROP_TRANSACTION_TYPE = "transactionType";
+	public static String PROP_TRANSACTION_TYPE = "inventoryTransactionType";
+	public static String PROP_COMPANY = "company";
+	public static String PROP_DISTRIBUTOR = "inventoryVendor";
 	public static String PROP_TOTAL_PRICE = "totalPrice";
 	public static String PROP_VAT_PAID = "vatPaid";
 	public static String PROP_CREDIT_CHECK = "creditCheck";
