@@ -122,7 +122,8 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		if (newUserType == null) {
 			createAdminMenu(menuBar);
 			createExplorerMenu(menuBar);
-			createReportMenu(menuBar);
+			createSalesReportMenu(menuBar);
+			createExpenseReportMenu(menuBar);
 		} else {
 			if (permissions != null && permissions.contains(UserPermission.PERFORM_ADMINISTRATIVE_TASK)) {
 				createAdminMenu(menuBar);
@@ -131,7 +132,8 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 				createExplorerMenu(menuBar);
 			}
 			if (permissions != null && permissions.contains(UserPermission.VIEW_REPORTS)) {
-				createReportMenu(menuBar);
+				createSalesReportMenu(menuBar);
+				createExpenseReportMenu(menuBar);
 			}
 		}
 
@@ -177,8 +179,8 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		menuBar.add(entityMenu);
 	}
 
-	private void createReportMenu(JMenuBar menuBar) {
-		JMenu reportMenu = new JMenu(com.floreantpos.POSConstants.REPORTS);
+	private void createSalesReportMenu(JMenuBar menuBar) {
+		JMenu reportMenu = new JMenu("Sales Reports");
 		reportMenu.add(new SalesReportAction());
 		reportMenu.add(new OpenTicketSummaryReportAction());
 		reportMenu.add(new HourlyLaborReportAction());
@@ -192,10 +194,15 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		reportMenu.add(new SalesBalanceReportAction());
 		reportMenu.add(new SalesExceptionReportAction());
 		reportMenu.add(new SalesDetailReportAction());
-		reportMenu.add(new InventoryTransactionReportAction());
-		reportMenu.add(new ExpenseTransactionReportAction());
-		reportMenu.add(new InventoryItemReportAction());
 		menuBar.add(reportMenu);
+	}
+
+	private void createExpenseReportMenu(JMenuBar menuBar) {
+		JMenu reportExpenseMenu = new JMenu("Expense Reports");
+		reportExpenseMenu.add(new InventoryTransactionReportAction());
+		reportExpenseMenu.add(new ExpenseTransactionReportAction());
+		reportExpenseMenu.add(new InventoryItemReportAction());
+		menuBar.add(reportExpenseMenu);
 	}
 
 	private void createExplorerMenu(JMenuBar menuBar) {

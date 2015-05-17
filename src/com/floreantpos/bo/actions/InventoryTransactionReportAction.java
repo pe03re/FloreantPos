@@ -14,7 +14,7 @@ public class InventoryTransactionReportAction extends AbstractAction {
 	public static String INV_TRANS_REPORT = "InventoryTransactionReport";
 
 	public InventoryTransactionReportAction() {
-		super(INV_TRANS_REPORT);
+		super("Inventory Transaction Report");
 	}
 
 	public InventoryTransactionReportAction(String name) {
@@ -33,7 +33,7 @@ public class InventoryTransactionReportAction extends AbstractAction {
 		int index = tabbedPane.indexOfTab(INV_TRANS_REPORT);
 		if (index == -1) {
 			reportView = new InventoryTransactionView();
-			tabbedPane.addTab("Inventory Transaction Report", reportView);
+			tabbedPane.addTab(INV_TRANS_REPORT, reportView);
 		} else {
 			reportView = (InventoryTransactionView) tabbedPane.getComponentAt(index);
 		}

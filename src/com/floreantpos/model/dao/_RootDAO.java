@@ -3,6 +3,7 @@ package com.floreantpos.model.dao;
 import org.hibernate.Session;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.stat.Statistics;
 
 import com.floreantpos.Database;
 import com.floreantpos.config.AppConfig;
@@ -91,6 +92,9 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 
 	public static void initialize(String configFileName, Configuration configuration) {
 		com.floreantpos.model.dao._RootDAO.setSessionFactory(configuration.buildSessionFactory());
+		Statistics statistics = sessionFactory.getStatistics();
+		statistics.setStatisticsEnabled(true);
+		statistics.logSummary();
 	}
 
 	public static Configuration getNewConfiguration(String configFileName) {
@@ -158,12 +162,13 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.setProperty("hibernate.hbm2ddl.auto", "validate");
 		configuration = configuration.setProperty("hibernate.connection.autocommit", "false");
 		configuration = configuration.setProperty("hibernate.max_fetch_depth", "5");
-		configuration = configuration.setProperty("hibernate.show_sql", "false");
-		configuration = configuration.setProperty("use_sql_comments", "false");
+		configuration = configuration.setProperty("hibernate.show_sql", "true");
+		configuration = configuration.setProperty("use_sql_comments", "true");
 		configuration = configuration.setProperty("hibernate.c3p0.min_size", "2");
 		configuration = configuration.setProperty("hibernate.c3p0.max_size", "10");
 		configuration = configuration.setProperty("hibernate.c3p0.timeout", "300");
 		configuration = configuration.setProperty("hibernate.c3p0.max_statements", "50");
+
 		// configuration =
 		// configuration.setProperty("hibernate.c3p0.idle_test_period", "3000");
 		configuration = configuration.setProperty("hibernate.c3p0.validate", "true");

@@ -47,6 +47,15 @@ public class SelectionManager<T> implements ActionListener {
 	public boolean isSelected(T item) {
 		return selectedItems.contains(item);
 	}
+
+	public void setAllSelected(List<T> tItems) {
+		selectedItems.clear();
+		selectedItems.addAll(tItems);
+	}
+
+	public void setAllUnSelected() {
+		selectedItems.clear();
+	}
 }
 
 /** Implementation copied from source code. */
@@ -58,26 +67,6 @@ class MultiRenderer extends BasicComboBoxRenderer {
 	public MultiRenderer(SelectionManager sm) {
 		selectionManager = sm;
 	}
-
-	// public Component getListCellRendererComponent(JList list, Object value,
-	// int index, boolean isSelected, boolean cellHasFocus) {
-	// if (selectionManager.isSelected(value)) {
-	// setBackground(list.getSelectionBackground());
-	// setForeground(list.getSelectionForeground());
-	// } else {
-	// setBackground(list.getBackground());
-	// setForeground(list.getForeground());
-	// }
-	//
-	// setFont(list.getFont());
-	//
-	// if (value instanceof Icon) {
-	// setIcon((Icon) value);
-	// } else {
-	// setText((value == null) ? "" : value.toString());
-	// }
-	// return this;
-	// }
 
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
@@ -132,21 +121,6 @@ class MultiRenderer extends BasicComboBoxRenderer {
 				}
 			}
 		}
-		// if (selectionManager.isSelected(value)) {
-		// setBackground(list.getSelectionBackground());
-		// setForeground(list.getSelectionForeground());
-		// } else {
-		// setBackground(list.getBackground());
-		// setForeground(list.getForeground());
-		// }
-		//
-		// setFont(list.getFont());
-		//
-		// if (value instanceof Icon) {
-		// setIcon((Icon) value);
-		// } else {
-		// setText((value == null) ? "" : value.toString());
-		// }
 		return p;
 	}
 }

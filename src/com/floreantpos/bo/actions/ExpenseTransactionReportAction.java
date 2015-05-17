@@ -14,7 +14,7 @@ public class ExpenseTransactionReportAction extends AbstractAction {
 	public static String EXP_TRANS_REPORT = "ExpenseTransactionReport";
 
 	public ExpenseTransactionReportAction() {
-		super(EXP_TRANS_REPORT);
+		super("Expense Transaction Report");
 	}
 
 	public ExpenseTransactionReportAction(String name) {

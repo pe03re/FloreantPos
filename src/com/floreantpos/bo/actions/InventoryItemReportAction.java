@@ -14,7 +14,7 @@ public class InventoryItemReportAction extends AbstractAction {
 	public static String INV_ITEM = "InventoryItemReport";
 
 	public InventoryItemReportAction() {
-		super(INV_ITEM);
+		super("Inventory Item Report");
 	}
 
 	public InventoryItemReportAction(String name) {
