@@ -7,9 +7,7 @@
 		<id column="ID" name="id" type="java.lang.Integer">
 			<generator class="identity" />
 		</id>
-
-
-			<many-to-one name="packagingUnit" class="com.floreantpos.model.PackagingUnit"
+		<many-to-one name="packagingUnit" class="com.floreantpos.model.PackagingUnit"
 			fetch="select" lazy="false">
 			<column name="PUNIT_ID" not-null="true" />
 		</many-to-one>
