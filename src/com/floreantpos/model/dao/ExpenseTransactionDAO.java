@@ -27,7 +27,7 @@ public class ExpenseTransactionDAO extends BaseExpenseTransactionDAO {
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
 			Calendar c = Calendar.getInstance();
-			c.add(Calendar.DATE, -60);
+			c.add(Calendar.DATE, -2);
 			criteria.add(Restrictions.ge(ExpenseTransaction.PROP_TRANSACTION_DATE, c.getTime()));
 			criteria.addOrder(Order.desc(ExpenseTransaction.PROP_TRANSACTION_DATE));
 			List<ExpenseTransaction> list = criteria.list();

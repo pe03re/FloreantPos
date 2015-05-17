@@ -31,7 +31,7 @@ public class InventoryTransactionDAO extends BaseInventoryTransactionDAO {
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
 			Calendar c = Calendar.getInstance();
-			c.add(Calendar.DATE, -60);
+			c.add(Calendar.DATE, -2);
 			criteria.add(Restrictions.ge(InventoryTransaction.PROP_TRANSACTION_DATE, c.getTime()));
 			criteria.addOrder(Order.desc(InventoryTransaction.PROP_TRANSACTION_DATE));
 			List<InventoryTransaction> list = criteria.list();

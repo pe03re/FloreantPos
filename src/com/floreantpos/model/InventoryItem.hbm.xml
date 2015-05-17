@@ -8,11 +8,11 @@
 			<generator class="identity" />
 		</id>
 		<many-to-one name="packagingUnit" class="com.floreantpos.model.PackagingUnit"
-			fetch="select" lazy="false">
+			fetch="join">
 			<column name="PUNIT_ID" not-null="true" />
 		</many-to-one>
 		<many-to-one name="inventoryGroup" class="com.floreantpos.model.InventoryGroup"
-			fetch="select" lazy="false">
+			fetch="join">
 			<column name="ITEM_GROUP_ID" />
 		</many-to-one>
 		<property name="createTime" type="timestamp">
@@ -46,29 +46,29 @@
 		<property name="visible" type="boolean">
 			<column name="VISIBLE" not-null="true" />
 		</property>
-		<set name="recepieItems" table="recepie_item" inverse="true" lazy="false"
-			fetch="select">
+		<set name="recepieItems" table="recepie_item" inverse="true" lazy="true"
+			batch-size="100" fetch="subselect">
 			<key>
 				<column name="INVENTORY_ITEM" />
 			</key>
 			<one-to-many class="com.floreantpos.model.RecepieItem" />
 		</set>
 		<set name="itemCompVendPacks" table="item_comp_vend_pack" inverse="true"
-			lazy="true" fetch="select">
+			lazy="true" fetch="subselect" batch-size="100">
 			<key>
 				<column name="INV_ITEM_ID" not-null="true" />
 			</key>
 			<one-to-many class="com.floreantpos.model.ItemCompVendPack" />
 		</set>
 		<set name="inventoryWarehouseItems" table="inventory_warehouse_item"
-			inverse="true" lazy="true" fetch="select">
+			inverse="true" fetch="subselect" batch-size="100">
 			<key>
 				<column name="INVENTORY_ITEM_ID" />
 			</key>
 			<one-to-many class="com.floreantpos.model.InventoryWarehouseItem" />
 		</set>
 		<set name="inventoryTransactions" table="inventory_transaction"
-			inverse="true" lazy="true" fetch="select">
+			inverse="true" fetch="subselect" batch-size="100">
 			<key>
 				<column name="ITEM_ID" not-null="true" />
 			</key>
