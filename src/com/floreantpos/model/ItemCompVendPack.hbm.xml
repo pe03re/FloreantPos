@@ -9,6 +9,7 @@
 			<column name="ID" />
 			<generator class="identity" />
 		</id>
+		<property column="PRICE" name="price" type="java.lang.Double" />
 		<many-to-one name="packSize" class="com.floreantpos.model.PackSize"
 			fetch="select" lazy="false">
 			<column name="PACK_SIZE_ID" not-null="true" />

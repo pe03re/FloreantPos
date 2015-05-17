@@ -17,7 +17,7 @@ public class InventoryItemView extends BaseReportView {
 
 	public InventoryItemView() {
 		super();
-		hideDateFields(true);
+		showDateFields(false);
 	}
 
 	@Override

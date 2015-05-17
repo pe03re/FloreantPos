@@ -16,6 +16,7 @@ import com.floreantpos.model.InventoryItem;
 import com.floreantpos.model.InventoryTransaction;
 import com.floreantpos.model.InventoryTransactionType;
 import com.floreantpos.model.InventoryVendor;
+import com.floreantpos.model.PackSize;
 
 public class InventoryTransactionDAO extends BaseInventoryTransactionDAO {
 
@@ -78,6 +79,33 @@ public class InventoryTransactionDAO extends BaseInventoryTransactionDAO {
 			}
 		} catch (Exception e) {
 			throw new PosException("Error occured while finding inventory transactions", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+
+	public InventoryTransaction findByICVP(InventoryItem inventoryItem, Company company, InventoryVendor inventoryVendor, PackSize packSize, Integer id) {
+		Session session = null;
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.add(Restrictions.eq(InventoryTransaction.PROP_INVENTORY_ITEM, inventoryItem));
+			criteria.add(Restrictions.eq(InventoryTransaction.PROP_COMPANY, company));
+			criteria.add(Restrictions.eq(InventoryTransaction.PROP_DISTRIBUTOR, inventoryVendor));
+			criteria.add(Restrictions.eq(InventoryTransaction.PROP_PACK_SIZE, packSize));
+			criteria.add(Restrictions.lt(InventoryTransaction.PROP_ID, id));
+			criteria.addOrder(Order.desc(InventoryTransaction.PROP_ID));
+			List<InventoryTransaction> list = criteria.list();
+			if (list != null && !list.isEmpty()) {
+				return list.get(0);
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new PosException("Error occured while finding inventory transaction data");
 		} finally {
 			if (session != null) {
 				session.close();

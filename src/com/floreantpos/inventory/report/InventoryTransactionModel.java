@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import com.floreantpos.bo.ui.explorer.ListTableModel;
 import com.floreantpos.model.InOutEnum;
 import com.floreantpos.model.InventoryTransaction;
+import com.floreantpos.model.dao.InventoryTransactionDAO;
 
 /**
  * @author SOMYA
@@ -18,12 +19,13 @@ public class InventoryTransactionModel extends ListTableModel {
 
 	public InventoryTransactionModel() {
 		super(new String[] { "transactionDate", "inventoryTransactionType", "inventoryWarehouse", "inventoryItem", "company", "packSize", "inventoryVendor", "quantity", "totalPrice", "vatPaid",
-				"creditCheck", "remark", "discount", "unit" });
+				"creditCheck", "remark", "discount", "unit", "currentUnitPrice", "lastUnitPrice" });
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		InventoryTransaction data = (InventoryTransaction) rows.get(rowIndex);
 		InOutEnum inOutEnum = InOutEnum.fromInt(data.getInventoryTransactionType().getInOrOut().intValue());
+		InventoryTransaction lastTrans = InventoryTransactionDAO.getInstance().findByICVP(data.getInventoryItem(), data.getCompany(), data.getInventoryVendor(), data.getPackSize(), data.getId());
 		switch (columnIndex) {
 		case 0:
 			return dateFormat2.format(data.getTransactionDate());
@@ -49,7 +51,6 @@ public class InventoryTransactionModel extends ListTableModel {
 			return data.getCompany().getName();
 		case 5:
 			return Integer.valueOf(data.getPackSize().getSize());
-
 		case 6:
 			return data.getInventoryVendor().getName();
 		case 7:
@@ -91,6 +92,18 @@ public class InventoryTransactionModel extends ListTableModel {
 				} else {
 					return data.getInventoryItem().getPackagingUnit().getRecepieUnitName();
 				}
+			} else {
+				return "";
+			}
+		case 14:
+			if (data.getQuantity() > 0) {
+				return formatDouble(data.getTotalPrice() / data.getQuantity());
+			} else {
+				return "";
+			}
+		case 15:
+			if (lastTrans != null && lastTrans.getQuantity() > 0) {
+				return formatDouble(lastTrans.getTotalPrice() / lastTrans.getQuantity());
 			} else {
 				return "";
 			}

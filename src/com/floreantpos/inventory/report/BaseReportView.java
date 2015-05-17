@@ -45,6 +45,8 @@ public abstract class BaseReportView extends TransparentPanel {
 	private JTextField reportName = new JTextField(30);
 	private JPanel reportPanel;
 	protected JPanel contentPane;
+	private JLabel label1;
+	private JLabel label2;
 
 	public BaseReportView() {
 		setLayout(new BorderLayout());
@@ -64,7 +66,9 @@ public abstract class BaseReportView extends TransparentPanel {
 
 	}
 
-	public void hideDateFields(boolean hide) {
+	public void showDateFields(boolean hide) {
+		this.label1.setVisible(hide);
+		this.label2.setVisible(hide);
 		this.fromDatePicker.setVisible(hide);
 		this.toDatePicker.setVisible(hide);
 	}
@@ -136,7 +140,7 @@ public abstract class BaseReportView extends TransparentPanel {
 		panel1.setLayout(new GridLayoutManager(8, 7, new Insets(0, 0, 0, 0), -1, -1));
 		contentPane.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_VERTICAL,
 				GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
-		final JLabel label1 = new JLabel();
+		label1 = new JLabel();
 		label1.setText(com.floreantpos.POSConstants.FROM + ":");
 		panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null,
 				null, 0, false));
@@ -144,7 +148,7 @@ public abstract class BaseReportView extends TransparentPanel {
 		panel1.add(fromDatePicker, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK
 				| GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(147, 24), null, 0, false));
 
-		final JLabel label2 = new JLabel();
+		label2 = new JLabel();
 		label2.setText(com.floreantpos.POSConstants.TO + ":");
 		panel1.add(label2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null,
 				null, 0, false));

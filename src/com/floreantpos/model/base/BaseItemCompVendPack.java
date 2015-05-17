@@ -17,22 +17,26 @@ public class BaseItemCompVendPack implements java.io.Serializable {
 	public static String PROP_COMPANY = "company";
 	public static String PROP_INV_VENDOR = "inventoryVendor";
 	public static String PROP_INV_ITEM = "inventoryItem";
+	public static String PROP_PRICE = "price";
 
 	protected Integer id;
 	protected PackSize packSize;
 	protected Company company;
 	protected InventoryVendor inventoryVendor;
 	protected InventoryItem inventoryItem;
+	protected Double price;
+
 	private int hashCode = Integer.MIN_VALUE;
 
 	public BaseItemCompVendPack() {
 	}
 
-	public BaseItemCompVendPack(PackSize packSize, Company company, InventoryVendor inventoryVendor, InventoryItem inventoryItem) {
+	public BaseItemCompVendPack(PackSize packSize, Company company, InventoryVendor inventoryVendor, InventoryItem inventoryItem, Double price) {
 		this.packSize = packSize;
 		this.company = company;
 		this.inventoryVendor = inventoryVendor;
 		this.inventoryItem = inventoryItem;
+		this.price = price;
 	}
 
 	public Integer getId() {
@@ -41,6 +45,14 @@ public class BaseItemCompVendPack implements java.io.Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
 	public PackSize getPackSize() {
