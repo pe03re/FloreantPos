@@ -161,13 +161,14 @@ public abstract class _RootDAO extends com.floreantpos.model.dao._BaseRootDAO {
 		configuration = configuration.setProperty("hibernate.connection.password", AppConfig.getDatabasePassword());
 		configuration = configuration.setProperty("hibernate.hbm2ddl.auto", "validate");
 		configuration = configuration.setProperty("hibernate.connection.autocommit", "false");
-		configuration = configuration.setProperty("hibernate.max_fetch_depth", "5");
-		configuration = configuration.setProperty("hibernate.show_sql", "true");
-		configuration = configuration.setProperty("use_sql_comments", "true");
-		configuration = configuration.setProperty("hibernate.c3p0.min_size", "2");
-		configuration = configuration.setProperty("hibernate.c3p0.max_size", "10");
+		configuration = configuration.setProperty("hibernate.max_fetch_depth", "1");
+		configuration = configuration.setProperty("hibernate.show_sql", "false");
+		configuration = configuration.setProperty("hibernate.default_batch_fetch_size", "50");
+		configuration = configuration.setProperty("use_sql_comments", "false");
+		configuration = configuration.setProperty("hibernate.c3p0.min_size", "10");
+		configuration = configuration.setProperty("hibernate.c3p0.max_size", "20");
 		configuration = configuration.setProperty("hibernate.c3p0.timeout", "300");
-		configuration = configuration.setProperty("hibernate.c3p0.max_statements", "50");
+		configuration = configuration.setProperty("hibernate.c3p0.max_statements", "100");
 
 		// configuration =
 		// configuration.setProperty("hibernate.c3p0.idle_test_period", "3000");

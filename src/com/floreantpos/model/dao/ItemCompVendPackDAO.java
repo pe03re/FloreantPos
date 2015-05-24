@@ -68,4 +68,48 @@ public class ItemCompVendPackDAO extends BaseItemCompVendPackDAO {
 		}
 	}
 
+	public List<ItemCompVendPack> findAllByVendor(InventoryVendor vend) {
+		Session session = null;
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.add(Restrictions.eq(ItemCompVendPack.PROP_INV_VENDOR, vend));
+			List<ItemCompVendPack> list = criteria.list();
+			if (list != null && !list.isEmpty()) {
+				return list;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new PosException("Error occured while finding distributor data");
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+
+	public List<ItemCompVendPack> findAllByCompany(Company comp) {
+		Session session = null;
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.add(Restrictions.eq(ItemCompVendPack.PROP_COMPANY, comp));
+			List<ItemCompVendPack> list = criteria.list();
+			if (list != null && !list.isEmpty()) {
+				return list;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new PosException("Error occured while finding distributor data");
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+
 }
