@@ -106,7 +106,7 @@ public class MenuItemBrowser extends ModelBrowser<MenuItem> {
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			MenuItem item = (MenuItem) rows.get(rowIndex);
+			MenuItem item = (MenuItem) getRowData(rowIndex);
 
 			switch (columnIndex) {
 			case 0:
