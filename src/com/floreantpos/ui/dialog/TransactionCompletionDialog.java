@@ -10,14 +10,12 @@ import javax.swing.JSeparator;
 
 import net.miginfocom.swing.MigLayout;
 
-import com.floreantpos.main.Application;
 import com.floreantpos.model.PosTransaction;
-import com.floreantpos.report.ReceiptPrintService;
 import com.floreantpos.swing.PosButton;
 import com.floreantpos.util.NumberUtil;
 
 public class TransactionCompletionDialog extends POSDialog {
-	//private List<Ticket> tickets;
+	// private List<Ticket> tickets;
 	private double tenderedAmount;
 	private double totalAmount;
 	private double paidAmount;
@@ -36,7 +34,7 @@ public class TransactionCompletionDialog extends POSDialog {
 
 	public TransactionCompletionDialog(Frame parent, PosTransaction transaction) {
 		super(parent, true);
-		
+
 		this.completedTransaction = transaction;
 
 		setTitle(com.floreantpos.POSConstants.TRANSACTION_COMPLETED);
@@ -66,7 +64,6 @@ public class TransactionCompletionDialog extends POSDialog {
 		add(createLabel("GRATUITY AMOUNT" + ":", JLabel.LEFT), "newline,grow");
 		lblGratuityAmount = createLabel("0.0", JLabel.RIGHT);
 		add(lblGratuityAmount, "span, grow");
-
 		add(new JSeparator(), "newline,span, grow");
 
 		add(createLabel("CHANGE DUE" + ":", JLabel.LEFT), "grow");
@@ -76,62 +73,63 @@ public class TransactionCompletionDialog extends POSDialog {
 		add(new JSeparator(), "sg mygroup,newline,span,grow");
 		PosButton btnClose = new PosButton("CLOSE");
 		btnClose.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-
-		});
-
-		PosButton btnPrintStoreCopy = new PosButton("PRINT STORE COPY");
-		btnPrintStoreCopy.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-
-					ReceiptPrintService.printTransaction(completedTransaction, false);
-
-				} catch (Exception ee) {
-					POSMessageDialog.showError(Application.getPosWindow(), "There was an error while printing.", ee);
-				}
 				dispose();
 			}
 		});
 
-		PosButton btnPrintAllCopy = new PosButton("PRINT STORE & MERCHANT COPY");
-		btnPrintAllCopy.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-
-					ReceiptPrintService.printTransaction(completedTransaction, true);
-
-				} catch (Exception ee) {
-					POSMessageDialog.showError(Application.getPosWindow(), "There was an error while printing.", ee);
-				}
-				dispose();
-			}
-		});
+		// PosButton btnPrintStoreCopy = new PosButton("PRINT STORE COPY");
+		// btnPrintStoreCopy.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// try {
+		//
+		// ReceiptPrintService.printTransaction(completedTransaction, false);
+		//
+		// } catch (Exception ee) {
+		// POSMessageDialog.showError(Application.getPosWindow(),
+		// "There was an error while printing.", ee);
+		// }
+		// dispose();
+		// }
+		// });
+		//
+		// PosButton btnPrintAllCopy = new
+		// PosButton("PRINT STORE & MERCHANT COPY");
+		// btnPrintAllCopy.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// try {
+		//
+		// ReceiptPrintService.printTransaction(completedTransaction, true);
+		//
+		// } catch (Exception ee) {
+		// POSMessageDialog.showError(Application.getPosWindow(),
+		// "There was an error while printing.", ee);
+		// }
+		// dispose();
+		// }
+		// });
 
 		JPanel p = new JPanel();
+		p.add(btnClose, "skip, h 50");
 
-		if (completedTransaction.isCard()) {
-			p.add(btnPrintAllCopy, "newline,skip, h 50");
-			p.add(btnPrintStoreCopy, "skip, h 50");
-			p.add(btnClose, "skip, h 50");
-		}
-		else {
-			btnPrintStoreCopy.setText("PRINT");
-			p.add(btnPrintStoreCopy, "skip, h 50");
-			p.add(btnClose, "skip, h 50");
-		}
+		// if (completedTransaction.isCard()) {
+		// p.add(btnPrintAllCopy, "newline,skip, h 50");
+		// p.add(btnPrintStoreCopy, "skip, h 50");
+		// p.add(btnClose, "skip, h 50");
+		// } else {
+		// btnPrintStoreCopy.setText("PRINT");
+		// p.add(btnPrintStoreCopy, "skip, h 50");
+		// p.add(btnClose, "skip, h 50");
+		// }
 
 		add(p, "newline, span 2, grow, gaptop 15px");
-		//setResizable(false);
+		// setResizable(false);
 	}
 
 	protected JLabel createLabel(String text, int alignment) {
 		JLabel label = new JLabel(text);
 		label.setFont(new java.awt.Font("Tahoma", 1, 24));
-		//label.setForeground(new java.awt.Color(255, 102, 0));
+		// label.setForeground(new java.awt.Color(255, 102, 0));
 		label.setHorizontalAlignment(alignment);
 		label.setText(text);
 		return label;
@@ -153,7 +151,6 @@ public class TransactionCompletionDialog extends POSDialog {
 		lblGratuityAmount.setText(NumberUtil.formatNumber(gratuityAmount));
 		lblChangeDue.setText(NumberUtil.formatNumber(changeAmount));
 	}
-
 
 	public double getDueAmount() {
 		return dueAmount;

@@ -143,7 +143,7 @@ public class CouponForm extends BeanEditor {
 		CellConstraints cc = new CellConstraints();
 		contentPane.add(label1, cc.xy(1, 1));
 		final JLabel label2 = new JLabel();
-		label2.setText("Experiation Date" + ":");
+		label2.setText("Expiration Date" + ":");
 		contentPane.add(label2, cc.xy(1, 5));
 		tfCouponName = new JTextField();
 		contentPane.add(tfCouponName, cc.xyw(3, 1, 3, CellConstraints.FILL, CellConstraints.DEFAULT));

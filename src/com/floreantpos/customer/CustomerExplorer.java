@@ -23,15 +23,15 @@ import com.floreantpos.util.PosGuiUtil;
 
 public class CustomerExplorer extends TransparentPanel {
 	private List<Customer> customerList;
-	
+
 	private JTable table;
 
 	private BeanTableModel<Customer> tableModel;
-	
+
 	public CustomerExplorer() {
 		CustomerDAO dao = new CustomerDAO();
 		customerList = dao.findAll();
-		
+
 		tableModel = new BeanTableModel<Customer>(Customer.class);
 		tableModel.addColumn("ID", "autoId");
 		tableModel.addColumn("NAME", "name");
@@ -39,6 +39,7 @@ public class CustomerExplorer extends TransparentPanel {
 		tableModel.addColumn("TELEPHONE", "telephoneNo");
 		tableModel.addColumn("EMAIL", "email");
 		tableModel.addColumn("DOB", "dob");
+		tableModel.addColumn("ANNIV", "anni");
 		tableModel.addColumn("SSN", "ssn");
 		tableModel.addColumn("ADDRESS", "address");
 		tableModel.addColumn("CITY", "city");
@@ -51,13 +52,13 @@ public class CustomerExplorer extends TransparentPanel {
 		tableModel.addRows(customerList);
 
 		table = new JTable(tableModel);
-		//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		// table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setDefaultRenderer(Object.class, new PosTableRenderer());
 		PosGuiUtil.setColumnWidth(table, 0, 40);
-		
-		setLayout(new BorderLayout(5,5));
+
+		setLayout(new BorderLayout(5, 5));
 		add(new JScrollPane(table));
-		
+
 		JButton addButton = new JButton(com.floreantpos.POSConstants.ADD);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -73,9 +74,9 @@ public class CustomerExplorer extends TransparentPanel {
 					BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
 				}
 			}
-			
+
 		});
-		
+
 		JButton editButton = new JButton(com.floreantpos.POSConstants.EDIT);
 		editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -92,13 +93,13 @@ public class CustomerExplorer extends TransparentPanel {
 					dialog.open();
 					if (dialog.isCanceled())
 						return;
-					
+
 					table.repaint();
 				} catch (Throwable x) {
 					BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
 				}
 			}
-			
+
 		});
 		JButton deleteButton = new JButton(com.floreantpos.POSConstants.DELETE);
 		deleteButton.addActionListener(new ActionListener() {
@@ -118,7 +119,7 @@ public class CustomerExplorer extends TransparentPanel {
 					BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
 				}
 			}
-			
+
 		});
 
 		TransparentPanel panel = new TransparentPanel();

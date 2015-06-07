@@ -18,11 +18,16 @@ import javax.swing.AbstractButton;
 import javax.swing.SwingConstants;
 
 import com.floreantpos.PosException;
+import com.floreantpos.bo.ui.BackOfficeWindow;
+import com.floreantpos.model.InventoryWarehouseItem;
 import com.floreantpos.model.MenuGroup;
 import com.floreantpos.model.MenuItem;
+import com.floreantpos.model.RecepieItem;
+import com.floreantpos.model.dao.InventoryWarehouseItemDAO;
 import com.floreantpos.model.dao.MenuItemDAO;
 import com.floreantpos.swing.ImageIcon;
 import com.floreantpos.swing.PosButton;
+import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.ui.views.order.actions.ItemSelectionListener;
 
 /**
@@ -39,7 +44,7 @@ public class MenuItemView extends SelectionView {
 	/** Creates new form GroupView */
 	public MenuItemView() {
 		super(com.floreantpos.POSConstants.ITEMS);
-		
+
 		setBackEnable(false);
 	}
 
@@ -60,26 +65,50 @@ public class MenuItemView extends SelectionView {
 		try {
 			List<MenuItem> items = dao.findByParent(menuGroup, false);
 			setBackEnable(items.size() > 0);
-			
 			setItems(items);
-			
-//			for (int i = 0; i < items.size(); i++) {
-//				MenuItem menuItem = items.get(i);
-//				ItemButton itemButton = new ItemButton(menuItem);
-//				addButton(itemButton);
-//			}
-//			revalidate();
-//			repaint();
+			// for (int i = 0; i < items.size(); i++) {
+			// MenuItem menuItem = items.get(i);
+			// ItemButton itemButton = new ItemButton(menuItem);
+			// addButton(itemButton);
+			// }
+			// revalidate();
+			// repaint();
 		} catch (PosException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	private static boolean checkInventory(MenuItem mi) {
+		boolean available = false;
+		if (mi != null) {
+			List<RecepieItem> riList = mi.getRecepie().getRecepieItems();
+			if (riList != null && !riList.isEmpty()) {
+				recLabel: for (RecepieItem ri : riList) {
+					if (ri.getInventoryItem() != null) {
+						Double itemQty = ri.getPercentage();
+						List<InventoryWarehouseItem> wareItemList = InventoryWarehouseItemDAO.getInstance().findByInventoryItem(ri.getInventoryItem());
+						for (InventoryWarehouseItem wareItem : wareItemList) {
+							if (wareItem.getItemLocation().getName().equalsIgnoreCase("cafe")) {
+								Double totalUnitsAvilable = wareItem.getTotalRecepieUnits();
+								if (totalUnitsAvilable > itemQty) {
+									available = true;
+								} else {
+									available = false;
+									break recLabel;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return available;
+	}
+
 	@Override
 	protected AbstractButton createItemButton(Object item) {
 		MenuItem menuItem = (MenuItem) item;
 		ItemButton itemButton = new ItemButton(menuItem);
-		
 		return itemButton;
 	}
 
@@ -111,42 +140,40 @@ public class MenuItemView extends SelectionView {
 			this.foodItem = menuItem;
 			setVerticalTextPosition(SwingConstants.BOTTOM);
 			setHorizontalTextPosition(SwingConstants.CENTER);
-			
-			if(menuItem.getImage() != null) {
+
+			if (menuItem.getImage() != null) {
 				int w = BUTTON_SIZE - 10;
 				int h = BUTTON_SIZE - 10;
-				
-				if(menuItem.isShowImageOnly()) {
+
+				if (menuItem.isShowImageOnly()) {
 					ImageIcon imageIcon = new ImageIcon(new ImageIcon(menuItem.getImage()).getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
 					setIcon(imageIcon);
-				}
-				else {
+				} else {
 					w = 80;
 					h = 80;
-					
 					ImageIcon imageIcon = new ImageIcon(new ImageIcon(menuItem.getImage()).getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
 					setIcon(imageIcon);
 					setText("<html><body><center>" + menuItem.getDisplayName() + "</center></body></html>");
 				}
-				
-			}
-			else {
+			} else {
 				setText("<html><body><center>" + menuItem.getName() + "</center></body></html>");
 			}
-			
-			if(menuItem.getButtonColor() != null) {
+			if (menuItem.getButtonColor() != null) {
 				setBackground(new Color(menuItem.getButtonColor()));
 			}
-			if(menuItem.getTextColor() != null) {
+			if (menuItem.getTextColor() != null) {
 				setForeground(new Color(menuItem.getTextColor()));
 			}
-			
 			setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
 			addActionListener(this);
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			fireItemSelected(foodItem);
+			if (checkInventory(foodItem)) {
+				fireItemSelected(foodItem);
+			} else {
+				POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Inventory level less for " + foodItem.getName() + ". Please refill!");
+			}
 		}
 	}
 

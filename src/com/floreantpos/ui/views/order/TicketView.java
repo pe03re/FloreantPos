@@ -73,11 +73,9 @@ public class TicketView extends JPanel {
 
 	public TicketView() {
 		initComponents();
-
 		btnAddCookingInstruction.setEnabled(false);
 		btnIncreaseAmount.setEnabled(false);
 		btnDecreaseAmount.setEnabled(false);
-
 		ticketViewerTable.setRowHeight(35);
 		ticketViewerTable.getRenderer().setInTicketScreen(true);
 		ticketViewerTable.addMouseListener(new MouseAdapter() {
@@ -99,9 +97,7 @@ public class TicketView extends JPanel {
 				}
 
 				ITicketItem item = (ITicketItem) selected;
-
 				Boolean printedToKitchen = item.isPrintedToKitchen();
-
 				btnAddCookingInstruction.setEnabled(item.canAddCookingInstruction());
 				btnIncreaseAmount.setEnabled(!printedToKitchen);
 				btnDecreaseAmount.setEnabled(!printedToKitchen);
@@ -134,21 +130,17 @@ public class TicketView extends JPanel {
 		jPanel2 = new com.floreantpos.swing.TransparentPanel();
 		ticketViewerTable = new com.floreantpos.ui.ticket.TicketViewerTable();
 		ticketScrollPane = new PosScrollPane(ticketViewerTable);
-
-		setBorder(javax.swing.BorderFactory.createTitledBorder(null, com.floreantpos.POSConstants.TICKET, javax.swing.border.TitledBorder.CENTER,
-				javax.swing.border.TitledBorder.DEFAULT_POSITION));
-		setPreferredSize(new java.awt.Dimension(420, 463));
+		setBorder(javax.swing.BorderFactory.createTitledBorder(null, com.floreantpos.POSConstants.TICKET, javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+		setPreferredSize(new java.awt.Dimension(650, 463));
 		setLayout(new java.awt.BorderLayout(5, 5));
 		jPanel1.setLayout(new BorderLayout(5, 5));
 		ticketAmountPanel.setLayout(new MigLayout("alignx trailing,fill", "[grow][]", "[][][][][][][][]"));
-
 		jLabel5 = new javax.swing.JLabel();
 		jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 		jLabel5.setText(com.floreantpos.POSConstants.SUBTOTAL + ":");
 		ticketAmountPanel.add(jLabel5, "cell 0 1,growx,aligny center");
 		tfSubtotal = new javax.swing.JTextField(10);
 		tfSubtotal.setHorizontalAlignment(SwingConstants.TRAILING);
-
 		tfSubtotal.setEditable(false);
 		ticketAmountPanel.add(tfSubtotal, "cell 1 1,growx,aligny center");
 
@@ -344,7 +336,6 @@ public class TicketView extends JPanel {
 
 	private void updateInventory(Ticket t) {
 		List<TicketItem> tiList = t.getTicketItems();
-
 		if (ticket.getId() != null) {
 			Ticket old = TicketDAO.getInstance().findTicket(ticket.getId());
 			List<TicketItem> cons = new ArrayList<TicketItem>();
@@ -363,7 +354,6 @@ public class TicketView extends JPanel {
 			}
 			tiList = cons;
 		}
-
 		Session s = InventoryWarehouseItemDAO.getInstance().createNewSession();
 		Transaction tx = s.beginTransaction();
 		boolean rollback = false;
@@ -377,8 +367,7 @@ public class TicketView extends JPanel {
 					for (RecepieItem ri : riList) {
 						if (ri.getInventoryItem() != null) {
 							Double itemQty = ri.getPercentage();
-							List<InventoryWarehouseItem> wareItemList = InventoryWarehouseItemDAO.getInstance().findByInventoryItem(
-									ri.getInventoryItem());
+							List<InventoryWarehouseItem> wareItemList = InventoryWarehouseItemDAO.getInstance().findByInventoryItem(ri.getInventoryItem());
 							for (InventoryWarehouseItem wareItem : wareItemList) {
 								if (wareItem.getItemLocation().getName().equalsIgnoreCase("cafe")) {
 									Double totalUnitsAvilable = wareItem.getTotalRecepieUnits();
@@ -386,8 +375,7 @@ public class TicketView extends JPanel {
 										wareItem.setTotalRecepieUnits(totalUnitsAvilable - (itemCount * itemQty));
 										InventoryWarehouseItemDAO.getInstance().saveOrUpdate(wareItem, s);
 									} else {
-										POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Inventory level less than number of items for "
-												+ mi.getName());
+										POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Inventory level less than number of items for " + mi.getName());
 										rollback = true;
 										break ticketLabel;
 									}
@@ -407,7 +395,6 @@ public class TicketView extends JPanel {
 
 	private synchronized void doFinishOrder(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_doFinishOrder
 		try {
-
 			updateModel();
 			updateInventory(ticket);
 			TicketDAO ticketDAO = TicketDAO.getInstance();

@@ -26,11 +26,11 @@ import us.fatehi.magnetictrack.bankcard.BankCardMagneticTrack;
 import com.floreantpos.POSConstants;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.KitchenTicket;
+import com.floreantpos.model.OrderType;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.RefundTransaction;
 import com.floreantpos.model.Restaurant;
 import com.floreantpos.model.Ticket;
-import com.floreantpos.model.OrderType;
 import com.floreantpos.model.dao.KitchenTicketDAO;
 import com.floreantpos.model.dao.RestaurantDAO;
 import com.floreantpos.model.dao.TicketDAO;
@@ -71,21 +71,26 @@ public class ReceiptPrintService {
 		printQuitely(jasperPrint);
 	}
 
-//	public static JasperPrint createJasperPrint(String reportFile, Map<String, String> properties, JRDataSource dataSource) throws Exception {
-//		InputStream ticketReportStream = null;
-//
-//		try {
-//
-//			ticketReportStream = JReportPrintService.class.getResourceAsStream(reportFile);
-//			JasperReport ticketReport = (JasperReport) JRLoader.loadObject(ticketReportStream);
-//
-//			JasperPrint jasperPrint = JasperFillManager.fillReport(ticketReport, properties, dataSource);
-//			return jasperPrint;
-//
-//		} finally {
-//			IOUtils.closeQuietly(ticketReportStream);
-//		}
-//	}
+	// public static JasperPrint createJasperPrint(String reportFile,
+	// Map<String, String> properties, JRDataSource dataSource) throws Exception
+	// {
+	// InputStream ticketReportStream = null;
+	//
+	// try {
+	//
+	// ticketReportStream =
+	// JReportPrintService.class.getResourceAsStream(reportFile);
+	// JasperReport ticketReport = (JasperReport)
+	// JRLoader.loadObject(ticketReportStream);
+	//
+	// JasperPrint jasperPrint = JasperFillManager.fillReport(ticketReport,
+	// properties, dataSource);
+	// return jasperPrint;
+	//
+	// } finally {
+	// IOUtils.closeQuietly(ticketReportStream);
+	// }
+	// }
 
 	public static JasperPrint createJasperPrint(JasperReport report, Map<String, String> properties, JRDataSource dataSource) throws Exception {
 		JasperPrint jasperPrint = JasperFillManager.fillReport(report, properties, dataSource);
@@ -143,7 +148,6 @@ public class ReceiptPrintService {
 	public static void printTransaction(PosTransaction transaction) {
 		try {
 			Ticket ticket = transaction.getTicket();
-
 			TicketPrintProperties printProperties = new TicketPrintProperties("*** PAYMENT RECEIPT ***", true, true, true);
 			printProperties.setPrintCookingInstructions(false);
 			HashMap map = populateTicketProperties(ticket, printProperties, transaction);
@@ -161,14 +165,12 @@ public class ReceiptPrintService {
 				jasperPrint.setName("Ticket-" + ticket.getId() + "-MerchantCopy");
 				jasperPrint.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
 				printQuitely(jasperPrint);
-			}
-			else {
+			} else {
 				JasperPrint jasperPrint = createPrint(ticket, map, transaction);
 				jasperPrint.setName("Ticket-" + ticket.getId());
 				jasperPrint.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
 				printQuitely(jasperPrint);
 			}
-
 		} catch (Exception e) {
 			logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
 		}
@@ -199,8 +201,7 @@ public class ReceiptPrintService {
 					jasperPrint.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
 					printQuitely(jasperPrint);
 				}
-			}
-			else {
+			} else {
 				JasperPrint jasperPrint = createPrint(ticket, map, transaction);
 				jasperPrint.setName("Ticket-" + ticket.getId());
 				jasperPrint.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
@@ -320,8 +321,7 @@ public class ReceiptPrintService {
 						}
 
 						map.put("approvalCode", string);
-					}
-					else {
+					} else {
 						String string = "APPROVAL: " + transaction.getCardAuthCode();
 						string += "<br/>" + "Card processed in ext. device.";
 
@@ -331,13 +331,13 @@ public class ReceiptPrintService {
 			}
 
 			String messageString = "<html>";
-			//			String customerName = ticket.getProperty(Ticket.CUSTOMER_NAME);
+			// String customerName = ticket.getProperty(Ticket.CUSTOMER_NAME);
 
-			//			if (customerName != null) {
-			//				if (customer.hasProperty("mykalaid")) {
-			//					messageString += "<br/>Customer: " + customer.getName();
-			//				}
-			//			}
+			// if (customerName != null) {
+			// if (customer.hasProperty("mykalaid")) {
+			// messageString += "<br/>Customer: " + customer.getName();
+			// }
+			// }
 			if (ticket.hasProperty("mykaladiscount")) {
 				messageString += "<br/>My Kala point: " + ticket.getProperty("mykalapoing");
 				messageString += "<br/>My Kala discount: " + ticket.getDiscountAmount();
@@ -389,7 +389,7 @@ public class ReceiptPrintService {
 		addColumn(ticketHeaderBuilder, "");
 		endRow(ticketHeaderBuilder);
 
-		//customer info section
+		// customer info section
 		if (ticket.getType() != OrderType.DINE_IN) {
 
 			String customerName = ticket.getProperty(Ticket.CUSTOMER_NAME);
@@ -410,8 +410,7 @@ public class ReceiptPrintService {
 					beginRow(ticketHeaderBuilder);
 					addColumn(ticketHeaderBuilder, ticket.getDeliveryAddress());
 					endRow(ticketHeaderBuilder);
-				}
-				else {
+				} else {
 					beginRow(ticketHeaderBuilder);
 					addColumn(ticketHeaderBuilder, "Pickup from hotel");
 					endRow(ticketHeaderBuilder);
@@ -447,7 +446,8 @@ public class ReceiptPrintService {
 		if (ticket.getTableNumbers() != null) {
 			map.put(TABLE_NO, POSConstants.RECEIPT_REPORT_TABLE_NO_LABEL + ticket.getTableNumbers());
 		}
-		//map.put(GUEST_COUNT, POSConstants.RECEIPT_REPORT_GUEST_NO_LABEL + ticket.getNumberOfGuests());
+		// map.put(GUEST_COUNT, POSConstants.RECEIPT_REPORT_GUEST_NO_LABEL +
+		// ticket.getNumberOfGuests());
 		map.put(SERVER_NAME, POSConstants.RECEIPT_REPORT_SERVER_LABEL + ticket.getServerName());
 		map.put(REPORT_DATE, Application.formatDate(new Date()));
 
@@ -474,15 +474,15 @@ public class ReceiptPrintService {
 				JasperPrint jasperPrint = createKitchenPrint(kitchenTicket);
 				jasperPrint.setName("KitchenReceipt-" + ticket.getId() + "-" + deviceName);
 				jasperPrint.setProperty("printerName", deviceName);
-				
-				//KitchenDisplayWindow.instance.addTicket(kitchenTicket);
+
+				// KitchenDisplayWindow.instance.addTicket(kitchenTicket);
 				printQuitely(jasperPrint);
-				
+
 				session.saveOrUpdate(kitchenTicket);
 			}
 
 			transaction.commit();
-			
+
 			ticket.clearDeletedItems();
 			TicketDAO.getInstance().saveOrUpdate(ticket);
 
@@ -502,32 +502,35 @@ public class ReceiptPrintService {
 		}
 	}
 
-	//	private static void markItemsAsPrinted(KitchenTicket ticket) {
-	//		List<TicketItem> ticketItems = ticket.getTicketItems();
-	//		if (ticketItems != null) {
-	//			for (TicketItem ticketItem : ticketItems) {
-	//				if (!ticketItem.isPrintedToKitchen()) {
-	//					ticketItem.setPrintedToKitchen(true);
-	//				}
+	// private static void markItemsAsPrinted(KitchenTicket ticket) {
+	// List<TicketItem> ticketItems = ticket.getTicketItems();
+	// if (ticketItems != null) {
+	// for (TicketItem ticketItem : ticketItems) {
+	// if (!ticketItem.isPrintedToKitchen()) {
+	// ticketItem.setPrintedToKitchen(true);
+	// }
 	//
-	//				List<TicketItemModifierGroup> modifierGroups = ticketItem.getTicketItemModifierGroups();
-	//				if (modifierGroups != null) {
-	//					for (TicketItemModifierGroup modifierGroup : modifierGroups) {
-	//						modifierGroup.setPrintedToKitchen(true);
-	//					}
-	//				}
+	// List<TicketItemModifierGroup> modifierGroups =
+	// ticketItem.getTicketItemModifierGroups();
+	// if (modifierGroups != null) {
+	// for (TicketItemModifierGroup modifierGroup : modifierGroups) {
+	// modifierGroup.setPrintedToKitchen(true);
+	// }
+	// }
 	//
-	//				List<TicketItemCookingInstruction> cookingInstructions = ticketItem.getCookingInstructions();
-	//				if (cookingInstructions != null) {
-	//					for (TicketItemCookingInstruction ticketItemCookingInstruction : cookingInstructions) {
-	//						ticketItemCookingInstruction.setPrintedToKitchen(true);
-	//					}
-	//				}
-	//			}
-	//		}
-	//		
-	//		KitchenTicketDAO.getInstance().saveOrUpdate(ticket);
-	//	}
+	// List<TicketItemCookingInstruction> cookingInstructions =
+	// ticketItem.getCookingInstructions();
+	// if (cookingInstructions != null) {
+	// for (TicketItemCookingInstruction ticketItemCookingInstruction :
+	// cookingInstructions) {
+	// ticketItemCookingInstruction.setPrintedToKitchen(true);
+	// }
+	// }
+	// }
+	// }
+	//
+	// KitchenTicketDAO.getInstance().saveOrUpdate(ticket);
+	// }
 
 	private static String getCardNumber(BankCardMagneticTrack track) {
 		String no = "";
@@ -536,8 +539,7 @@ public class ReceiptPrintService {
 			if (track.getTrack1().hasPrimaryAccountNumber()) {
 				no = track.getTrack1().getPrimaryAccountNumber().getAccountNumber();
 				no = "************" + no.substring(12);
-			}
-			else if (track.getTrack2().hasPrimaryAccountNumber()) {
+			} else if (track.getTrack2().hasPrimaryAccountNumber()) {
 				no = track.getTrack2().getPrimaryAccountNumber().getAccountNumber();
 				no = "************" + no.substring(12);
 			}

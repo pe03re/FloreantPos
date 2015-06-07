@@ -33,6 +33,8 @@ public class CustomerForm extends BeanEditor<Customer> {
 	private FixedLengthTextField tfEmail;
 	private JLabel lblDob;
 	private FixedLengthTextField tfDoB;
+	private JLabel lblAnni;
+	private FixedLengthTextField tfAnni;
 	private JPanel panel;
 	private QwertyKeyPad qwertyKeyPad;
 
@@ -47,7 +49,7 @@ public class CustomerForm extends BeanEditor<Customer> {
 		add(tfName, "cell 1 0,growx,aligny top");
 
 		lblDob = new JLabel("DoB (MM/DD/YYYY)");
-		add(lblDob, "cell 2 0 2 1");
+		add(lblDob, "cell 2 0 2 1,alignx trailing");
 
 		tfDoB = new FixedLengthTextField();
 		tfDoB.setLength(16);
@@ -60,12 +62,19 @@ public class CustomerForm extends BeanEditor<Customer> {
 		tfPhone.setLength(30);
 		add(tfPhone, "cell 1 1,growx");
 
+		lblAnni = new JLabel("Anni (MM/DD/YYYY)");
+		add(lblAnni, "cell 2 1 2 1,alignx trailing");
+
+		tfAnni = new FixedLengthTextField();
+		tfAnni.setLength(16);
+		add(tfAnni, "flowx,cell 4 1 2 1,growx");
+
 		JLabel lblEmail = new JLabel("E-mail");
-		add(lblEmail, "cell 2 1 2 1,alignx trailing");
+		add(lblEmail, "cell 2 2 2 1,alignx trailing");
 
 		tfEmail = new FixedLengthTextField(40);
 		tfEmail.setLength(40);
-		add(tfEmail, "flowx,cell 4 1 2 1,growx");
+		add(tfEmail, "cell 4 2 2 1,growx");
 
 		JLabel lblLoyaltyNo = new JLabel("Loyalty No");
 		add(lblLoyaltyNo, "cell 0 2,alignx trailing");
@@ -100,11 +109,11 @@ public class CustomerForm extends BeanEditor<Customer> {
 		add(lblCountry, "cell 4 4,alignx trailing");
 
 		tfCountry = new FixedLengthTextField(30);
-		tfCountry.setText("USA");
+		tfCountry.setText("India");
 		tfCountry.setLength(30);
 		add(tfCountry, "cell 5 4,growx");
 
-		JLabel lblCreditLimit = new JLabel("Credit Limit ($)");
+		JLabel lblCreditLimit = new JLabel("Credit Limit (Rs)");
 		add(lblCreditLimit, "cell 0 5,alignx trailing");
 
 		tfCreditLimit = new DoubleTextField();
@@ -135,6 +144,7 @@ public class CustomerForm extends BeanEditor<Customer> {
 		tfCountry.setEditable(editable);
 		cbVip.setEnabled(editable);
 		tfDoB.setEditable(editable);
+		tfAnni.setEditable(editable);
 	}
 
 	@Override
@@ -161,6 +171,7 @@ public class CustomerForm extends BeanEditor<Customer> {
 		if (customer != null) {
 			tfName.setText(customer.getName());
 			tfDoB.setText(customer.getDob());
+			tfAnni.setText(customer.getAnni());
 			tfAddress.setText(customer.getAddress());
 			tfCity.setText(customer.getCity());
 			tfCountry.setText(customer.getCountry());
@@ -173,6 +184,7 @@ public class CustomerForm extends BeanEditor<Customer> {
 		} else {
 			tfName.setText("");
 			tfDoB.setText("");
+			tfAnni.setText("");
 			tfAddress.setText("");
 			tfCity.setText("");
 			tfCountry.setText("");
@@ -205,6 +217,7 @@ public class CustomerForm extends BeanEditor<Customer> {
 
 		customer.setName(tfName.getText());
 		customer.setDob(tfDoB.getText());
+		customer.setAnni(tfAnni.getText());
 		customer.setAddress(tfAddress.getText());
 		customer.setCity(tfCity.getText());
 		customer.setCountry(tfCountry.getText());
