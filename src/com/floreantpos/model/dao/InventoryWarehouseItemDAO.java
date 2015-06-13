@@ -42,13 +42,7 @@ public class InventoryWarehouseItemDAO extends BaseInventoryWarehouseItemDAO {
 		Session session = null;
 		try {
 			session = getSession();
-			Criteria criteria = session.createCriteria(getReferenceClass());
-			criteria.add(Restrictions.eq(InventoryWarehouseItem.PROP_INVENTORY_ITEM, item));
-//			if(onlyCafe){
-//				criteria.add(Restrictions.eq(InventoryWarehouseItem.PROP_ITEM_LOCATION, InventoryLocationDAO.getInstance().f));
-//			}
-			criteria.addOrder(Order.asc(InventoryWarehouseItem.PROP_ITEM_LOCATION));
-			return criteria.list();
+			return findByInventoryItem(session, item);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new PosException("Error occured while finding food items");
@@ -58,8 +52,18 @@ public class InventoryWarehouseItemDAO extends BaseInventoryWarehouseItemDAO {
 			}
 		}
 	}
-	
-	
+
+	public List<InventoryWarehouseItem> findByInventoryItem(Session session, InventoryItem item) {
+		try {
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.add(Restrictions.eq(InventoryWarehouseItem.PROP_INVENTORY_ITEM, item));
+			criteria.addOrder(Order.asc(InventoryWarehouseItem.PROP_ITEM_LOCATION));
+			return criteria.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new PosException("Error occured while finding food items");
+		}
+	}
 
 	public InventoryWarehouseItem findByInventoryItemAndInventoryLocation(InventoryItem item, InventoryLocation loc) {
 		Session session = null;

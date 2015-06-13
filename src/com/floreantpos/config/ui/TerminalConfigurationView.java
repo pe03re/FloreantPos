@@ -32,7 +32,7 @@ public class TerminalConfigurationView extends ConfigurationView {
 	private IntegerTextField tfTerminalNumber;
 	private IntegerTextField tfSecretKeyLength;
 
-	private JCheckBox cbTranslatedName = new JCheckBox("Show translated item name in UI");
+	private JCheckBox cbTranslatedName = new JCheckBox("Show translated item name in UI", true);
 	private JCheckBox cbEnableDineIn = new JCheckBox("DINE IN");
 	private JCheckBox cbEnableTakeOut = new JCheckBox("TAKE OUT");
 	private JCheckBox cbEnablePickUp = new JCheckBox("PICK UP");
@@ -92,7 +92,7 @@ public class TerminalConfigurationView extends ConfigurationView {
 		add(new JLabel("Auto logoff time")); //$NON-NLS-1$
 		add(tfLogoffTime, "wrap");
 
-		add(cbTranslatedName, "span 2, wrap"); //$NON-NLS-1$
+		//add(cbTranslatedName, "span 2, wrap"); //$NON-NLS-1$
 		add(cbFullscreenMode, "wrap"); //$NON-NLS-1$
 
 		add(new JLabel("Default font")); //$NON-NLS-1$
@@ -267,10 +267,8 @@ public class TerminalConfigurationView extends ConfigurationView {
 		cbEnableBarTab.setSelected(TerminalConfig.isBarTabEnable());
 		cbFullscreenMode.setSelected(TerminalConfig.isFullscreenMode());
 		cbShowDbConfiguration.setSelected(TerminalConfig.isShowDbConfigureButton());
-
 		tfButtonHeight.setText("" + TerminalConfig.getTouchScreenButtonHeight());
 		tfFontSize.setText("" + TerminalConfig.getTouchScreenFontSize());
-
 		cbTranslatedName.setSelected(TerminalConfig.isUseTranslatedName());
 		cbAutoLogoff.setSelected(TerminalConfig.isAutoLogoffEnable());
 		tfLogoffTime.setText("" + TerminalConfig.getAutoLogoffTime());

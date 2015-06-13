@@ -71,6 +71,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	private javax.swing.JComboBox cbTax;
 	private javax.swing.JCheckBox chkVisible;
 	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel111;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JLabel jLabel4;
@@ -87,6 +88,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	private javax.swing.JTable tableTicketItemModifierGroups;
 	private DoubleTextField tfDiscountRate;
 	private com.floreantpos.swing.FixedLengthTextField tfName;
+	private com.floreantpos.swing.FixedLengthTextField tfTransName;
 	private DoubleTextField tfPrice;
 	private JLabel lblImagePreview;
 	private JButton btnClearImage;
@@ -137,6 +139,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 
 	public void setFieldsEnable(boolean enable) {
 		this.tfName.setEnabled(enable);
+		this.tfTransName.setEnabled(enable);
 		this.btnAddShift.setEnabled(enable);
 		this.btnDeleteShift.setEnabled(enable);
 		/*
@@ -146,6 +149,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		this.cbGroup.setEnabled(enable);
 		this.cbTax.setEnabled(enable);
 		this.jLabel1.setEnabled(enable);
+		this.jLabel111.setEnabled(enable);
 		this.chkVisible.setEnabled(enable);
 		this.jLabel2.setEnabled(enable);
 		this.jLabel3.setEnabled(enable);
@@ -172,6 +176,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 
 	public void clearFields() {
 		this.tfName.setText("");
+		this.tfTransName.setText("");
 		this.cbGroup.setSelectedIndex(-1);
 		this.cbTax.setSelectedIndex(-1);
 		this.tfPrice.setText("");
@@ -257,6 +262,10 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		jLabel1.setHorizontalAlignment(SwingConstants.TRAILING);
 		tfName = new com.floreantpos.swing.FixedLengthTextField();
 		tfName.setLength(120);
+		jLabel111 = new javax.swing.JLabel();
+		jLabel111.setHorizontalAlignment(SwingConstants.TRAILING);
+		tfTransName = new com.floreantpos.swing.FixedLengthTextField();
+		tfTransName.setLength(30);
 		jLabel4 = new javax.swing.JLabel();
 		jLabel4.setHorizontalAlignment(SwingConstants.TRAILING);
 		cbGroup = new javax.swing.JComboBox();
@@ -283,6 +292,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		shiftTable = new javax.swing.JTable();
 
 		jLabel1.setText(Messages.getString("LABEL_NAME"));
+		jLabel111.setText("Print Name");
 		jLabel4.setText(Messages.getString("LABEL_GROUP"));
 
 		// btnNewGroup.setText("...");
@@ -326,24 +336,28 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 
 		lblBuyPrice = new JLabel(Messages.getString("LABEL_BUY_PRICE"));
 		lblBuyPrice.setEnabled(false);
-		tabGeneral.add(lblBuyPrice, "cell 0 5");
 
 		tfBuyPrice = new DoubleTextField();
 		tfBuyPrice.setEnabled(false);
 		tfBuyPrice.setHorizontalAlignment(SwingConstants.TRAILING);
-		tabGeneral.add(tfBuyPrice, "cell 1 5,growx");
-		tabGeneral.add(jLabel3, "cell 0 6,alignx left,aligny center");
-		tabGeneral.add(jLabel4, "cell 0 4,alignx left,aligny center");
 		setLayout(new BorderLayout(0, 0));
-		tabGeneral.add(jLabel6, "cell 0 8,alignx left,aligny center"); //$NON-NLS-1$
+		tabGeneral.add(jLabel4, "cell 0 4,alignx left,aligny center");
+		tabGeneral.add(lblBuyPrice, "cell 0 5");
+		tabGeneral.add(jLabel3, "cell 0 6,alignx left,aligny center");
 		tabGeneral.add(jLabel2, "cell 0 7,alignx left,aligny center"); //$NON-NLS-1$
+		tabGeneral.add(jLabel6, "cell 0 8,alignx left,aligny center"); //$NON-NLS-1$
 		tabGeneral.add(jLabel1, "cell 0 0,alignx left,aligny center"); //$NON-NLS-1$
+		tabGeneral.add(jLabel111, "cell 0 1,alignx left,aligny center"); //$NON-NLS-1$
+
 		tabGeneral.add(tfName, "cell 1 0 3 1,growx,aligny top"); //$NON-NLS-1$
+		tabGeneral.add(tfTransName, "cell 1 1 3 1,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(cbGroup, "cell 1 4,growx,aligny top"); //$NON-NLS-1$
 		//		tabGeneral.add(btnNewGroup, "cell 3 4,growx,aligny top"); //$NON-NLS-1$
+		tabGeneral.add(tfBuyPrice, "cell 1 5,growx");
+		tabGeneral.add(tfPrice, "cell 1 6,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(tfDiscountRate, "cell 1 7,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(cbTax, "cell 1 8,growx,aligny top"); //$NON-NLS-1$
-		tabGeneral.add(tfPrice, "cell 1 6,growx,aligny top"); //$NON-NLS-1$
+
 		lblImage.setHorizontalAlignment(SwingConstants.TRAILING);
 		tabGeneral.add(lblImage, "cell 0 10,aligny center");
 
@@ -507,6 +521,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	protected void updateView() {
 		MenuItem menuItem = getBean();
 		tfName.setText(menuItem.getName());
+		tfTransName.setText(menuItem.getTranslatedName());
 		tfBuyPrice.setText(String.valueOf(formatDouble(menuItem.getBuyPrice())));
 		tfPrice.setText(String.valueOf(menuItem.getPrice()));
 		tfDiscountRate.setText(String.valueOf(menuItem.getDiscountRate()));
@@ -543,8 +558,13 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	@Override
 	protected boolean updateModel() {
 		String itemName = tfName.getText();
+		String printName = tfTransName.getText();
 		if (POSUtil.isBlankOrNull(itemName)) {
 			POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Name is required");
+			return false;
+		}
+		if (POSUtil.isBlankOrNull(printName)) {
+			POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Print Name is required");
 			return false;
 		}
 
@@ -557,10 +577,8 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		menuItem.setTax((Tax) cbTax.getSelectedItem());
 		menuItem.setVisible(chkVisible.isSelected());
 		menuItem.setShowImageOnly(cbShowTextWithImage.isSelected());
-
-		menuItem.setTranslatedName(itemName);
+		menuItem.setTranslatedName(printName);
 		menuItem.setSortOrder(menuItem.getSortOrder());
-
 		menuItem.setButtonColor(btnButtonColor.getBackground().getRGB());
 		menuItem.setTextColor(btnTextColor.getForeground().getRGB());
 

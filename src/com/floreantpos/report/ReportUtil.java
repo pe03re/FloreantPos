@@ -105,7 +105,7 @@ public class ReportUtil {
 
 	public static void main(String[] args) {
 		try {
-			compileReport("InventoryItemReport");
+			compileReport("ticket-receipt");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

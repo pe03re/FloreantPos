@@ -367,15 +367,19 @@ public class TicketView extends JPanel {
 					for (RecepieItem ri : riList) {
 						if (ri.getInventoryItem() != null) {
 							Double itemQty = ri.getPercentage();
-							List<InventoryWarehouseItem> wareItemList = InventoryWarehouseItemDAO.getInstance().findByInventoryItem(ri.getInventoryItem());
+							List<InventoryWarehouseItem> wareItemList = InventoryWarehouseItemDAO.getInstance().findByInventoryItem(s, ri.getInventoryItem());
 							for (InventoryWarehouseItem wareItem : wareItemList) {
 								if (wareItem.getItemLocation().getName().equalsIgnoreCase("cafe")) {
 									Double totalUnitsAvilable = wareItem.getTotalRecepieUnits();
 									if (totalUnitsAvilable > (itemCount * itemQty)) {
 										wareItem.setTotalRecepieUnits(totalUnitsAvilable - (itemCount * itemQty));
-										InventoryWarehouseItemDAO.getInstance().saveOrUpdate(wareItem, s);
-									} else {
+										InventoryWarehouseItemDAO iwDao = InventoryWarehouseItemDAO.getInstance();
+										iwDao.refresh(wareItem);
+										iwDao.saveOrUpdate(wareItem, s);
+									} else if (ri.getInventoryItem().getPackageReplenishLevel() >= wareItem.getTotalRecepieUnits()) {
 										POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Inventory level less than number of items for " + mi.getName());
+									} else {
+										POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Inventory level less for " + mi.getName() + ". Please order more!");
 										rollback = true;
 										break ticketLabel;
 									}

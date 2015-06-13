@@ -383,7 +383,8 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 			// FIXME
 			printTicket(ticket, transaction);
 
-			showTransactionCompleteMsg(dueAmount, transaction.getTenderAmount(), ticket, transaction);
+			// showTransactionCompleteMsg(dueAmount,
+			// transaction.getTenderAmount(), ticket, transaction);
 
 			if (ticket.getDueAmount() > 0.0) {
 				int option = JOptionPane.showConfirmDialog(Application.getPosWindow(), POSConstants.CONFIRM_PARTIAL_PAYMENT, POSConstants.MDS_POS, JOptionPane.YES_NO_OPTION);

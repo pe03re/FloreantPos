@@ -11,31 +11,27 @@ import com.floreantpos.util.NumberUtil;
 public class TicketItem extends BaseTicketItem implements ITicketItem {
 	private static final long serialVersionUID = 1L;
 
-	/*[CONSTRUCTOR MARKER BEGIN]*/
-	public TicketItem () {
+	/* [CONSTRUCTOR MARKER BEGIN] */
+	public TicketItem() {
 		super();
 	}
 
 	/**
 	 * Constructor for primary key
 	 */
-	public TicketItem (java.lang.Integer id) {
+	public TicketItem(java.lang.Integer id) {
 		super(id);
 	}
 
 	/**
 	 * Constructor for required fields
 	 */
-	public TicketItem (
-		java.lang.Integer id,
-		com.floreantpos.model.Ticket ticket) {
+	public TicketItem(java.lang.Integer id, com.floreantpos.model.Ticket ticket) {
 
-		super (
-			id,
-			ticket);
+		super(id, ticket);
 	}
 
-	/*[CONSTRUCTOR MARKER END]*/
+	/* [CONSTRUCTOR MARKER END] */
 
 	private boolean priceIncludesTax;
 
@@ -57,10 +53,10 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 	}
 
 	public java.lang.Double getTaxAmount() {
-		if(getTicket().isTaxExempt()) {
+		if (getTicket().isTaxExempt()) {
 			return 0.0;
 		}
-		
+
 		return super.getTaxAmount();
 	}
 
@@ -128,10 +124,10 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 
 		return ticketItemModifierGroup;
 	}
-	
+
 	public TicketItemModifierGroup findTicketItemModifierGroup(Integer menuModifierGroupId) {
 		List<TicketItemModifierGroup> ticketItemModifierGroups = getTicketItemModifierGroups();
-		
+
 		if (ticketItemModifierGroups != null) {
 			for (TicketItemModifierGroup ticketItemModifierGroup : ticketItemModifierGroups) {
 				if (ticketItemModifierGroup.getModifierGroupId() == menuModifierGroupId) {
@@ -139,7 +135,7 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 				}
 			}
 		}
-		
+
 		return null;
 	}
 
@@ -162,17 +158,18 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 		setTotalAmountWithoutModifiers(NumberUtil.roundToTwoDigit(calculateTotal(false)));
 	}
 
-	//	public double calculateSubtotal() {
-	//		double subtotal = NumberUtil.roundToTwoDigit(calculateSubtotal(true));
-	//		
-	//		return subtotal;
-	//	}
-	//	
-	//	public double calculateSubtotalWithoutModifiers() {
-	//		double subtotalWithoutModifiers = NumberUtil.roundToTwoDigit(calculateSubtotal(false));
-	//		
-	//		return subtotalWithoutModifiers;
-	//	}
+	// public double calculateSubtotal() {
+	// double subtotal = NumberUtil.roundToTwoDigit(calculateSubtotal(true));
+	//
+	// return subtotal;
+	// }
+	//
+	// public double calculateSubtotalWithoutModifiers() {
+	// double subtotalWithoutModifiers =
+	// NumberUtil.roundToTwoDigit(calculateSubtotal(false));
+	//
+	// return subtotalWithoutModifiers;
+	// }
 
 	private double calculateSubtotal(boolean includeModifierPrice) {
 		double subTotalAmount = NumberUtil.roundToTwoDigit(getUnitPrice() * getItemCount());
@@ -216,8 +213,7 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 		if (taxRate > 0) {
 			if (priceIncludesTax) {
 				tax = subtotal - (subtotal / (1 + (taxRate / 100.0)));
-			}
-			else {
+			} else {
 				tax = subtotal * (taxRate / 100.0);
 			}
 		}
@@ -240,16 +236,13 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 		if (includeModifiers) {
 			if (priceIncludesTax) {
 				total = getSubtotalAmount() - getDiscountAmount();
-			}
-			else {
+			} else {
 				total = getSubtotalAmount() - getDiscountAmount() + getTaxAmount();
 			}
-		}
-		else {
+		} else {
 			if (priceIncludesTax) {
 				total = getSubtotalAmountWithoutModifiers() - getDiscountAmount();
-			}
-			else {
+			} else {
 				total = getSubtotalAmountWithoutModifiers() - getDiscountAmount() + getTaxAmountWithoutModifiers();
 			}
 		}
@@ -289,20 +282,20 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 	public void setPriceIncludesTax(boolean priceIncludesTax) {
 		this.priceIncludesTax = priceIncludesTax;
 	}
-	
+
 	@Override
 	public String getItemCode() {
 		return String.valueOf(getId());
 	}
-	
+
 	public Printer getPrinter() {
 		PosPrinters printers = Application.getPrinters();
 		VirtualPrinter virtualPrinter = getVirtualPrinter();
-		
-		if(virtualPrinter == null) {
+
+		if (virtualPrinter == null) {
 			return printers.getDefaultKitchenPrinter();
 		}
-		
+
 		return printers.getKitchenPrinterFor(virtualPrinter);
 	}
 }
