@@ -8,19 +8,19 @@ import javax.swing.JTabbedPane;
 
 import com.floreantpos.bo.ui.BackOfficeWindow;
 import com.floreantpos.report.ReportViewer;
-import com.floreantpos.report.SalesReport;
+import com.floreantpos.sale.report.SaleDetailsReport;
 
-public class SalesReportAction extends AbstractAction {
+public class SalesDetailsReportAction extends AbstractAction {
 
-	public SalesReportAction() {
-		super(com.floreantpos.POSConstants.SALES_REPORT);
+	public SalesDetailsReportAction() {
+		super("Sale Detail Report");
 	}
 
-	public SalesReportAction(String name) {
+	public SalesDetailsReportAction(String name) {
 		super(name);
 	}
 
-	public SalesReportAction(String name, Icon icon) {
+	public SalesDetailsReportAction(String name, Icon icon) {
 		super(name, icon);
 	}
 
@@ -29,10 +29,10 @@ public class SalesReportAction extends AbstractAction {
 		JTabbedPane tabbedPane = window.getTabbedPane();
 
 		ReportViewer viewer = null;
-		int index = tabbedPane.indexOfTab(com.floreantpos.POSConstants.SALES_REPORT);
+		int index = tabbedPane.indexOfTab("Sale Detail Report");
 		if (index == -1) {
-			viewer = new ReportViewer(new SalesReport());
-			tabbedPane.addTab(com.floreantpos.POSConstants.SALES_REPORT, viewer);
+			viewer = new ReportViewer(new SaleDetailsReport());
+			tabbedPane.addTab("Sale Detail Report", viewer);
 		} else {
 			viewer = (ReportViewer) tabbedPane.getComponentAt(index);
 		}

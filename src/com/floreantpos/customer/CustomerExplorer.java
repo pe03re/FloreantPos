@@ -52,7 +52,7 @@ public class CustomerExplorer extends TransparentPanel {
 		tableModel.addRows(customerList);
 
 		table = new JTable(tableModel);
-		// table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setDefaultRenderer(Object.class, new PosTableRenderer());
 		PosGuiUtil.setColumnWidth(table, 0, 40);
 

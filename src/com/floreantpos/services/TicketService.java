@@ -13,7 +13,7 @@ public class TicketService {
 		if (ticket == null) {
 			throw new PosException(POSConstants.NO_TICKET_WITH_ID + " " + ticketId + " " + POSConstants.FOUND);
 		}
-		
+
 		return ticket;
 	}
 }

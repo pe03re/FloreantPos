@@ -45,14 +45,14 @@ public class CustomerSelectionDialog extends POSDialog {
 
 	protected Customer selectedCustomer;
 	private PosSmallButton btnRemoveCustomer;
-	
+
 	private Ticket ticket;
-	
+
 	public CustomerSelectionDialog(Ticket ticket) {
 		this.ticket = ticket;
-		
+
 		setTitle("Add/Edit Customer");
-		
+
 		loadCustomerFromTicket();
 	}
 
@@ -120,9 +120,8 @@ public class CustomerSelectionDialog extends POSDialog {
 			public void valueChanged(ListSelectionEvent e) {
 				selectedCustomer = customerTable.getSelectedCustomer();
 				if (selectedCustomer != null) {
-//					btnInfo.setEnabled(true);
-				}
-				else {
+					// btnInfo.setEnabled(true);
+				} else {
 					btnInfo.setEnabled(false);
 				}
 			}
@@ -152,7 +151,7 @@ public class CustomerSelectionDialog extends POSDialog {
 			}
 		});
 		btnCreateNewCustomer.setText("NEW");
-		
+
 		btnRemoveCustomer = new PosSmallButton();
 		btnRemoveCustomer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -166,26 +165,26 @@ public class CustomerSelectionDialog extends POSDialog {
 		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Customer customer = customerTable.getSelectedCustomer();
-				if(customer == null) {
+				if (customer == null) {
 					POSMessageDialog.showError("Please select a customer");
 					return;
 				}
-				
+
 				doSetCustomer(customer);
 			}
 		});
 		btnSelect.setText("SELECT");
 		panel.add(btnSelect);
-		
-				PosSmallButton btnCancel = new PosSmallButton();
-				btnCancel.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						setCanceled(true);
-						dispose();
-					}
-				});
-				btnCancel.setText("CANCEL");
-				panel.add(btnCancel);
+
+		PosSmallButton btnCancel = new PosSmallButton();
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setCanceled(true);
+				dispose();
+			}
+		});
+		btnCancel.setText("CANCEL");
+		panel.add(btnCancel);
 
 		JPanel panel_3 = new JPanel(new BorderLayout());
 		getContentPane().add(panel_3, "cell 0 1,grow, gapright 2px");
@@ -211,10 +210,10 @@ public class CustomerSelectionDialog extends POSDialog {
 
 	private void loadCustomerFromTicket() {
 		String customerIdString = ticket.getProperty(Ticket.CUSTOMER_ID);
-		if(StringUtils.isNotEmpty(customerIdString)) {
+		if (StringUtils.isNotEmpty(customerIdString)) {
 			int customerId = Integer.parseInt(customerIdString);
 			Customer customer = CustomerDAO.getInstance().get(customerId);
-			
+
 			List<Customer> list = new ArrayList<Customer>();
 			list.add(customer);
 			customerTable.setModel(new CustomerListTableModel(list));
@@ -230,10 +229,10 @@ public class CustomerSelectionDialog extends POSDialog {
 
 	protected void doRemoveCustomerFromTicket() {
 		int option = JOptionPane.showOptionDialog(this, "Remove customer from ticket?", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-		if(option != JOptionPane.YES_OPTION) {
+		if (option != JOptionPane.YES_OPTION) {
 			return;
 		}
-		
+
 		ticket.removeCustomer();
 		TicketDAO.getInstance().saveOrUpdate(ticket);
 		setCanceled(false);
@@ -252,7 +251,9 @@ public class CustomerSelectionDialog extends POSDialog {
 		}
 
 		List<Customer> list = CustomerDAO.getInstance().findBy(phone, loyalty, name);
-		customerTable.setModel(new CustomerListTableModel(list));
+		CustomerListTableModel model = new CustomerListTableModel(list);
+		model.setPageSize(list.size());
+		customerTable.setModel(model);
 	}
 
 	protected void doCreateNewCustomer() {
@@ -262,12 +263,12 @@ public class CustomerSelectionDialog extends POSDialog {
 
 		if (!dialog.isCanceled()) {
 			selectedCustomer = (Customer) form.getBean();
-			
+
 			CustomerListTableModel model = (CustomerListTableModel) customerTable.getModel();
 			model.addItem(selectedCustomer);
 		}
 	}
-	
+
 	@Override
 	public String getName() {
 		return "C";

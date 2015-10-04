@@ -83,7 +83,7 @@ public class Application {
 	public final static String VERSION = AppProperties.getVersion();
 
 	private Application() {
-		//Locale.setDefault(Locale.forLanguageTag("ar-EG"));
+		// Locale.setDefault(Locale.forLanguageTag("ar-EG"));
 
 		applicationIcon = new ImageIcon(getClass().getResource("/icons/icon.png")); //$NON-NLS-1$
 		posWindow = new PosWindow();
@@ -116,14 +116,15 @@ public class Application {
 
 	private void setApplicationLook() {
 		try {
-			
+
 			initializeFont();
-			
+
 			PlasticXPLookAndFeel.setPlasticTheme(new ExperienceBlue());
 			UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
-			//UIManager.setLookAndFeel(new NimbusLookAndFeel());
+			// UIManager.setLookAndFeel(new NimbusLookAndFeel());
 			UIManager.put("ComboBox.is3DEnabled", Boolean.FALSE); //$NON-NLS-1$
-			//UIManager.put("ToggleButtonUI", "com.floreantpos.swing.POSButtonUI");
+			// UIManager.put("ToggleButtonUI",
+			// "com.floreantpos.swing.POSButtonUI");
 		} catch (Exception ignored) {
 			ignored.printStackTrace();
 		}
@@ -131,15 +132,15 @@ public class Application {
 
 	private void initializeFont() {
 		String uiDefaultFont = TerminalConfig.getUiDefaultFont();
-		if(StringUtils.isEmpty(uiDefaultFont)) {
+		if (StringUtils.isEmpty(uiDefaultFont)) {
 			return;
 		}
-		
+
 		Font sourceFont = UIManager.getFont("Label.font");
 		Font font = new Font(uiDefaultFont, sourceFont.getStyle(), sourceFont.getSize());
-		
+
 		UIManager.put("ArrowButton.size", 40);
-		UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL",Font.PLAIN,35)));
+		UIManager.put("OptionPane.buttonFont", new FontUIResource(new Font("ARIAL", Font.PLAIN, 35)));
 		UIManager.put("Button.font", font);
 		UIManager.put("ToggleButton.font", font);
 		UIManager.put("RadioButton.font", font);
@@ -179,13 +180,13 @@ public class Application {
 		}
 		try {
 			posWindow.setGlassPaneVisible(true);
-			//posWindow.setGlassPaneMessage(com.floreantpos.POSConstants.LOADING);
+			// posWindow.setGlassPaneMessage(com.floreantpos.POSConstants.LOADING);
 			DatabaseUtil.checkConnection(DatabaseUtil.initialize());
 			initTerminal();
 			initPrintConfig();
 			refreshRestaurant();
 			loadPrinters();
-			//setTicketActiveSetterScheduler();
+			// setTicketActiveSetterScheduler();
 			setSystemInitialized(true);
 		} catch (DatabaseConnectionException e) {
 			e.printStackTrace();
@@ -194,10 +195,8 @@ public class Application {
 			if (writer.toString().contains("Another instance of Derby may have already booted")) {
 				POSMessageDialog.showError("Another FloreantPOS instance may be already running.\n" + "Multiple instances cannot be run in Derby single mode");
 				return;
-			}
-			else {
-				int option = JOptionPane.showConfirmDialog(getPosWindow(),
-						Messages.getString("Application.0"), Messages.getString(POSConstants.POS_MESSAGE_ERROR), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
+			} else {
+				int option = JOptionPane.showConfirmDialog(getPosWindow(), Messages.getString("Application.0"), Messages.getString(POSConstants.POS_MESSAGE_ERROR), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
 				if (option == JOptionPane.YES_OPTION) {
 					DatabaseConfigurationDialog.show(Application.getPosWindow());
 				}
@@ -213,19 +212,20 @@ public class Application {
 
 	private void loadPrinters() {
 		printers = PosPrinters.load();
-		if(printers == null) {
+		if (printers == null) {
 			printers = new PosPrinters();
 		}
 	}
 
-	//	private void setTicketActiveSetterScheduler() {
-	//		Calendar calendar = Calendar.getInstance();
-	//		calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
-	//		calendar.set(Calendar.HOUR_OF_DAY, 0);
-	//		calendar.set(Calendar.MINUTE, 0);
-	//		calendar.set(Calendar.SECOND, 0);
+	// private void setTicketActiveSetterScheduler() {
+	// Calendar calendar = Calendar.getInstance();
+	// calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) +
+	// 1);
+	// calendar.set(Calendar.HOUR_OF_DAY, 0);
+	// calendar.set(Calendar.MINUTE, 0);
+	// calendar.set(Calendar.SECOND, 0);
 	//
-	//	}
+	// }
 
 	private void initPrintConfig() {
 		printConfiguration = PrinterConfigurationDAO.getInstance().get(PrinterConfiguration.ID);
@@ -260,13 +260,11 @@ public class Application {
 
 		TerminalConfig.setTerminalId(terminalId);
 		RootView.getInstance().getLoginScreen().setTerminalId(terminalId);
-		
 
 		if (terminal.isHasCashDrawer() && terminal.isAutoDrawerPullEnable() && autoDrawerPullTimer == null) {
 			autoDrawerPullTimer = new Timer(60 * 1000, new AutoDrawerPullAction());
 			autoDrawerPullTimer.start();
-		}
-		else {
+		} else {
 			if (autoDrawerPullTimer != null) {
 				autoDrawerPullTimer.stop();
 				autoDrawerPullTimer = null;
@@ -274,7 +272,7 @@ public class Application {
 		}
 
 		this.terminal = terminal;
-		
+
 		OrderTypePropertiesDAO.populate();
 	}
 
@@ -289,8 +287,7 @@ public class Application {
 
 			if (restaurant.isItemPriceIncludesTax()) {
 				posWindow.setStatus("Tax is included in item price");
-			}
-			else {
+			} else {
 				posWindow.setStatus("Tax is not included in item price");
 			}
 		} catch (Exception e) {
@@ -325,13 +322,13 @@ public class Application {
 	public void shutdownPOS() {
 		User user = getCurrentUser();
 
-//		if (user != null && !user.hasPermission(UserPermission.SHUT_DOWN)) {
-//			POSMessageDialog.showError("You do not have permission to execute this action");
-//			return;
-//		}
+		// if (user != null && !user.hasPermission(UserPermission.SHUT_DOWN)) {
+		// POSMessageDialog.showError("You do not have permission to execute this action");
+		// return;
+		// }
 
-		int option = JOptionPane.showOptionDialog(getPosWindow(), com.floreantpos.POSConstants.SURE_SHUTDOWN_, com.floreantpos.POSConstants.CONFIRM_SHUTDOWN,
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+		int option = JOptionPane.showOptionDialog(getPosWindow(), com.floreantpos.POSConstants.SURE_SHUTDOWN_, com.floreantpos.POSConstants.CONFIRM_SHUTDOWN, JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE, null, null, null);
 		if (option != JOptionPane.YES_OPTION) {
 			return;
 		}
@@ -361,31 +358,28 @@ public class Application {
 		setCurrentShift(currentShift);
 
 		RootView rootView = getRootView();
-		
-		if(TerminalConfig.isCashierMode()) {
-			//SwitchboardView.doTakeout(OrderType.TAKE_OUT);
-			if(!rootView.hasView(CashierSwitchBoardView.VIEW_NAME)) {
+
+		if (TerminalConfig.isCashierMode()) {
+			// SwitchboardView.doTakeout(OrderType.TAKE_OUT);
+			if (!rootView.hasView(CashierSwitchBoardView.VIEW_NAME)) {
 				CashierSwitchBoardView view = new CashierSwitchBoardView();
 				rootView.addView(view);
 			}
-			
+
 			rootView.showView(CashierSwitchBoardView.VIEW_NAME);
-		}
-		else if(TerminalConfig.isKitchenMode()) {
-			if(rootView.hasView(KitchenDisplayView.VIEW_NAME)) {
+		} else if (TerminalConfig.isKitchenMode()) {
+			if (rootView.hasView(KitchenDisplayView.VIEW_NAME)) {
 				rootView.showView(KitchenDisplayView.VIEW_NAME);
-			}
-			else {
+			} else {
 				KitchenDisplayView kitchenDisplayView = new KitchenDisplayView();
 				rootView.addView(kitchenDisplayView);
 				rootView.showView(KitchenDisplayView.VIEW_NAME);
 			}
-		}
-		else {
+		} else {
 			rootView.showView(SwitchboardView.VIEW_NAME);
 		}
 	}
-	
+
 	public void doLogout() {
 		if (backOfficeWindow != null) {
 			backOfficeWindow.setVisible(false);
@@ -417,9 +411,9 @@ public class Application {
 		return getInstance().posWindow;
 	}
 
-	//	public BackOfficeWindow getBackOfficeWindow() {
-	//		return backOfficeWindow;
-	//	}
+	// public BackOfficeWindow getBackOfficeWindow() {
+	// return backOfficeWindow;
+	// }
 
 	public void setBackOfficeWindow(BackOfficeWindow backOfficeWindow) {
 		this.backOfficeWindow = backOfficeWindow;
@@ -432,10 +426,10 @@ public class Application {
 		return terminal;
 	}
 
-	//	public static PrinterConfiguration getPrinterConfiguration() {
-	//		return getInstance().printConfiguration;
-	//	}
-	
+	// public static PrinterConfiguration getPrinterConfiguration() {
+	// return getInstance().printConfiguration;
+	// }
+
 	public static PosPrinters getPrinters() {
 		return getInstance().printers;
 	}
@@ -468,13 +462,11 @@ public class Application {
 		if (enable) {
 			if (autoDrawerPullTimer != null) {
 				return;
-			}
-			else {
+			} else {
 				autoDrawerPullTimer = new Timer(60 * 1000, new AutoDrawerPullAction());
 				autoDrawerPullTimer.start();
 			}
-		}
-		else {
+		} else {
 			autoDrawerPullTimer.stop();
 			autoDrawerPullTimer = null;
 		}
@@ -518,7 +510,7 @@ public class Application {
 
 		return POSUtil.getBoolean(restaurant.isItemPriceIncludesTax());
 	}
-	
+
 	public String getLocation() {
 		File file = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getFile());
 		return file.getParent();

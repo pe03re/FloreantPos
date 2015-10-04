@@ -108,10 +108,10 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		orderServiceExtension = Application.getPluginManager().getPlugin(OrderServiceExtension.class);
 
 		if (orderServiceExtension == null) {
-			btnHomeDelivery.setEnabled(false);
+			btnHomeDelivery.setEnabled(true);
 			btnPickup.setEnabled(false);
 			btnDriveThrough.setEnabled(false);
-			btnAssignDriver.setEnabled(false);
+			btnAssignDriver.setEnabled(true);
 
 			orderServiceExtension = new DefaultOrderServiceExtension();
 		}
@@ -231,7 +231,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		panel1.add(btnEditTicket);
 		panel1.add(btnSettleTicket);
 
-		panel1.add(btnReopenTicket);
+		// panel1.add(btnReopenTicket);
 		panel1.add(btnVoidTicket);
 		panel1.add(btnRefundTicket);
 		// panel1.add(btnCloseOrder);
@@ -531,6 +531,9 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 				ticket = selectedTickets.get(0);
 			} else {
 				int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
+				if (ticketId == -1) {
+					return;
+				}
 				ticket = TicketService.getTicket(ticketId);
 			}
 
@@ -587,6 +590,9 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 				ticket = selectedTickets.get(0);
 			} else {
 				int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
+				if (ticketId == -1) {
+					return;
+				}
 				ticket = TicketService.getTicket(ticketId);
 			}
 
@@ -637,6 +643,9 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 				ticket = selectedTickets.get(0);
 			} else {
 				int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
+				if (ticketId == -1) {
+					return;
+				}
 				ticket = TicketService.getTicket(ticketId);
 			}
 

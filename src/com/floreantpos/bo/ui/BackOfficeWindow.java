@@ -25,27 +25,15 @@ import com.floreantpos.bo.actions.CategoryExplorerAction;
 import com.floreantpos.bo.actions.ConfigureRestaurantAction;
 import com.floreantpos.bo.actions.CookingInstructionExplorerAction;
 import com.floreantpos.bo.actions.CouponExplorerAction;
-import com.floreantpos.bo.actions.CreditCardReportAction;
-import com.floreantpos.bo.actions.DataExportAction;
-import com.floreantpos.bo.actions.DataImportAction;
-import com.floreantpos.bo.actions.DrawerPullReportExplorerAction;
 import com.floreantpos.bo.actions.ExpenseTransactionReportAction;
 import com.floreantpos.bo.actions.GroupExplorerAction;
-import com.floreantpos.bo.actions.HourlyLaborReportAction;
 import com.floreantpos.bo.actions.InventoryItemReportAction;
 import com.floreantpos.bo.actions.InventoryTransactionReportAction;
 import com.floreantpos.bo.actions.ItemExplorerAction;
-import com.floreantpos.bo.actions.JournalReportAction;
-import com.floreantpos.bo.actions.KeyStatisticsSalesReportAction;
-import com.floreantpos.bo.actions.MenuUsageReportAction;
-import com.floreantpos.bo.actions.OpenTicketSummaryReportAction;
-import com.floreantpos.bo.actions.PayrollReportAction;
-import com.floreantpos.bo.actions.SalesAnalysisReportAction;
 import com.floreantpos.bo.actions.SalesBalanceReportAction;
-import com.floreantpos.bo.actions.SalesDetailReportAction;
+import com.floreantpos.bo.actions.SalesDetailsReportAction;
 import com.floreantpos.bo.actions.SalesExceptionReportAction;
 import com.floreantpos.bo.actions.SalesReportAction;
-import com.floreantpos.bo.actions.ServerProductivityReportAction;
 import com.floreantpos.bo.actions.ShiftExplorerAction;
 import com.floreantpos.bo.actions.TaxExplorerAction;
 import com.floreantpos.bo.actions.UserExplorerAction;
@@ -182,18 +170,19 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 	private void createSalesReportMenu(JMenuBar menuBar) {
 		JMenu reportMenu = new JMenu("Sales Reports");
 		reportMenu.add(new SalesReportAction());
-		reportMenu.add(new OpenTicketSummaryReportAction());
-		reportMenu.add(new HourlyLaborReportAction());
-		reportMenu.add(new PayrollReportAction());
-		reportMenu.add(new KeyStatisticsSalesReportAction());
-		reportMenu.add(new SalesAnalysisReportAction());
-		reportMenu.add(new CreditCardReportAction());
-		reportMenu.add(new MenuUsageReportAction());
-		reportMenu.add(new ServerProductivityReportAction());
-		reportMenu.add(new JournalReportAction());
+		reportMenu.add(new SalesDetailsReportAction());
+		// reportMenu.add(new OpenTicketSummaryReportAction());
+		// reportMenu.add(new HourlyLaborReportAction());
+		// reportMenu.add(new PayrollReportAction());
+		// reportMenu.add(new KeyStatisticsSalesReportAction());
+		// reportMenu.add(new SalesAnalysisReportAction());
+		// reportMenu.add(new CreditCardReportAction());
+		// reportMenu.add(new MenuUsageReportAction());
+		// reportMenu.add(new ServerProductivityReportAction());
+		// reportMenu.add(new JournalReportAction());
 		reportMenu.add(new SalesBalanceReportAction());
 		reportMenu.add(new SalesExceptionReportAction());
-		reportMenu.add(new SalesDetailReportAction());
+		// reportMenu.add(new SalesDetailReportAction());
 		menuBar.add(reportMenu);
 	}
 
@@ -233,9 +222,9 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		adminMenu.add(new UserExplorerAction());
 		adminMenu.add(new UserTypeExplorerAction());
 		// adminMenu.add(new ViewGratuitiesAction());
-		adminMenu.add(new DrawerPullReportExplorerAction());
-		adminMenu.add(new DataExportAction());
-		adminMenu.add(new DataImportAction());
+		// adminMenu.add(new DrawerPullReportExplorerAction());
+		// adminMenu.add(new DataExportAction());
+		// adminMenu.add(new DataImportAction());
 		menuBar.add(adminMenu);
 	}
 

@@ -67,7 +67,7 @@ public class OthersView extends JPanel {
 
 		buttonPanel = new JPanel();
 		btnOrderInfo = new com.floreantpos.swing.PosButton();
-		btnMisc = new com.floreantpos.swing.PosButton();
+		// btnMisc = new com.floreantpos.swing.PosButton();
 		// btnGuestNo = new com.floreantpos.swing.PosButton();
 		// btnTableNumber = new com.floreantpos.swing.PosButton();
 
@@ -104,13 +104,13 @@ public class OthersView extends JPanel {
 		});
 		buttonPanel.add(btnCustomer);
 
-		btnMisc.setText(com.floreantpos.POSConstants.MISC);
-		btnMisc.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				doInsertMisc(evt);
-			}
-		});
-		buttonPanel.add(btnMisc);
+		// btnMisc.setText(com.floreantpos.POSConstants.MISC);
+		// btnMisc.addActionListener(new java.awt.event.ActionListener() {
+		// public void actionPerformed(java.awt.event.ActionEvent evt) {
+		// doInsertMisc(evt);
+		// }
+		// });
+		// buttonPanel.add(btnMisc);
 
 		// btnGuestNo.setText(com.floreantpos.POSConstants.CUSTOMER);
 		// btnGuestNo.addActionListener(new java.awt.event.ActionListener() {
@@ -274,7 +274,7 @@ public class OthersView extends JPanel {
 	}
 
 	// private com.floreantpos.swing.PosButton btnGuestNo;
-	private com.floreantpos.swing.PosButton btnMisc;
+	// private com.floreantpos.swing.PosButton btnMisc;
 	private com.floreantpos.swing.PosButton btnOrderInfo;
 	// private com.floreantpos.swing.PosButton btnTableNumber;
 	private com.floreantpos.swing.PosButton btnCustomer;

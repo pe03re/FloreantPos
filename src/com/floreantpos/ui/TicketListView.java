@@ -30,11 +30,12 @@ public class TicketListView extends JPanel {
 		table.setSortable(false);
 		table.setColumnControlVisible(false);
 		table.setModel(tableModel = new TicketListTableModel());
+		tableModel.setPageSize(10000);
 		table.setRowHeight(60);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 		table.setDefaultRenderer(Object.class, new PosTableRenderer());
 		table.setGridColor(Color.LIGHT_GRAY);
-		
+
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(30);
 		columnModel.getColumn(1).setPreferredWidth(20);
@@ -74,7 +75,7 @@ public class TicketListView extends JPanel {
 			Ticket ticket = (Ticket) tableModel.getRowData(selectedRows[i]);
 			tickets.add(ticket);
 		}
-		
+
 		return tickets;
 	}
 
@@ -83,18 +84,17 @@ public class TicketListView extends JPanel {
 	// }
 
 	private class TicketListTable extends JXTable {
-		
+
 		public TicketListTable() {
 		}
-		
+
 		@Override
 		public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend) {
 			ListSelectionModel selectionModel = getSelectionModel();
 			boolean selected = selectionModel.isSelectedIndex(rowIndex);
 			if (selected) {
 				selectionModel.removeSelectionInterval(rowIndex, rowIndex);
-			}
-			else {
+			} else {
 				selectionModel.addSelectionInterval(rowIndex, rowIndex);
 			}
 		}
@@ -113,33 +113,31 @@ public class TicketListView extends JPanel {
 				return Integer.valueOf(ticket.getId());
 
 			case 1:
-					User owner = ticket.getOwner();
-					return owner.getFirstName();
+				User owner = ticket.getOwner();
+				return owner.getFirstName();
 
 			case 2:
 				return ticket.getType();
-				
+
 			case 3:
-				if(ticket.getType() == OrderType.PICKUP) {
+				if (ticket.getType() == OrderType.PICKUP) {
 					return "Will pickup";
-				}
-				else if(ticket.getType() == OrderType.HOME_DELIVERY) {
-					if(ticket.getAssignedDriver() == null) {
+				} else if (ticket.getType() == OrderType.HOME_DELIVERY) {
+					if (ticket.getAssignedDriver() == null) {
 						return "Driver not assigned";
 					}
 					return "Driver assigned";
-				}
-				else if(ticket.getType() == OrderType.DRIVE_THRU) {
+				} else if (ticket.getType() == OrderType.DRIVE_THRU) {
 					return "Not delivered";
 				}
-				
-				if(ticket.isPaid()) {
-					if(ticket.getStatus() != null) {
+
+				if (ticket.isPaid()) {
+					if (ticket.getStatus() != null) {
 						return TicketStatus.valueOf(ticket.getStatus()).toString();
 					}
 					return "PAID";
 				}
-				
+
 				return "OPEN";
 
 			case 4:
@@ -154,7 +152,7 @@ public class TicketListView extends JPanel {
 		}
 
 	}
-	
+
 	public Ticket getFirstSelectedTicket() {
 		List<Ticket> selectedTickets = getSelectedTickets();
 
@@ -167,13 +165,13 @@ public class TicketListView extends JPanel {
 
 		return ticket;
 	}
-	
+
 	public int getFirstSelectedTicketId() {
 		Ticket ticket = getFirstSelectedTicket();
-		if(ticket == null) {
+		if (ticket == null) {
 			return -1;
 		}
-		
+
 		return ticket.getId();
 	}
 

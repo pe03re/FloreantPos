@@ -336,9 +336,9 @@ public class TicketView extends JPanel {
 
 	private void updateInventory(Ticket t) {
 		List<TicketItem> tiList = t.getTicketItems();
-		if (ticket.getId() != null) {
-			Ticket old = TicketDAO.getInstance().findTicket(ticket.getId());
-			List<TicketItem> cons = new ArrayList<TicketItem>();
+		List<TicketItem> cons = new ArrayList<TicketItem>();
+		if (t.getId() != null) {
+			Ticket old = TicketDAO.getInstance().findTicket(t.getId());
 			List<TicketItem> oldItems = old.getTicketItems();
 			Map<Integer, TicketItem> itemMap = new HashMap<Integer, TicketItem>();
 			for (TicketItem ti : oldItems) {
@@ -348,16 +348,19 @@ public class TicketView extends JPanel {
 				if (!itemMap.containsKey(ti.getItemId())) {
 					cons.add(ti);
 				} else {
-					cons.add(ti);
-					ti.setItemCount(ti.getItemCount() - itemMap.get(ti.getItemId()).getItemCount());
+					TicketItem ti1 = new TicketItem(ti.getId());
+					ti1.setItemCount(ti.getItemCount() - itemMap.get(ti.getItemId()).getItemCount());
+					cons.add(ti1);
 				}
 			}
-			tiList = cons;
+		}
+		if (cons.isEmpty()) {
+			cons.addAll(t.getTicketItems());
 		}
 		Session s = InventoryWarehouseItemDAO.getInstance().createNewSession();
 		Transaction tx = s.beginTransaction();
 		boolean rollback = false;
-		ticketLabel: for (TicketItem ti : tiList) {
+		ticketLabel: for (TicketItem ti : cons) {
 			int itemId = ti.getItemId();
 			int itemCount = ti.getItemCount();
 			MenuItem mi = MenuItemDAO.getInstance().findByItemId(itemId);
@@ -372,9 +375,9 @@ public class TicketView extends JPanel {
 								if (wareItem.getItemLocation().getName().equalsIgnoreCase("cafe")) {
 									Double totalUnitsAvilable = wareItem.getTotalRecepieUnits();
 									if (totalUnitsAvilable > (itemCount * itemQty)) {
-										wareItem.setTotalRecepieUnits(totalUnitsAvilable - (itemCount * itemQty));
 										InventoryWarehouseItemDAO iwDao = InventoryWarehouseItemDAO.getInstance();
 										iwDao.refresh(wareItem);
+										wareItem.setTotalRecepieUnits(totalUnitsAvilable - (itemCount * itemQty));
 										iwDao.saveOrUpdate(wareItem, s);
 									} else if (ri.getInventoryItem().getPackageReplenishLevel() >= wareItem.getTotalRecepieUnits()) {
 										POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Inventory level less than number of items for " + mi.getName());

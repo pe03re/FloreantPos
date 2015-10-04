@@ -21,10 +21,10 @@ public class OrderInfoView extends JPanel {
 	public OrderInfoView(List<Ticket> tickets) throws Exception {
 		super();
 		this.tickets = tickets;
-		
+
 		createUI();
 	}
-	
+
 	private void createUI() throws Exception {
 		JPanel reportPanel = new JPanel(new MigLayout("wrap 1, ax 50%", "", ""));
 		PosScrollPane scrollPane = new PosScrollPane(reportPanel);
@@ -32,15 +32,15 @@ public class OrderInfoView extends JPanel {
 
 		for (int i = 0; i < tickets.size(); i++) {
 			Ticket ticket = (Ticket) tickets.get(i);
-			
+
 			TicketPrintProperties printProperties = new TicketPrintProperties("*** ORDER " + ticket.getId() + " ***", false, true, true);
 			HashMap map = ReceiptPrintService.populateTicketProperties(ticket, printProperties, null);
-			JasperPrint jasperPrint = ReceiptPrintService.createPrint(ticket, map, null);
+			JasperPrint jasperPrint = ReceiptPrintService.createGeneralTicketPrint(ticket, map, null);
 
 			TicketReceiptView receiptView = new TicketReceiptView(jasperPrint);
 			reportPanel.add(receiptView.getReportPanel());
 		}
-		
+
 		setLayout(new BorderLayout());
 		add(scrollPane);
 	}
@@ -48,7 +48,7 @@ public class OrderInfoView extends JPanel {
 	public void print() throws Exception {
 		for (Iterator iter = tickets.iterator(); iter.hasNext();) {
 			Ticket ticket = (Ticket) iter.next();
-			
+
 			ReceiptPrintService.printTicket(ticket);
 		}
 	}

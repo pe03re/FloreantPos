@@ -1,4 +1,4 @@
-package com.floreantpos.report;
+package com.floreantpos.sale.report;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,18 +16,23 @@ import net.sf.jasperreports.view.JRViewer;
 import org.jdesktop.swingx.calendar.DateUtils;
 
 import com.floreantpos.main.Application;
+import com.floreantpos.model.MenuItem;
+import com.floreantpos.model.RecepieItem;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
 import com.floreantpos.model.TicketItemModifier;
 import com.floreantpos.model.TicketItemModifierGroup;
+import com.floreantpos.model.dao.MenuItemDAO;
 import com.floreantpos.model.dao.TicketDAO;
+import com.floreantpos.report.Report;
+import com.floreantpos.report.ReportUtil;
 import com.floreantpos.report.service.ReportService;
 
-public class SalesReport extends Report {
-	private SalesReportModel itemReportModel;
-	private SalesReportModel modifierReportModel;
+public class SaleDetailsReport extends Report {
+	private SaleDetailsReportModel itemReportModel;
+	private SaleDetailsReportModel modifierReportModel;
 
-	public SalesReport() {
+	public SaleDetailsReport() {
 		super();
 	}
 
@@ -35,15 +40,15 @@ public class SalesReport extends Report {
 	public void refresh() throws Exception {
 		createModels();
 
-		SalesReportModel itemReportModel = this.itemReportModel;
-		SalesReportModel modifierReportModel = this.modifierReportModel;
+		SaleDetailsReportModel itemReportModel = this.itemReportModel;
+		SaleDetailsReportModel modifierReportModel = this.modifierReportModel;
 
-		JasperReport itemReport = ReportUtil.getReport("sales_sub_report");
-		JasperReport modifierReport = ReportUtil.getReport("sales_sub_report");
+		JasperReport itemReport = ReportUtil.getReport("sales_sub_report_new");
+		JasperReport modifierReport = ReportUtil.getReport("sales_sub_report_new");
 
 		HashMap map = new HashMap();
 		ReportUtil.populateRestaurantProperties(map);
-		map.put("reportTitle", "================================= Sales Report ================================");
+		map.put("reportTitle", "============================ Sale Detail Report ===============================");
 		map.put("reportTime", ReportService.formatFullDate(new Date()));
 		map.put("dateRange", ReportService.formatShortDate(getStartDate()) + " to " + ReportService.formatShortDate(getEndDate()));
 		map.put("terminalName", com.floreantpos.POSConstants.ALL);
@@ -71,20 +76,48 @@ public class SalesReport extends Report {
 		return true;
 	}
 
+	private void refreshBuyPrice() {
+		MenuItemDAO menuItemDAO = new MenuItemDAO();
+		List<MenuItem> itemList = MenuItemDAO.getInstance().findAll();
+		for (MenuItem m : itemList) {
+			m.setBuyPrice(getBuyPriceFromInventory(m));
+			menuItemDAO.saveOrUpdate(m);
+		}
+	}
+
+	private static Double getBuyPriceFromInventory(MenuItem menuItem) {
+		double buyPrice = 0.0d;
+		if (menuItem != null && menuItem.getRecepie() != null) {
+			List<RecepieItem> riList = menuItem.getRecepie().getRecepieItems();
+			if (riList != null && !riList.isEmpty()) {
+				for (RecepieItem ri : riList) {
+					if (ri != null && ri.getInventoryItem() != null) {
+						Double itemQty = ri.getPercentage();
+						buyPrice += ri.getInventoryItem().getAverageRunitPrice() * itemQty;
+					}
+				}
+			}
+		}
+		return buyPrice;
+	}
+
 	public void createModels() {
 		Date date1 = DateUtils.startOfDay(getStartDate());
 		Date date2 = DateUtils.endOfDay(getEndDate());
 
 		List<Ticket> tickets = TicketDAO.getInstance().findTickets(date1, date2, getReportType() == Report.REPORT_TYPE_1 ? true : false);
-
-		HashMap<String, ReportItem> itemMap = new HashMap<String, ReportItem>();
-		HashMap<String, ReportItem> modifierMap = new HashMap<String, ReportItem>();
-
+		refreshBuyPrice();
+		HashMap<String, SaleDetailReportItem> itemMap = new HashMap<String, SaleDetailReportItem>();
+		HashMap<String, SaleDetailReportItem> modifierMap = new HashMap<String, SaleDetailReportItem>();
+		// Map<String, List<TicketItem>> ticketItems = new HashMap<String,
+		// List<TicketItem>>();
 		for (Iterator iter = tickets.iterator(); iter.hasNext();) {
 			Ticket t = (Ticket) iter.next();
 
 			Ticket ticket = TicketDAO.getInstance().loadFullTicket(t.getId());
 
+			// ticketItems.put(ticket.getCreateDateFormatted(),
+			// ticket.getTicketItems());
 			List<TicketItem> ticketItems = ticket.getTicketItems();
 			if (ticketItems == null)
 				continue;
@@ -96,19 +129,21 @@ public class SalesReport extends Report {
 				} else {
 					key = ticketItem.getItemId().toString();
 				}
-				ReportItem reportItem = itemMap.get(key);
-
+				SaleDetailReportItem reportItem = itemMap.get(key);
+				MenuItem mi = MenuItemDAO.getInstance().findByItemId(ticketItem.getItemId());
 				if (reportItem == null) {
-					reportItem = new ReportItem();
+					reportItem = new SaleDetailReportItem();
 					reportItem.setId(key);
+					reportItem.setDate(ticket.getCreateDateFormatted());
 					reportItem.setPrice(ticketItem.getUnitPrice());
+					reportItem.setBuyPrice(mi.getBuyPrice());
+					reportItem.setProfit(ticketItem.getUnitPrice() - mi.getBuyPrice());
 					reportItem.setName(ticketItem.getName());
 					reportItem.setTaxRate(ticketItem.getTaxRate());
-
+					reportItem.setDiscount(ticketItem.getDiscountAmount());
+					reportItem.setQuantity(ticketItem.getItemCount());
 					itemMap.put(key, reportItem);
 				}
-				reportItem.setQuantity(ticketItem.getItemCount() + reportItem.getQuantity());
-				reportItem.setTotal(reportItem.getTotal() + ticketItem.getSubtotalAmountWithoutModifiers());
 
 				if (ticketItem.isHasModifiers() && ticketItem.getTicketItemModifierGroups() != null) {
 					List<TicketItemModifierGroup> ticketItemModifierGroups = ticketItem.getTicketItemModifierGroups();
@@ -121,9 +156,9 @@ public class SalesReport extends Report {
 							} else {
 								key = modifier.getItemId().toString();
 							}
-							ReportItem modifierReportItem = modifierMap.get(key);
+							SaleDetailReportItem modifierReportItem = modifierMap.get(key);
 							if (modifierReportItem == null) {
-								modifierReportItem = new ReportItem();
+								modifierReportItem = new SaleDetailReportItem();
 								modifierReportItem.setId(key);
 								modifierReportItem.setPrice(modifier.getUnitPrice());
 								modifierReportItem.setName(modifier.getName());
@@ -141,12 +176,12 @@ public class SalesReport extends Report {
 			ticket = null;
 			iter.remove();
 		}
-		itemReportModel = new SalesReportModel();
-		itemReportModel.setItems(new ArrayList<ReportItem>(itemMap.values()));
+		itemReportModel = new SaleDetailsReportModel();
+		itemReportModel.setItems(new ArrayList<SaleDetailReportItem>(itemMap.values()));
 		itemReportModel.calculateGrandTotal();
 
-		modifierReportModel = new SalesReportModel();
-		modifierReportModel.setItems(new ArrayList<ReportItem>(modifierMap.values()));
+		modifierReportModel = new SaleDetailsReportModel();
+		modifierReportModel.setItems(new ArrayList<SaleDetailReportItem>(modifierMap.values()));
 		modifierReportModel.calculateGrandTotal();
 	}
 }
