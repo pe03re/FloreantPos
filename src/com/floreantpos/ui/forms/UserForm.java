@@ -43,7 +43,10 @@ public class UserForm extends BeanEditor {
 		cbUserType.setModel(new DefaultComboBoxModel(userTypes.toArray()));
 
 		chkDriver = new JCheckBox("Driver");
+		avlForDelivery = new JCheckBox("Available for Delivery");
+
 		add(chkDriver, "cell 1 9");
+		add(avlForDelivery, "cell 1 10");
 	}
 
 	/**
@@ -156,6 +159,7 @@ public class UserForm extends BeanEditor {
 	private JLabel lblPhone;
 	private FixedLengthTextField tfPhone;
 	private JCheckBox chkDriver;
+	private JCheckBox avlForDelivery;
 
 	@Override
 	public boolean save() {
@@ -254,7 +258,7 @@ public class UserForm extends BeanEditor {
 		user.setPhoneNo(tfPhone.getText());
 		user.setPassword(secretKey1);
 		user.setDriver(chkDriver.isSelected());
-
+		user.setAvailableForDelivery(avlForDelivery.isSelected());
 		setBean(user);
 		return true;
 	}

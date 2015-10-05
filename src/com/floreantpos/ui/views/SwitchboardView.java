@@ -108,12 +108,16 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		orderServiceExtension = Application.getPluginManager().getPlugin(OrderServiceExtension.class);
 
 		if (orderServiceExtension == null) {
-			btnHomeDelivery.setEnabled(true);
+			btnHomeDelivery.setEnabled(false);
 			btnPickup.setEnabled(false);
 			btnDriveThrough.setEnabled(false);
-			btnAssignDriver.setEnabled(true);
+			btnAssignDriver.setEnabled(false);
 
 			orderServiceExtension = new DefaultOrderServiceExtension();
+		} else {
+			btnAssignDriver.setEnabled(true);
+			btnHomeDelivery.setEnabled(true);
+
 		}
 
 		applyComponentOrientation(ComponentOrientation.getOrientation(Locale.getDefault()));
@@ -180,15 +184,14 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 		rightPanel.add(orderPanel);
 
-		// PosButton btnOthers = new PosButton("OTHER FUNCTIONS");
-		// btnOthers.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent e) {
-		// SwitchboardOtherFunctionsDialog dialog = new
-		// SwitchboardOtherFunctionsDialog(SwitchboardView.this);
-		// dialog.open();
-		// }
-		// });
+		PosButton btnOthers = new PosButton("OTHER FUNCTIONS");
+		btnOthers.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SwitchboardOtherFunctionsDialog dialog = new SwitchboardOtherFunctionsDialog(SwitchboardView.this);
+				dialog.open();
+			}
+		});
 
 		PosButton btnBackOffice = new PosButton(POSConstants.BACK_OFFICE_BUTTON_TEXT);
 		btnBackOffice.addActionListener(new ActionListener() {
@@ -230,7 +233,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		panel1.add(btnOrderInfo);
 		panel1.add(btnEditTicket);
 		panel1.add(btnSettleTicket);
-
+		panel1.add(btnAssignDriver);
 		// panel1.add(btnReopenTicket);
 		panel1.add(btnVoidTicket);
 		panel1.add(btnRefundTicket);
