@@ -160,11 +160,11 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			}
 		});
 
-		// btnCloseOrder.addActionListener(new ActionListener() {
-		// public void actionPerformed(ActionEvent e) {
-		// doCloseOrder();
-		// }
-		// });
+		btnCloseOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doCloseOrder();
+			}
+		});
 
 		centerPanel.add(ticketsAndActivityPanel, java.awt.BorderLayout.CENTER);
 
@@ -233,11 +233,11 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		panel1.add(btnOrderInfo);
 		panel1.add(btnEditTicket);
 		panel1.add(btnSettleTicket);
-		panel1.add(btnAssignDriver);
 		// panel1.add(btnReopenTicket);
 		panel1.add(btnVoidTicket);
 		panel1.add(btnRefundTicket);
-		// panel1.add(btnCloseOrder);
+		panel1.add(btnAssignDriver);
+		panel1.add(btnCloseOrder);
 
 		innerActivityPanel.add(panel1);
 
@@ -817,8 +817,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 	private PosButton btnRefundTicket = new PosButton(POSConstants.REFUND_BUTTON_TEXT, new RefundAction(this));
 
 	private PosButton btnAssignDriver = new PosButton(POSConstants.ASSIGN_DRIVER_BUTTON_TEXT);
-	// private PosButton btnCloseOrder = new
-	// PosButton(POSConstants.CLOSE_ORDER_BUTTON_TEXT);
+	private PosButton btnCloseOrder = new PosButton(POSConstants.CLOSE_ORDER_BUTTON_TEXT);
 
 	private com.floreantpos.ui.TicketListView openTicketList = new com.floreantpos.ui.TicketListView();
 
