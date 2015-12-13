@@ -154,11 +154,18 @@ public class CustomerForm extends BeanEditor<Customer> {
 				return false;
 
 			Customer customer = (Customer) getBean();
-			CustomerDAO.getInstance().saveOrUpdate(customer);
-			return true;
+			CustomerDAO dao = CustomerDAO.getInstance();
+			if (!dao.hasCustomerByPhone(customer.getTelephoneNo())) {
+				CustomerDAO.getInstance().saveOrUpdate(customer);
+				return true;
+			} else {
+				BOMessageDialog.showError(this, "Customer already exists!");
+				return false;
+			}
 		} catch (IllegalModelStateException e) {
 		} catch (StaleObjectStateException e) {
-			BOMessageDialog.showError(this, "It seems this Customer is modified by some other person or terminal. Save failed.");
+			BOMessageDialog.showError(this,
+					"It seems this Customer is modified by some other person or terminal. Save failed.");
 		}
 
 		return false;

@@ -8,7 +8,9 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 
+import com.floreantpos.PosException;
 import com.floreantpos.model.Customer;
+import com.floreantpos.model.MenuItem;
 
 public class CustomerDAO extends BaseCustomerDAO {
 
@@ -43,6 +45,24 @@ public class CustomerDAO extends BaseCustomerDAO {
 		} finally {
 			if (session != null) {
 				closeSession(session);
+			}
+		}
+
+	}
+	
+	public boolean hasCustomerByPhone(String phone) {
+		Session session = null;
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.add(Restrictions.eq(Customer.PROP_TELEPHONE_NO, phone));
+			return criteria.list().size() > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new PosException("Error occured while finding customer");
+		} finally {
+			if (session != null) {
+				session.close();
 			}
 		}
 
