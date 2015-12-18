@@ -477,6 +477,8 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			POSMessageDialog.showError(e.getMessage());
 			LogFactory.getLog(SwitchboardView.class).error(e);
 		}
+		updateTicketList();
+
 	}
 
 	private void doReopenTicket() {

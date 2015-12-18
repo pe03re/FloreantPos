@@ -125,6 +125,8 @@ public class TicketListView extends JPanel {
 				} else if (ticket.getType() == OrderType.HOME_DELIVERY) {
 					if (ticket.getAssignedDriver() == null) {
 						return "Driver not assigned";
+					} else if (ticket.isPaid()) {
+						return "PAID, Out for Delivery";
 					}
 					return "Driver assigned";
 				} else if (ticket.getType() == OrderType.DRIVE_THRU) {

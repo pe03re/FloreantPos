@@ -3,6 +3,7 @@ package com.floreantpos.ui.views.order;
 import java.awt.Frame;
 import java.awt.Window;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.SwingUtilities;
 
@@ -15,9 +16,9 @@ import com.floreantpos.model.MenuCategory;
 import com.floreantpos.model.MenuGroup;
 import com.floreantpos.model.MenuItem;
 import com.floreantpos.model.MenuModifier;
+import com.floreantpos.model.OrderType;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
-import com.floreantpos.model.OrderType;
 import com.floreantpos.model.User;
 import com.floreantpos.model.dao.ActionHistoryDAO;
 import com.floreantpos.model.dao.MenuItemDAO;
@@ -56,6 +57,11 @@ public class OrderController implements OrderListener, CategorySelectionListener
 		orderView.getItemView().setMenuGroup(foodGroup);
 	}
 
+	public void groupsSelected(List<MenuGroup> foodGroup) {
+		orderView.showView(MenuItemView.VIEW_NAME);
+		orderView.getItemView().setMenuGroups(foodGroup);
+	}
+
 	public void itemSelected(MenuItem menuItem) {
 		MenuItemDAO dao = new MenuItemDAO();
 		menuItem = dao.initialize(menuItem);
@@ -71,16 +77,17 @@ public class OrderController implements OrderListener, CategorySelectionListener
 	}
 
 	public void modifierSelected(MenuItem parent, MenuModifier modifier) {
-		//		TicketItemModifier itemModifier = new TicketItemModifier();
-		//		itemModifier.setItemId(modifier.getId());
-		//		itemModifier.setName(modifier.getName());
-		//		itemModifier.setPrice(modifier.getPrice());
-		//		itemModifier.setExtraPrice(modifier.getExtraPrice());
-		//		itemModifier.setMinQuantity(modifier.getMinQuantity());
-		//		itemModifier.setMaxQuantity(modifier.getMaxQuantity());
-		//		itemModifier.setTaxRate(modifier.getTax() == null ? 0 : modifier.getTax().getRate());
-		//		
-		//		orderView.getTicketView().addModifier(itemModifier);
+		// TicketItemModifier itemModifier = new TicketItemModifier();
+		// itemModifier.setItemId(modifier.getId());
+		// itemModifier.setName(modifier.getName());
+		// itemModifier.setPrice(modifier.getPrice());
+		// itemModifier.setExtraPrice(modifier.getExtraPrice());
+		// itemModifier.setMinQuantity(modifier.getMinQuantity());
+		// itemModifier.setMaxQuantity(modifier.getMaxQuantity());
+		// itemModifier.setTaxRate(modifier.getTax() == null ? 0 :
+		// modifier.getTax().getRate());
+		//
+		// orderView.getTicketView().addModifier(itemModifier);
 	}
 
 	public void itemSelectionFinished(MenuGroup parent) {
@@ -103,25 +110,24 @@ public class OrderController implements OrderListener, CategorySelectionListener
 
 	public void payOrderSelected(Ticket ticket) {
 		new SettleTicketAction(ticket.getId()).execute();
-		
-		if(TerminalConfig.isCashierMode()) {
+
+		if (TerminalConfig.isCashierMode()) {
 			String message = "Ticket no " + ticket.getId() + " saved. What do you want to do next?";
-			if(ticket.isPaid()) {
+			if (ticket.isPaid()) {
 				message = "Ticket no " + ticket.getId() + " paid. What do you want to do next?";
 			}
-			
+
 			OrderUtil.createNewTakeOutOrder(OrderType.TAKE_OUT);
 			Window ancestor = SwingUtilities.getWindowAncestor(Application.getPosWindow());
 			CashierModeNextActionDialog dialog = new CashierModeNextActionDialog((Frame) ancestor, message);
 			dialog.open();
-		}
-		else {
+		} else {
 			RootView.getInstance().showView(SwitchboardView.VIEW_NAME);
 			SwitchboardView.getInstance().updateTicketList();
 		}
 	}
 
-	//VERIFIED
+	// VERIFIED
 	public synchronized static void saveOrder(Ticket ticket) {
 		if (ticket == null)
 			return;
@@ -131,31 +137,36 @@ public class OrderController implements OrderListener, CategorySelectionListener
 		TicketDAO ticketDAO = new TicketDAO();
 		ticketDAO.saveOrUpdate(ticket);
 
-		//			save the action
+		// save the action
 		ActionHistoryDAO actionHistoryDAO = ActionHistoryDAO.getInstance();
 		User user = Application.getCurrentUser();
-		
+
 		if (newTicket) {
 			ShopTableDAO.getInstance().occupyTables(ticket);
-			
+
 			actionHistoryDAO.saveHistory(user, ActionHistory.NEW_CHECK, POSConstants.RECEIPT_REPORT_TICKET_NO_LABEL + ":" + ticket.getId());
-		}
-		else {
+		} else {
 			actionHistoryDAO.saveHistory(user, ActionHistory.EDIT_CHECK, POSConstants.RECEIPT_REPORT_TICKET_NO_LABEL + ":" + ticket.getId());
 		}
 	}
-	
+
 	public synchronized static void closeOrder(Ticket ticket) {
 		ticket.setClosed(true);
 		ticket.setClosingDate(new Date());
-		
+
 		TicketDAO ticketDAO = new TicketDAO();
 		ticketDAO.saveOrUpdate(ticket);
-		
+
 		User driver = ticket.getAssignedDriver();
 		if (driver != null) {
 			driver.setAvailableForDelivery(true);
 			UserDAO.getInstance().saveOrUpdate(driver);
 		}
+	}
+
+	@Override
+	public void itemSelectionFinished(List<MenuGroup> parent) {
+		// TODO Auto-generated method stub
+
 	}
 }

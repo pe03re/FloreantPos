@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -41,11 +42,40 @@ public class MenuItemView extends SelectionView {
 
 	private MenuGroup menuGroup;
 
+	private List<MenuGroup> menuGroups;
+
 	/** Creates new form GroupView */
 	public MenuItemView() {
 		super(com.floreantpos.POSConstants.ITEMS);
 
 		setBackEnable(false);
+	}
+
+	public List<MenuGroup> getMenuGroups() {
+		return menuGroups;
+	}
+
+	public void setMenuGroups(List<MenuGroup> menuGroups) {
+		this.menuGroups = menuGroups;
+
+		reset();
+
+		if (menuGroups == null) {
+			return;
+		}
+
+		MenuItemDAO dao = new MenuItemDAO();
+		try {
+			List<MenuItem> itemsList = new ArrayList<MenuItem>();
+			for (MenuGroup menuGroup : menuGroups) {
+				List<MenuItem> items = dao.findByParent(menuGroup, false);
+				setBackEnable(items.size() > 0);
+				itemsList.addAll(items);
+			}
+			setItems(itemsList);
+		} catch (PosException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public MenuGroup getMenuGroup() {
@@ -66,13 +96,6 @@ public class MenuItemView extends SelectionView {
 			List<MenuItem> items = dao.findByParent(menuGroup, false);
 			setBackEnable(items.size() > 0);
 			setItems(items);
-			// for (int i = 0; i < items.size(); i++) {
-			// MenuItem menuItem = items.get(i);
-			// ItemButton itemButton = new ItemButton(menuItem);
-			// addButton(itemButton);
-			// }
-			// revalidate();
-			// repaint();
 		} catch (PosException e) {
 			e.printStackTrace();
 		}
@@ -128,7 +151,7 @@ public class MenuItemView extends SelectionView {
 
 	private void fireBackFromItemSelected() {
 		for (ItemSelectionListener listener : listenerList) {
-			listener.itemSelectionFinished(menuGroup);
+			listener.itemSelectionFinished(menuGroups);
 		}
 	}
 

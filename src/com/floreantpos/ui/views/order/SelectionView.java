@@ -31,7 +31,7 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 	protected final JPanel buttonsPanel = new JPanel();
 
 	protected List items;
-	
+
 	protected int previousBlockIndex = -1;
 	protected int currentBlockIndex = 0;
 	protected int nextBlockIndex;
@@ -39,7 +39,7 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 	protected com.floreantpos.swing.PosButton btnBack;
 	protected com.floreantpos.swing.PosButton btnNext;
 	protected com.floreantpos.swing.PosButton btnPrev;
-	
+
 	@SuppressWarnings("unused")
 	private String title;
 
@@ -73,7 +73,9 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 		btnNext.setText(POSConstants.CAPITAL_NEXT);
 		southPanel.add(btnNext, "grow, align center, height 50");
 
-		add(southPanel, BorderLayout.SOUTH);
+		if (title == com.floreantpos.POSConstants.CATEGORIES) {
+			add(southPanel, BorderLayout.SOUTH);
+		}
 
 		ScrollAction action = new ScrollAction();
 		btnBack.addActionListener(action);
@@ -90,7 +92,7 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 		this.items = items;
 		currentBlockIndex = 0;
 		nextBlockIndex = 0;
-		
+
 		renderItems();
 	}
 
@@ -109,10 +111,10 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 	protected abstract AbstractButton createItemButton(Object item);
 
 	public void reset() {
-		//btnBack.setEnabled(false);
+		// btnBack.setEnabled(false);
 		btnNext.setEnabled(false);
 		btnPrev.setEnabled(false);
-		
+
 		Component[] components = buttonsPanel.getComponents();
 		for (int i = 0; i < components.length; i++) {
 			Component c = components[i];
@@ -145,14 +147,14 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 
 		int horizontalButtonCount = getButtonCount(size.width, getButtonSize().width);
 		int verticalButtonCount = getButtonCount(size.height, getButtonSize().height);
-		
+
 		buttonsPanel.setLayout(new MigLayout("alignx 50%, wrap " + horizontalButtonCount));
-		
+
 		int totalItem = horizontalButtonCount * verticalButtonCount;
-		
+
 		previousBlockIndex = currentBlockIndex - totalItem;
 		nextBlockIndex = currentBlockIndex + totalItem;
-		
+
 		try {
 			for (int i = currentBlockIndex; i < nextBlockIndex; i++) {
 
@@ -166,21 +168,21 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 				}
 			}
 		} catch (Exception e) {
-			// TODO: fix it.
+			e.printStackTrace();
 		}
-		
-		if(previousBlockIndex >= 0 && currentBlockIndex != 0) {
+
+		if (previousBlockIndex >= 0 && currentBlockIndex != 0) {
 			btnPrev.setEnabled(true);
 		}
-		
-		if(nextBlockIndex < items.size()) {
+
+		if (nextBlockIndex < items.size()) {
 			btnNext.setEnabled(true);
 		}
-		
+
 		revalidate();
 		repaint();
 	}
-	
+
 	public void addButton(AbstractButton button) {
 		button.setPreferredSize(buttonSize);
 		button.setText("<html><body><center>" + button.getText() + "</center></body></html>");
@@ -217,11 +219,9 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 			Object source = e.getSource();
 			if (source == btnBack) {
 				doGoBack();
-			}
-			else if (source == btnPrev) {
+			} else if (source == btnPrev) {
 				scrollUp();
-			}
-			else if (source == btnNext) {
+			} else if (source == btnNext) {
 				scrollDown();
 			}
 		}
