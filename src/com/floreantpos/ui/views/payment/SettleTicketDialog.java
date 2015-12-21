@@ -181,6 +181,10 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 		paymentView.updateView();
 	}
 
+	public void doSetDelivery() {
+		// set delivery option here
+	}
+
 	public void doViewDiscounts() {// GEN-FIRST:event_btnViewDiscountsdoViewDiscounts
 		try {
 

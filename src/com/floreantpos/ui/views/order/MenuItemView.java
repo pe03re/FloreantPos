@@ -188,6 +188,7 @@ public class MenuItemView extends SelectionView {
 				setForeground(new Color(menuItem.getTextColor()));
 			}
 			setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
+			setButtonSize(new Dimension(BUTTON_SIZE + 10, BUTTON_SIZE - 10));
 			addActionListener(this);
 		}
 

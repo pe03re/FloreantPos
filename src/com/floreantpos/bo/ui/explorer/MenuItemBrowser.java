@@ -17,10 +17,12 @@ import com.floreantpos.model.RecepieItem;
 import com.floreantpos.model.dao.MenuItemDAO;
 import com.floreantpos.ui.model.MenuItemForm;
 
+/**
+ * @author SOMYA
+ * 
+ */
 public class MenuItemBrowser extends ModelBrowser<MenuItem> {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -3216688728242415755L;
 	private JButton btnRefreshPrice = new JButton("REFRESH PRICE");
 
