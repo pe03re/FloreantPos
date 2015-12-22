@@ -14,6 +14,7 @@ import com.floreantpos.model.Ticket;
 import com.floreantpos.report.ReceiptPrintService;
 import com.floreantpos.report.TicketPrintProperties;
 import com.floreantpos.swing.PosScrollPane;
+import com.floreantpos.ui.util.TicketUtils;
 
 public class OrderInfoView extends JPanel {
 	private List<Ticket> tickets;
@@ -33,7 +34,7 @@ public class OrderInfoView extends JPanel {
 		for (int i = 0; i < tickets.size(); i++) {
 			Ticket ticket = (Ticket) tickets.get(i);
 
-			TicketPrintProperties printProperties = new TicketPrintProperties("*** ORDER " + ticket.getId() + " ***", false, true, true);
+			TicketPrintProperties printProperties = new TicketPrintProperties("ORDER: " + TicketUtils.getTicketHeader(ticket), false, true, true);
 			HashMap map = ReceiptPrintService.populateTicketProperties(ticket, printProperties, null);
 			JasperPrint jasperPrint = ReceiptPrintService.createGeneralTicketPrint(ticket, map, null);
 

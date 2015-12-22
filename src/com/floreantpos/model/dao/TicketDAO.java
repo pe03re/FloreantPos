@@ -10,6 +10,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -229,6 +230,43 @@ public class TicketDAO extends BaseTicketDAO {
 			Object ticket = criteria.uniqueResult();
 			if (ticket != null) {
 				return (Ticket) ticket;
+			} else {
+				return null;
+			}
+		} finally {
+			closeSession(session);
+		}
+	}
+
+	public Ticket findLastTicket() {
+		Session session = null;
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.addOrder(Order.desc(Ticket.PROP_ID));
+			criteria.setMaxResults(1);
+			Object ticket = criteria.uniqueResult();
+			if (ticket != null) {
+				return (Ticket) ticket;
+			} else {
+				return null;
+			}
+		} finally {
+			closeSession(session);
+		}
+	}
+
+	public Ticket findTicketByDateAndSerialId(String serialId, Date counterResetDate) {
+		Session session = null;
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.add(Restrictions.ge(Ticket.PROP_CREATE_DATE, counterResetDate));
+			criteria.add(Restrictions.eq(Ticket.PROP_SERIAL_ID, serialId));
+			Object ticket = criteria.uniqueResult();
+			if (ticket != null) {
+				Ticket t = (Ticket) ticket;
+				return t;
 			} else {
 				return null;
 			}

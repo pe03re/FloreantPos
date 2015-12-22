@@ -34,6 +34,7 @@ import com.floreantpos.model.Ticket;
 import com.floreantpos.model.dao.KitchenTicketDAO;
 import com.floreantpos.model.dao.RestaurantDAO;
 import com.floreantpos.model.dao.TicketDAO;
+import com.floreantpos.ui.util.TicketUtils;
 import com.floreantpos.util.NumberUtil;
 
 public class ReceiptPrintService {
@@ -110,7 +111,7 @@ public class ReceiptPrintService {
 	public static void printTicket(Ticket ticket) {
 		try {
 
-			TicketPrintProperties printProperties = new TicketPrintProperties("*** ORDER " + ticket.getId() + " ***", false, true, true);
+			TicketPrintProperties printProperties = new TicketPrintProperties("ORDER: " + TicketUtils.getTicketHeader(ticket), false, true, true);
 			printProperties.setPrintCookingInstructions(false);
 			HashMap map = populateTicketProperties(ticket, printProperties, null);
 
@@ -119,6 +120,22 @@ public class ReceiptPrintService {
 			jasperPrint.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
 			printQuitely(jasperPrint);
 
+		} catch (Exception e) {
+			logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
+		}
+	}
+
+	public static void printLastTicket(Ticket ticket) {
+		try {
+
+			TicketPrintProperties printProperties = new TicketPrintProperties("RECEIPT: " + TicketUtils.getTicketHeader(ticket), false, true, true);
+			printProperties.setPrintCookingInstructions(false);
+			HashMap map = populateTicketProperties(ticket, printProperties, null);
+
+			JasperPrint jasperPrint = createGeneralTicketPrint(ticket, map, null);
+			jasperPrint.setName("ORDER_" + ticket.getId());
+			jasperPrint.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
+			printQuitely(jasperPrint);
 		} catch (Exception e) {
 			logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
 		}
@@ -152,49 +169,8 @@ public class ReceiptPrintService {
 	public static void printTransaction(PosTransaction transaction) {
 		try {
 			Ticket ticket = transaction.getTicket();
-			String serialID = "";
-			Date ticketDate = new Date();
-			int startCounter = -1;
-			int startVCounter = -1;
-			RestaurantDAO resDAO = RestaurantDAO.getInstance();
-			Session session = resDAO.createNewSession();
-			if (session != null) {
-				Transaction tx = session.beginTransaction();
-				try {
-					Restaurant res = resDAO.findAll().get(0);
-					Date resStartTime = res.getStartTime();
-					Date resEndTime = res.getEndTime();
-					if (resStartTime.getHours() * 60 + resStartTime.getMinutes() <= ticketDate.getHours() * 60 + ticketDate.getMinutes()
-							&& resEndTime.getHours() * 60 + resEndTime.getMinutes() >= ticketDate.getHours() * 60 + ticketDate.getMinutes()) {
-						startCounter = res.getStartCounter();
-						startCounter++;
-						res.setStartCounter(startCounter);
-						serialID = String.valueOf(startCounter);
-					} else {
-						startVCounter = res.getStartVCounter();
-						startVCounter++;
-						res.setStartVCounter(startVCounter);
-						serialID = "V" + String.valueOf(startVCounter);
-					}
-					resDAO.saveOrUpdate(res);
-					tx.commit();
-					ticket.setSerialId(serialID);
-				} catch (Exception e) {
-					tx.rollback();
-				} finally {
-					session.close();
-				}
-			}
-			String year = null;
-			int yearInt = ticketDate.getYear() - 100;
-			if (ticketDate.getMonth() >= 3) {
-				year = yearInt + "-" + (yearInt + 1);
-			} else {
-				year = (yearInt - 1) + "-" + yearInt;
-			}
-			String newstring = new SimpleDateFormat("/MM/").format(ticketDate);
-			System.out.println(year + newstring + ticket.getSerialId());
-			TicketPrintProperties printProperties = new TicketPrintProperties("SNo:" + year + newstring + ticket.getSerialId(), true, true, true);
+
+			TicketPrintProperties printProperties = new TicketPrintProperties("ORDER: " + TicketUtils.getTicketHeader(ticket), true, true, true);
 			printProperties.setPrintCookingInstructions(false);
 			HashMap map = populateTicketProperties(ticket, printProperties, transaction);
 
@@ -208,7 +184,7 @@ public class ReceiptPrintService {
 
 				map.put("copyType", "Merchant Copy");
 				jasperPrint = createGeneralTicketPrint(ticket, map, transaction);
-				jasperPrint.setName("Ticket-" + ticket.getId() + "-MerchantCopy");
+				jasperPrint.setName("Ticket-" + ticket.getSerialId() + "-MerchantCopy");
 				jasperPrint.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
 				printQuitely(jasperPrint);
 			} else {
@@ -216,17 +192,110 @@ public class ReceiptPrintService {
 				jasperPrint.setName("Customer Ticket-" + ticket.getSerialId());
 				jasperPrint.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
 				printQuitely(jasperPrint);
-				
+
 				// commented out second print command
-//				JasperPrint jasperPrintMer = createMerchantPrint(ticket, map, transaction);
-//				jasperPrintMer.setName("Merchant Ticket-" + ticket.getSerialId());
-//				jasperPrintMer.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
-//				printQuitely(jasperPrintMer);
+				// JasperPrint jasperPrintMer = createMerchantPrint(ticket, map,
+				// transaction);
+				// jasperPrintMer.setName("Merchant Ticket-" +
+				// ticket.getSerialId());
+				// jasperPrintMer.setProperty("printerName",
+				// Application.getPrinters().getReceiptPrinter());
+				// printQuitely(jasperPrintMer);
 			}
 		} catch (Exception e) {
 			logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
 		}
 	}
+
+	// public static void printTransaction(PosTransaction transaction) {
+	// try {
+	// Ticket ticket = transaction.getTicket();
+	// String serialID = "";
+	// Date ticketDate = new Date();
+	// int startCounter = -1;
+	// int startVCounter = -1;
+	// RestaurantDAO resDAO = RestaurantDAO.getInstance();
+	// Session session = resDAO.createNewSession();
+	// if (session != null) {
+	// Transaction tx = session.beginTransaction();
+	// try {
+	// Restaurant res = resDAO.findAll().get(0);
+	// Date resStartTime = res.getStartTime();
+	// Date resEndTime = res.getEndTime();
+	// if (resStartTime.getHours() * 60 + resStartTime.getMinutes() <=
+	// ticketDate.getHours() * 60 + ticketDate.getMinutes()
+	// && resEndTime.getHours() * 60 + resEndTime.getMinutes() >=
+	// ticketDate.getHours() * 60 + ticketDate.getMinutes()) {
+	// startCounter = res.getStartCounter();
+	// startCounter++;
+	// res.setStartCounter(startCounter);
+	// serialID = String.valueOf(startCounter);
+	// } else {
+	// startVCounter = res.getStartVCounter();
+	// startVCounter++;
+	// res.setStartVCounter(startVCounter);
+	// serialID = "V" + String.valueOf(startVCounter);
+	// }
+	// resDAO.saveOrUpdate(res);
+	// tx.commit();
+	// ticket.setSerialId(serialID);
+	// } catch (Exception e) {
+	// tx.rollback();
+	// } finally {
+	// session.close();
+	// }
+	// }
+	// String year = null;
+	// int yearInt = ticketDate.getYear() - 100;
+	// if (ticketDate.getMonth() >= 3) {
+	// year = yearInt + "-" + (yearInt + 1);
+	// } else {
+	// year = (yearInt - 1) + "-" + yearInt;
+	// }
+	// String newstring = new SimpleDateFormat("/MM/").format(ticketDate);
+	// System.out.println(year + newstring + ticket.getSerialId());
+	// TicketPrintProperties printProperties = new TicketPrintProperties("SNo:"
+	// + year + newstring + ticket.getSerialId(), true, true, true);
+	// printProperties.setPrintCookingInstructions(false);
+	// HashMap map = populateTicketProperties(ticket, printProperties,
+	// transaction);
+	//
+	// if (transaction != null && transaction.isCard()) {
+	// map.put("cardPayment", true);
+	// map.put("copyType", "Customer Copy");
+	// JasperPrint jasperPrint = createGeneralTicketPrint(ticket, map,
+	// transaction);
+	// jasperPrint.setName("Ticket-" + ticket.getId() + "-CustomerCopy");
+	// jasperPrint.setProperty("printerName",
+	// Application.getPrinters().getReceiptPrinter());
+	// printQuitely(jasperPrint);
+	//
+	// map.put("copyType", "Merchant Copy");
+	// jasperPrint = createGeneralTicketPrint(ticket, map, transaction);
+	// jasperPrint.setName("Ticket-" + ticket.getId() + "-MerchantCopy");
+	// jasperPrint.setProperty("printerName",
+	// Application.getPrinters().getReceiptPrinter());
+	// printQuitely(jasperPrint);
+	// } else {
+	// JasperPrint jasperPrint = createGeneralTicketPrint(ticket, map,
+	// transaction);
+	// jasperPrint.setName("Customer Ticket-" + ticket.getSerialId());
+	// jasperPrint.setProperty("printerName",
+	// Application.getPrinters().getReceiptPrinter());
+	// printQuitely(jasperPrint);
+	//
+	// // commented out second print command
+	// // JasperPrint jasperPrintMer = createMerchantPrint(ticket, map,
+	// transaction);
+	// // jasperPrintMer.setName("Merchant Ticket-" + ticket.getSerialId());
+	// // jasperPrintMer.setProperty("printerName",
+	// Application.getPrinters().getReceiptPrinter());
+	// // printQuitely(jasperPrintMer);
+	// }
+	// } catch (Exception e) {
+	// logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
+	// }
+	// }
 
 	// for credit card
 	public static void printTransaction(PosTransaction transaction, boolean printCustomerCopy) {

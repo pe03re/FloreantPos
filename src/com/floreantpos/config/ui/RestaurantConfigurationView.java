@@ -1,5 +1,7 @@
 package com.floreantpos.config.ui;
 
+import java.text.SimpleDateFormat;
+
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
@@ -8,7 +10,6 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.date.picker.DateTimePicker;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.Restaurant;
 import com.floreantpos.model.dao.RestaurantDAO;
@@ -30,11 +31,12 @@ public class RestaurantConfigurationView extends ConfigurationView {
 	private POSTextField tfServiceCharge;
 	private POSTextField tfDefaultGratuity;
 	private POSTextField tfTicketFooter;
-	private DateTimePicker tfStartDate;
-	private DateTimePicker tfEndDate;
+	private POSTextField tfStartDate;
+	// private DateTimePicker tfEndDate;
 	private POSTextField tfStartCounter;
-	private POSTextField tfStartVCounter;
+	// private POSTextField tfStartVCounter;
 	private JTextField tfZipCode;
+	private final SimpleDateFormat ft = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
 
 	public RestaurantConfigurationView() {
 		setLayout(new MigLayout("", "[grow][grow][][grow]", "[grow][][][][][][][][][][][][][][][][]"));
@@ -130,19 +132,17 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		tfTicketFooter = new POSTextField();
 		add(tfTicketFooter, "cell 1 14 3 1,growx");
 
-		JLabel lblStartTime = new JLabel("Cafe Start Time" + ":");
+		JLabel lblStartTime = new JLabel("Start Time" + ":");
 		add(lblStartTime, "cell 0 15,alignx trailing");
+		lblStartTime.setEnabled(false);
 
-		tfStartDate = new DateTimePicker();
-		tfStartDate.setFormats("dd-MM-yyyy HH:mm");
+		tfStartDate = new POSTextField();
 		add(tfStartDate, "cell 1 15 3 1,growx");
+		tfStartDate.setEnabled(false);
 
-		JLabel lblEndTime = new JLabel("Cafe End Time" + ":");
-		add(lblEndTime, "cell 0 16,alignx trailing");
-
-		tfEndDate = new DateTimePicker();
-		tfEndDate.setFormats("dd-MM-yyyy HH:mm");
-		add(tfEndDate, "cell 1 16 3 1,growx");
+		// tfEndDate = new DateTimePicker();
+		// tfEndDate.setFormats("dd-MM-yyyy HH:mm");
+		// add(tfEndDate, "cell 1 16 3 1,growx");
 
 		JLabel lblStartCounter = new JLabel("Normal Start Counter" + ":");
 		add(lblStartCounter, "cell 0 17,alignx trailing");
@@ -150,11 +150,11 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		tfStartCounter = new POSTextField();
 		add(tfStartCounter, "cell 1 17 3 1,growx");
 
-		JLabel lblVStartCounter = new JLabel("V Start Counter" + ":");
-		add(lblVStartCounter, "cell 0 18,alignx trailing");
+		// JLabel lblVStartCounter = new JLabel("V Start Counter" + ":");
+		// add(lblVStartCounter, "cell 0 18,alignx trailing");
 
-		tfStartVCounter = new POSTextField();
-		add(tfStartVCounter, "cell 1 18 3 1,growx");
+		// tfStartVCounter = new POSTextField();
+		// add(tfStartVCounter, "cell 1 18 3 1,growx");
 
 	}
 
@@ -231,10 +231,9 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		restaurant.setServiceChargePercentage(serviceCharge);
 		restaurant.setDefaultGratuityPercentage(gratuityPercentage);
 		restaurant.setTicketFooterMessage(tfTicketFooter.getText());
-		restaurant.setStartTime(tfStartDate.getDate());
-		restaurant.setEndTime(tfEndDate.getDate());
+		// restaurant.setEndTime(tfEndDate.getDate());
 		restaurant.setStartCounter(Integer.parseInt(tfStartCounter.getText()));
-		restaurant.setStartVCounter(Integer.parseInt(tfStartVCounter.getText()));
+		// restaurant.setStartVCounter(Integer.parseInt(tfStartVCounter.getText()));
 
 		dao.saveOrUpdate(restaurant);
 
@@ -260,10 +259,10 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		tfServiceCharge.setText(String.valueOf(restaurant.getServiceChargePercentage()));
 		tfDefaultGratuity.setText(String.valueOf(restaurant.getDefaultGratuityPercentage()));
 		tfTicketFooter.setText(restaurant.getTicketFooterMessage());
-		tfStartDate.setDate(restaurant.getStartTime());
-		tfEndDate.setDate(restaurant.getEndTime());
+		tfStartDate.setText(ft.format(restaurant.getStartTime()));
+		// tfEndDate.setDate(restaurant.getEndTime());
 		tfStartCounter.setText(restaurant.getStartCounter().toString());
-		tfStartVCounter.setText(restaurant.getStartVCounter().toString());
+		// tfStartVCounter.setText(restaurant.getStartVCounter().toString());
 
 		setInitialized(true);
 	}

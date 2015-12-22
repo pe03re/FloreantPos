@@ -417,7 +417,7 @@ public class TicketView extends JPanel {
 				ReceiptPrintService.printToKitchen(ticket);
 				ticketDAO.refresh(ticket);
 			}
-
+			OrderController.assignOrderNumber(ticket);
 			OrderController.saveOrder(ticket);
 
 			closeView(false);
@@ -466,6 +466,7 @@ public class TicketView extends JPanel {
 		try {
 			updateModel();
 			updateInventory(ticket);
+			OrderController.assignOrderNumber(ticket);
 			OrderController.saveOrder(ticket);
 
 			firePayOrderSelected();

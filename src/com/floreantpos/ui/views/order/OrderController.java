@@ -7,6 +7,9 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import com.floreantpos.POSConstants;
 import com.floreantpos.actions.SettleTicketAction;
 import com.floreantpos.config.TerminalConfig;
@@ -17,11 +20,13 @@ import com.floreantpos.model.MenuGroup;
 import com.floreantpos.model.MenuItem;
 import com.floreantpos.model.MenuModifier;
 import com.floreantpos.model.OrderType;
+import com.floreantpos.model.Restaurant;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
 import com.floreantpos.model.User;
 import com.floreantpos.model.dao.ActionHistoryDAO;
 import com.floreantpos.model.dao.MenuItemDAO;
+import com.floreantpos.model.dao.RestaurantDAO;
 import com.floreantpos.model.dao.ShopTableDAO;
 import com.floreantpos.model.dao.TicketDAO;
 import com.floreantpos.model.dao.UserDAO;
@@ -124,6 +129,36 @@ public class OrderController implements OrderListener, CategorySelectionListener
 		} else {
 			RootView.getInstance().showView(SwitchboardView.VIEW_NAME);
 			SwitchboardView.getInstance().updateTicketList();
+		}
+	}
+
+	public static void assignOrderNumber(Ticket ticket) {
+		String serialID = "";
+		int startCounter = 1;
+		RestaurantDAO resDAO = RestaurantDAO.getInstance();
+		Session session = resDAO.createNewSession();
+		if (session != null) {
+			Transaction tx = session.beginTransaction();
+			try {
+				Restaurant res = resDAO.findAll().get(0);
+				if (res.getStartTime().getDate() <= ticket.getCreateDate().getDate()) {
+					startCounter = res.getStartCounter();
+					startCounter++;
+				} else {
+					res.setStartTime(ticket.getCreateDate());
+				}
+				serialID = String.format("%03d", startCounter);
+				res.setStartCounter(startCounter);
+				resDAO.saveOrUpdate(res);
+				tx.commit();
+				ticket.setSerialId(serialID);
+			} catch (Exception e) {
+				tx.rollback();
+			} finally {
+				session.close();
+				// TicketDAO ticketDAO = new TicketDAO();
+				// ticketDAO.saveOrUpdate(ticket);
+			}
 		}
 	}
 

@@ -17,8 +17,8 @@ import net.miginfocom.swing.MigLayout;
 
 import com.floreantpos.IconFactory;
 import com.floreantpos.Messages;
-import com.floreantpos.actions.ClockoutAction;
 import com.floreantpos.actions.LogoutAction;
+import com.floreantpos.actions.PrintLastTicketAction;
 import com.floreantpos.actions.ShutDownAction;
 import com.floreantpos.main.Application;
 import com.floreantpos.swing.PosButton;
@@ -31,16 +31,16 @@ public class HeaderPanel extends JPanel {
 
 	private String userString = Messages.getString("PosMessage.70"); //$NON-NLS-1$
 	private String terminalString = Messages.getString("TERMINAL_LABEL"); //$NON-NLS-1$
-	
+
 	private String name;
-	
+
 	public HeaderPanel() {
 		this("");
 	}
-	
+
 	public HeaderPanel(String name) {
 		super(new MigLayout("ins 2 2 0 2", "[][fill, grow][]", "")); //$NON-NLS-1$  //$NON-NLS-2$  //$NON-NLS-3$
-		
+
 		this.name = name;
 
 		setOpaque(true);
@@ -54,9 +54,14 @@ public class HeaderPanel extends JPanel {
 		statusLabel.setHorizontalAlignment(JLabel.CENTER);
 		add(statusLabel, "grow"); //$NON-NLS-1$
 
-		PosButton btnClockOUt = new PosButton(new ClockoutAction(false, true));
-		btnClockOUt.setToolTipText(Messages.getString("Clockout")); //$NON-NLS-1$
-		add(btnClockOUt, "w 60!, h 60!"); //$NON-NLS-1$
+		// PosButton btnClockOUt = new PosButton(new ClockoutAction(false,
+		// true));
+		//		btnClockOUt.setToolTipText(Messages.getString("Clockout")); //$NON-NLS-1$
+		//		add(btnClockOUt, "w 60!, h 60!"); //$NON-NLS-1$
+
+		PosButton btnPrintLastTicket = new PosButton(new PrintLastTicketAction(false, true));
+		btnPrintLastTicket.setToolTipText(Messages.getString("PrintLastTicket")); //$NON-NLS-1$
+		add(btnPrintLastTicket, "w 60!, h 60!");
 
 		PosButton btnLogout = new PosButton(new LogoutAction(false, true));
 		btnLogout.setToolTipText(Messages.getString("Logout")); //$NON-NLS-1$
@@ -74,7 +79,7 @@ public class HeaderPanel extends JPanel {
 					timer.stop();
 					return;
 				}
-				
+
 				showHeader();
 			}
 		});
@@ -104,11 +109,11 @@ public class HeaderPanel extends JPanel {
 
 		statusLabel.setText(sb.toString());
 	}
-	
+
 	public void startTimer() {
 		timer.start();
 	}
-	
+
 	public void stopTimer() {
 		timer.stop();
 	}
