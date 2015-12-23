@@ -6,38 +6,37 @@ import org.apache.commons.lang.StringUtils;
 
 import com.floreantpos.model.base.BaseRestaurant;
 
-
-@XmlRootElement(name="restaurant")
+@XmlRootElement(name = "restaurant")
 public class Restaurant extends BaseRestaurant {
 	private static final long serialVersionUID = 1L;
 
-/*[CONSTRUCTOR MARKER BEGIN]*/
-	public Restaurant () {
+	/* [CONSTRUCTOR MARKER BEGIN] */
+	public Restaurant() {
 		super();
 	}
 
 	/**
 	 * Constructor for primary key
 	 */
-	public Restaurant (java.lang.Integer id) {
+	public Restaurant(java.lang.Integer id) {
 		super(id);
 	}
 
-/*[CONSTRUCTOR MARKER END]*/
+	/* [CONSTRUCTOR MARKER END] */
 
 	@Override
 	public String getCurrencyName() {
 		String currencyName = super.getCurrencyName();
-		if(StringUtils.isEmpty(currencyName)) {
+		if (StringUtils.isEmpty(currencyName)) {
 			return "Dollar";
 		}
 		return currencyName;
 	}
-	
+
 	@Override
 	public String getCurrencySymbol() {
 		String currencySymbol = super.getCurrencySymbol();
-		if(StringUtils.isEmpty(currencySymbol)) {
+		if (StringUtils.isEmpty(currencySymbol)) {
 			currencySymbol = "$";
 		}
 		return currencySymbol;

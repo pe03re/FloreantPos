@@ -6,19 +6,19 @@ import com.floreantpos.Messages;
 
 public enum OrderType {
 	DINE_IN, TAKE_OUT, PICKUP, HOME_DELIVERY, DRIVE_THRU, BAR_TAB;
-	
+
 	private OrderTypeProperties properties;
-	
+
 	public String toString() {
-		if(properties != null && StringUtils.isNotEmpty(properties.getAlias())) {
+		if (properties != null && StringUtils.isNotEmpty(properties.getAlias())) {
 			return properties.getAlias();
 		}
-		
+
 		String string = Messages.getString(name());
-		if(StringUtils.isEmpty(string)) {
+		if (StringUtils.isEmpty(string)) {
 			return name().replaceAll("_", " ");
 		}
-		
+
 		return string;
 	}
 

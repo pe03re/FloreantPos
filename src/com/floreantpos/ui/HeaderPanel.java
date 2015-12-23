@@ -19,6 +19,7 @@ import com.floreantpos.IconFactory;
 import com.floreantpos.Messages;
 import com.floreantpos.actions.LogoutAction;
 import com.floreantpos.actions.PrintLastTicketAction;
+import com.floreantpos.actions.SearchTicketAction;
 import com.floreantpos.actions.ShutDownAction;
 import com.floreantpos.main.Application;
 import com.floreantpos.swing.PosButton;
@@ -46,7 +47,7 @@ public class HeaderPanel extends JPanel {
 		setOpaque(true);
 		setBackground(Color.white);
 
-		JLabel logoLabel = new JLabel(IconFactory.getIcon("header-logo.png")); //$NON-NLS-1$
+		JLabel logoLabel = new JLabel(IconFactory.getIcon("Vintro_print.jpg")); //$NON-NLS-1$
 		add(logoLabel);
 
 		statusLabel = new JLabel();
@@ -59,8 +60,12 @@ public class HeaderPanel extends JPanel {
 		//		btnClockOUt.setToolTipText(Messages.getString("Clockout")); //$NON-NLS-1$
 		//		add(btnClockOUt, "w 60!, h 60!"); //$NON-NLS-1$
 
+		PosButton btnSearchTicket = new PosButton(new SearchTicketAction(false, true));
+		btnSearchTicket.setToolTipText(Messages.getString("Search Ticket")); //$NON-NLS-1$
+		add(btnSearchTicket, "w 60!, h 60!");
+
 		PosButton btnPrintLastTicket = new PosButton(new PrintLastTicketAction(false, true));
-		btnPrintLastTicket.setToolTipText(Messages.getString("PrintLastTicket")); //$NON-NLS-1$
+		btnPrintLastTicket.setToolTipText(Messages.getString("Print Last Ticket")); //$NON-NLS-1$
 		add(btnPrintLastTicket, "w 60!, h 60!");
 
 		PosButton btnLogout = new PosButton(new LogoutAction(false, true));

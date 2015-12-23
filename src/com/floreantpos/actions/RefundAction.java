@@ -9,6 +9,8 @@ import com.floreantpos.services.PosTransactionService;
 import com.floreantpos.services.TicketService;
 import com.floreantpos.ui.dialog.NumberSelectionDialog2;
 import com.floreantpos.ui.dialog.POSMessageDialog;
+import com.floreantpos.ui.dialog.TicketSelectionDialog;
+import com.floreantpos.ui.util.TicketUtils;
 
 public class RefundAction extends PosAction {
 	private ITicketList ticketList;
@@ -25,10 +27,11 @@ public class RefundAction extends PosAction {
 			Ticket ticket = ticketList.getSelectedTicket();
 
 			if (ticket == null) {
-				int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
-				if (ticketId == -1) {
+				String ticketId = TicketSelectionDialog.takeTicketInput("Enter or scan ticket id", TicketUtils.getTicketPrefix());
+				if (ticketId == null) {
 					return;
 				}
+
 				ticket = TicketService.getTicket(ticketId);
 			}
 
@@ -57,7 +60,7 @@ public class RefundAction extends PosAction {
 
 			ticket = TicketDAO.getInstance().loadFullTicket(ticket.getId());
 
-			message = "<html>" + "Ticket #" + ticket.getId() + "<br/>Total paid " + ticket.getPaidAmount();
+			message = "<html>" + "Ticket #" + TicketUtils.getTicketHeader(ticket) + "<br/>Total paid " + ticket.getPaidAmount();
 
 			if (ticket.getGratuity() != null) {
 				message += ", including tips " + ticket.getGratuity().getAmount();
@@ -85,5 +88,4 @@ public class RefundAction extends PosAction {
 			POSMessageDialog.showError(e.getMessage(), e);
 		}
 	}
-
 }

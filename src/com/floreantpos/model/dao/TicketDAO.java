@@ -256,12 +256,12 @@ public class TicketDAO extends BaseTicketDAO {
 		}
 	}
 
-	public Ticket findTicketByDateAndSerialId(String serialId, Date counterResetDate) {
+	public Ticket findTicketByDateAndSerialId(Date ticketCreateDate, String serialId) {
 		Session session = null;
 		try {
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
-			criteria.add(Restrictions.ge(Ticket.PROP_CREATE_DATE, counterResetDate));
+			criteria.add(Restrictions.ge(Ticket.PROP_CREATE_DATE, ticketCreateDate));
 			criteria.add(Restrictions.eq(Ticket.PROP_SERIAL_ID, serialId));
 			Object ticket = criteria.uniqueResult();
 			if (ticket != null) {

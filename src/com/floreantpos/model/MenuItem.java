@@ -124,4 +124,5 @@ public class MenuItem extends BaseMenuItem {
 	public boolean hasModifiers() {
 		return (this.getMenuItemModiferGroups() != null && this.getMenuItemModiferGroups().size() > 0);
 	}
+
 }

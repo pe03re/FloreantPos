@@ -2,11 +2,11 @@ package com.floreantpos.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 
@@ -14,12 +14,11 @@ import org.jdesktop.swingx.JXTable;
 
 import com.floreantpos.POSConstants;
 import com.floreantpos.bo.ui.explorer.ListTableModel;
-import com.floreantpos.model.OrderType;
 import com.floreantpos.model.Ticket;
-import com.floreantpos.model.TicketStatus;
-import com.floreantpos.model.User;
+import com.floreantpos.model.TicketItem;
 import com.floreantpos.swing.PosScrollPane;
 import com.floreantpos.ui.dialog.POSMessageDialog;
+import com.floreantpos.ui.util.TicketUtils;
 
 public class TicketListView extends JPanel {
 	private JXTable table;
@@ -32,15 +31,19 @@ public class TicketListView extends JPanel {
 		table.setModel(tableModel = new TicketListTableModel());
 		tableModel.setPageSize(10000);
 		table.setRowHeight(60);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-		table.setDefaultRenderer(Object.class, new PosTableRenderer());
+		// table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		// table.setDefaultRenderer(Object.class, new PosTableRenderer());
 		table.setGridColor(Color.LIGHT_GRAY);
 
 		TableColumnModel columnModel = table.getColumnModel();
-		columnModel.getColumn(0).setPreferredWidth(30);
-		columnModel.getColumn(1).setPreferredWidth(20);
-		columnModel.getColumn(2).setPreferredWidth(100);
-		columnModel.getColumn(3).setPreferredWidth(100);
+		columnModel.getColumn(0).setPreferredWidth(5);
+		columnModel.getColumn(1).setPreferredWidth(30);
+		columnModel.getColumn(2).setPreferredWidth(250);
+		columnModel.getColumn(3).setPreferredWidth(30);
+		columnModel.getColumn(4).setPreferredWidth(50);
+		columnModel.getColumn(5).setPreferredWidth(10);
+		columnModel.getColumn(6).setPreferredWidth(10);
+		columnModel.getColumn(7).setPreferredWidth(100);
 
 		PosScrollPane scrollPane = new PosScrollPane(table, PosScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, PosScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -102,7 +105,7 @@ public class TicketListView extends JPanel {
 
 	private class TicketListTableModel extends ListTableModel {
 		public TicketListTableModel() {
-			super(new String[] { POSConstants.ID, POSConstants.SERVER, POSConstants.TICKET_TYPE, "STATUS", POSConstants.TOTAL, POSConstants.DUE });
+			super(new String[] { POSConstants.ID, "DATE", "ITEMS", POSConstants.TICKET_TYPE, "STATUS", POSConstants.TOTAL, POSConstants.DUE, "CUSTOMER" });
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
@@ -110,49 +113,39 @@ public class TicketListView extends JPanel {
 
 			switch (columnIndex) {
 			case 0:
-				return Integer.valueOf(ticket.getId());
-
+				return ticket.getSerialId();
 			case 1:
-				User owner = ticket.getOwner();
-				return owner.getFirstName();
-
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
+				return simpleDateFormat.format(ticket.getCreateDate());
 			case 2:
-				return ticket.getType();
+				List<TicketItem> list = ticket.getTicketItems();
+				String items = list.size() + "";
+				int count = 2;
+				for (TicketItem ti : list) {
+					if (count > 0) {
+						items = items + ", " + ti.getNameDisplay();
+						count--;
+					} else {
+						items = items + "+" + (list.size() - 2) + " more";
+						break;
+					}
+				}
+				return items.substring(2);
 
 			case 3:
-				if (ticket.getType() == OrderType.PICKUP) {
-					return "Will pickup";
-				} else if (ticket.getType() == OrderType.HOME_DELIVERY) {
-					if (ticket.getAssignedDriver() == null) {
-						return "Driver not assigned";
-					} else if (ticket.isPaid()) {
-						return "Out for Delivery";
-					}
-					return "Driver assigned";
-				} else if (ticket.getType() == OrderType.DRIVE_THRU) {
-					return "Not delivered";
-				}
-
-				if (ticket.isPaid()) {
-					if (ticket.getStatus() != null) {
-						return TicketStatus.valueOf(ticket.getStatus()).toString();
-					}
-					return "PAID";
-				}
-
-				return "OPEN";
-
+				return ticket.getType();
 			case 4:
-				return ticket.getTotalAmount();
-
+				return TicketUtils.getTicketStatus(ticket);
 			case 5:
+				return ticket.getTotalAmount();
+			case 6:
 				return ticket.getDueAmount();
-
+			case 7:
+				return "***";
 			}
 
 			return null;
 		}
-
 	}
 
 	public Ticket getFirstSelectedTicket() {

@@ -1,7 +1,6 @@
 package com.floreantpos.ui.dialog;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Dimension;
@@ -22,7 +21,7 @@ import com.floreantpos.main.Application;
 import com.floreantpos.swing.PosButton;
 import com.floreantpos.ui.TitlePanel;
 
-public class NumberSelectionDialog2 extends POSDialog implements ActionListener {
+public class TicketSelectionDialog extends POSDialog implements ActionListener {
 	private int defaultValue;
 
 	private TitlePanel titlePanel;
@@ -31,16 +30,16 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 	private boolean floatingPoint;
 	private PosButton posButton_1;
 
-	public NumberSelectionDialog2() {
+	public TicketSelectionDialog() {
 		this(Application.getPosWindow());
 	}
 
-	public NumberSelectionDialog2(Frame parent) {
+	public TicketSelectionDialog(Frame parent) {
 		super(parent, true);
 		init();
 	}
 
-	public NumberSelectionDialog2(Dialog parent) {
+	public TicketSelectionDialog(Dialog parent) {
 		super(parent, true);
 
 		init();
@@ -58,7 +57,7 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 		contentPane.add(titlePanel, "spanx ,growy,height 60,wrap");
 
 		tfNumber = new JTextField();
-		tfNumber.setText(String.valueOf(defaultValue));
+		// tfNumber.setText(String.valueOf(defaultValue));
 		tfNumber.setFont(tfNumber.getFont().deriveFont(Font.BOLD, 24));
 		// tfNumber.setEditable(false);
 		tfNumber.setFocusable(true);
@@ -67,15 +66,15 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 		// tfNumber.setHorizontalAlignment(JTextField.RIGHT);
 		contentPane.add(tfNumber, "span 2, grow");
 
-		PosButton posButton = new PosButton(POSConstants.CLEAR_ALL);
+		PosButton posButton = new PosButton("DEL");
 		posButton.setFocusable(false);
 		posButton.setMinimumSize(new Dimension(25, 23));
 		posButton.addActionListener(this);
 		contentPane.add(posButton, "growy,height 55,wrap");
 
-		String[][] numbers = { { "7", "8", "9" }, { "4", "5", "6" }, { "1", "2", "3" }, { ".", "0", "CLEAR" } };
+		String[][] numbers = { { "7", "8", "9" }, { "4", "5", "6" }, { "1", "2", "3" }, { "/", "0", "-" } };
 		String[][] iconNames = new String[][] { { "7_32.png", "8_32.png", "9_32.png" }, { "4_32.png", "5_32.png", "6_32.png" }, { "1_32.png", "2_32.png", "3_32.png" },
-				{ "dot_32.png", "0_32.png", "clear_32.png" } };
+				{ "slash.jpg", "0_32.png", "hyphen.jpg" } };
 
 		for (int i = 0; i < numbers.length; i++) {
 			for (int j = 0; j < numbers[i].length; j++) {
@@ -116,10 +115,6 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 	}
 
 	private void doOk() {
-		if (!validate(tfNumber.getText())) {
-			POSMessageDialog.showError(this, POSConstants.INVALID_NUMBER);
-			return;
-		}
 		setCanceled(false);
 		dispose();
 	}
@@ -130,10 +125,6 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 	}
 
 	private void doClearAll() {
-		tfNumber.setText(String.valueOf(defaultValue));
-	}
-
-	private void doClear() {
 		String s = tfNumber.getText();
 		if (s.length() > 1) {
 			s = s.substring(0, s.length() - 1);
@@ -145,35 +136,8 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 
 	private void doInsertNumber(String number) {
 		String s = tfNumber.getText();
-		double d = 0;
-
-		try {
-			d = Double.parseDouble(s);
-		} catch (Exception x) {
-		}
-
-		if (d == 0) {
-			tfNumber.setText(number);
-			return;
-		}
-
 		s = s + number;
-		if (!validate(s)) {
-			POSMessageDialog.showError(this, POSConstants.INVALID_NUMBER);
-			return;
-		}
 		tfNumber.setText(s);
-	}
-
-	private void doInsertDot() {
-		// if (isFloatingPoint() && tfNumber.getText().indexOf('.') < 0) {
-		String string = tfNumber.getText() + ".";
-		if (!validate(string)) {
-			POSMessageDialog.showError(this, POSConstants.INVALID_NUMBER);
-			return;
-		}
-		tfNumber.setText(string);
-		// }
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -185,31 +149,22 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 			doOk();
 		} else if (actionCommand.equals(POSConstants.CLEAR_ALL)) {
 			doClearAll();
-		} else if (actionCommand.equals(POSConstants.CLEAR)) {
-			doClear();
-		} else if (actionCommand.equals(".")) {
-			doInsertDot();
+		} else if (actionCommand.equals("/")) {
+			doInsertSlash();
+		} else if (actionCommand.equals("-")) {
+			doInsertHyphen();
 		} else {
 			doInsertNumber(actionCommand);
 		}
 
 	}
 
-	private boolean validate(String str) {
-		if (isFloatingPoint()) {
-			try {
-				Double.parseDouble(str);
-			} catch (Exception x) {
-				return false;
-			}
-		} else {
-			try {
-				Integer.parseInt(str);
-			} catch (Exception x) {
-				return false;
-			}
-		}
-		return true;
+	private void doInsertHyphen() {
+		tfNumber.setText(tfNumber.getText() + "-");
+	}
+
+	private void doInsertSlash() {
+		tfNumber.setText(tfNumber.getText() + "/");
 	}
 
 	public void setTitle(String title) {
@@ -222,17 +177,17 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 		super.setTitle(title);
 	}
 
-	public double getValue() {
-		return Double.parseDouble(tfNumber.getText());
+	public String getValue() {
+		return tfNumber.getText().toString();
 	}
 
-	public void setValue(double value) {
-		if (value == 0) {
-			tfNumber.setText("0");
-		} else if (isFloatingPoint()) {
-			tfNumber.setText(String.valueOf(value));
+	public void setValue(String value) {
+		if (value == null) {
+			tfNumber.setText("");
 		} else {
-			tfNumber.setText(String.valueOf((int) value));
+			tfNumber.setText(value);
+			tfNumber.setCaretPosition(value.length());
+			tfNumber.moveCaretPosition(value.length());
 		}
 	}
 
@@ -245,62 +200,32 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 	}
 
 	public static void main(String[] args) {
-		NumberSelectionDialog2 dialog2 = new NumberSelectionDialog2();
+		TicketSelectionDialog dialog2 = new TicketSelectionDialog();
 		dialog2.pack();
 		dialog2.setVisible(true);
 	}
 
-	public int getDefaultValue() {
-		return defaultValue;
-	}
+	// public int getDefaultValue() {
+	// return defaultValue;
+	// }
+	//
+	// public void setDefaultValue(int defaultValue) {
+	// this.defaultValue = defaultValue;
+	// tfNumber.setText(String.valueOf(defaultValue));
+	// }
 
-	public void setDefaultValue(int defaultValue) {
-		this.defaultValue = defaultValue;
-		tfNumber.setText(String.valueOf(defaultValue));
-	}
-
-	public static int takeIntInput(String title) {
-		NumberSelectionDialog2 dialog = new NumberSelectionDialog2();
+	public static String takeTicketInput(String title, String tHeader) {
+		TicketSelectionDialog dialog = new TicketSelectionDialog();
 		dialog.setTitle(title);
+		dialog.setValue(tHeader);
 		dialog.pack();
 		dialog.open();
 
 		if (dialog.isCanceled()) {
-			return -1;
-		}
-
-		return (int) dialog.getValue();
-	}
-
-	public static double takeDoubleInput(String title, String dialogTitle, double initialAmount) {
-		NumberSelectionDialog2 dialog = new NumberSelectionDialog2();
-		dialog.setFloatingPoint(true);
-		dialog.setValue(initialAmount);
-		dialog.setTitle(title);
-		dialog.setDialogTitle(dialogTitle);
-		dialog.pack();
-		dialog.open();
-
-		if (dialog.isCanceled()) {
-			return Double.NaN;
+			return null;
 		}
 
 		return dialog.getValue();
 	}
 
-	public static double show(Component parent, String title, double initialAmount) {
-		NumberSelectionDialog2 dialog2 = new NumberSelectionDialog2();
-		dialog2.setFloatingPoint(true);
-		dialog2.setTitle(title);
-		dialog2.pack();
-		dialog2.setLocationRelativeTo(parent);
-		dialog2.setValue(initialAmount);
-		dialog2.setVisible(true);
-
-		if (dialog2.isCanceled()) {
-			return Double.NaN;
-		}
-
-		return dialog2.getValue();
-	}
 }

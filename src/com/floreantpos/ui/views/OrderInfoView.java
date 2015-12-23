@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
@@ -34,11 +35,15 @@ public class OrderInfoView extends JPanel {
 		for (int i = 0; i < tickets.size(); i++) {
 			Ticket ticket = (Ticket) tickets.get(i);
 
+			JLabel ticketLabel = new JLabel();
+			ticketLabel.setText("#TICKET STATUS: " + TicketUtils.getTicketStatus(ticket));
+
 			TicketPrintProperties printProperties = new TicketPrintProperties("ORDER: " + TicketUtils.getTicketHeader(ticket), false, true, true);
 			HashMap map = ReceiptPrintService.populateTicketProperties(ticket, printProperties, null);
 			JasperPrint jasperPrint = ReceiptPrintService.createGeneralTicketPrint(ticket, map, null);
 
 			TicketReceiptView receiptView = new TicketReceiptView(jasperPrint);
+			reportPanel.add(ticketLabel);
 			reportPanel.add(receiptView.getReportPanel());
 		}
 

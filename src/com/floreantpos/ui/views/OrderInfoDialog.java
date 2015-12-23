@@ -12,20 +12,20 @@ import com.floreantpos.ui.dialog.POSMessageDialog;
 
 public class OrderInfoDialog extends POSDialog {
 	OrderInfoView view;
-	
+
 	public OrderInfoDialog(OrderInfoView view) {
 		this.view = view;
 		setTitle("ORDER PREVIEW");
-		
+
 		createUI();
 	}
 
 	private void createUI() {
 		add(view);
-		
+
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.SOUTH);
-		
+
 		PosButton btnPrint = new PosButton();
 		btnPrint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -34,7 +34,7 @@ public class OrderInfoDialog extends POSDialog {
 		});
 		btnPrint.setText("PRINT");
 		panel.add(btnPrint);
-		
+
 		PosButton btnClose = new PosButton();
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

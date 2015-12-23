@@ -19,12 +19,12 @@ import com.floreantpos.ui.views.OrderInfoView;
 public class PrintLastTicketAction extends PosAction {
 
 	public PrintLastTicketAction() {
-		super(Messages.getString("PrintLastTicket")); //$NON-NLS-1$
+		super(Messages.getString("Print Last Ticket")); //$NON-NLS-1$
 	}
 
 	public PrintLastTicketAction(boolean showText, boolean showIcon) {
 		if (showText) {
-			putValue(Action.NAME, Messages.getString("Clockout")); //$NON-NLS-1$
+			putValue(Action.NAME, Messages.getString("Print Last Ticket")); //$NON-NLS-1$
 		}
 		if (showIcon) {
 			putValue(Action.SMALL_ICON, IconFactory.getIcon("print_32.png")); //$NON-NLS-1$

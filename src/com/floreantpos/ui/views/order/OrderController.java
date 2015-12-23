@@ -141,11 +141,11 @@ public class OrderController implements OrderListener, CategorySelectionListener
 			Transaction tx = session.beginTransaction();
 			try {
 				Restaurant res = resDAO.findAll().get(0);
-				if (res.getStartTime().getDate() <= ticket.getCreateDate().getDate()) {
+				if (res.getStartTime().getDate() != ticket.getCreateDate().getDate()) {
+					res.setStartTime(ticket.getCreateDate());
+				} else {
 					startCounter = res.getStartCounter();
 					startCounter++;
-				} else {
-					res.setStartTime(ticket.getCreateDate());
 				}
 				serialID = String.format("%03d", startCounter);
 				res.setStartCounter(startCounter);
