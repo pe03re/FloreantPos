@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.floreantpos.model">
+	<class lazy="false" name="com.floreantpos.model.TaxTreatment"
+		table="TAX_TREATMENT">
+		<id column="ID" name="id" type="java.lang.Integer">
+			<generator class="identity" />
+		</id>
+
+		<property column="IS_PRICE_INCLUDED" length="1" name="includedInPrice"
+			not-null="true" type="java.lang.Boolean" />
+		<!-- Associations -->
+		<many-to-one class="com.floreantpos.model.Tax" lazy="false"
+			cascade="all" name="tax">
+			<column name="TAX_ID" />
+		</many-to-one>
+
+	</class>
+</hibernate-mapping>
