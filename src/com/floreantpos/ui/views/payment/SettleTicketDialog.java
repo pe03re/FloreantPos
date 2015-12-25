@@ -45,6 +45,7 @@ import com.floreantpos.ui.dialog.CouponAndDiscountDialog;
 import com.floreantpos.ui.dialog.DiscountListDialog;
 import com.floreantpos.ui.dialog.POSDialog;
 import com.floreantpos.ui.dialog.POSMessageDialog;
+import com.floreantpos.ui.dialog.PaymentTypeSelectionDialog;
 import com.floreantpos.ui.dialog.TransactionCompletionDialog;
 import com.floreantpos.ui.views.SwitchboardView;
 import com.floreantpos.ui.views.TicketDetailView;
@@ -222,30 +223,29 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 
 			// Commented to remove card payment!
 
-			// PaymentTypeSelectionDialog dialog = new
-			// PaymentTypeSelectionDialog();
-			// dialog.setResizable(false);
-			// dialog.pack();
-			// dialog.open();
-			// if (dialog.isCanceled()) {
-			// return;
-			// }
+			PaymentTypeSelectionDialog dialog = new PaymentTypeSelectionDialog();
+			dialog.setResizable(false);
+			dialog.pack();
+			dialog.open();
+			if (dialog.isCanceled()) {
+				return;
+			}
 
-			// paymentType = dialog.getSelectedPaymentType();
-			// cardName = paymentType.getDisplayString();
+			paymentType = dialog.getSelectedPaymentType();
+			cardName = paymentType.getDisplayString();
 
 			paymentType = PaymentType.CASH;
 			PosTransaction transaction = null;
 
 			switch (paymentType) {
 			case CASH:
-				// ConfirmPayDialog confirmPayDialog = new ConfirmPayDialog();
-				// confirmPayDialog.setAmount(tenderAmount);
-				// confirmPayDialog.open();
-				//
-				// if (confirmPayDialog.isCanceled()) {
-				// return;
-				// }
+				ConfirmPayDialog confirmPayDialog = new ConfirmPayDialog();
+				confirmPayDialog.setAmount(tenderAmount);
+				confirmPayDialog.open();
+
+				if (confirmPayDialog.isCanceled()) {
+					return;
+				}
 
 				transaction = new CashTransaction();
 				transaction.setPaymentType(paymentType.name());
@@ -274,8 +274,8 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 				giftCertDialog.open();
 
 				// Commented to remove card payment!
-				// if (dialog.isCanceled())
-				// return;
+				if (dialog.isCanceled())
+					return;
 
 				transaction = new GiftCertificateTransaction();
 				transaction.setPaymentType(PaymentType.GIFT_CERTIFICATE.name());

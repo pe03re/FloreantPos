@@ -1,6 +1,9 @@
 package com.floreantpos.model.base;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.floreantpos.model.TaxTreatment;
 
 /**
  * This is an object that contains data related to the MENU_ITEM table. Do not
@@ -20,7 +23,7 @@ public abstract class BaseMenuItem implements Comparable, Serializable {
 	public static String PROP_SHOW_IMAGE_ONLY = "showImageOnly";
 	public static String PROP_DISCOUNT_RATE = "discountRate";
 	public static String PROP_SORT_ORDER = "sortOrder";
-	public static String PROP_TAX = "tax";
+	public static String PROP_TAXLIST = "taxList";
 	public static String PROP_TEXT_COLOR = "textColor";
 	public static String PROP_NAME = "name";
 	public static String PROP_BUTTON_COLOR = "buttonColor";
@@ -80,9 +83,9 @@ public abstract class BaseMenuItem implements Comparable, Serializable {
 
 	// many to one
 	private com.floreantpos.model.MenuGroup parent;
-	private com.floreantpos.model.Tax tax;
 	private com.floreantpos.model.Recepie recepie;
 	private com.floreantpos.model.VirtualPrinter virtualPrinter;
+	private List<TaxTreatment> taxList;
 
 	// collections
 	private java.util.List<com.floreantpos.model.MenuItemShift> shifts;
@@ -337,23 +340,6 @@ public abstract class BaseMenuItem implements Comparable, Serializable {
 	}
 
 	/**
-	 * Return the value associated with the column: TAX_ID
-	 */
-	public com.floreantpos.model.Tax getTax() {
-		return tax;
-	}
-
-	/**
-	 * Set the value related to the column: TAX_ID
-	 * 
-	 * @param tax
-	 *            the TAX_ID value
-	 */
-	public void setTax(com.floreantpos.model.Tax tax) {
-		this.tax = tax;
-	}
-
-	/**
 	 * Return the value associated with the column: RECEPIE
 	 */
 	public com.floreantpos.model.Recepie getRecepie() {
@@ -470,6 +456,14 @@ public abstract class BaseMenuItem implements Comparable, Serializable {
 
 	public String toString() {
 		return super.toString();
+	}
+
+	public List<TaxTreatment> getTaxList() {
+		return taxList;
+	}
+
+	public void setTaxList(List<TaxTreatment> taxList) {
+		this.taxList = taxList;
 	}
 
 }

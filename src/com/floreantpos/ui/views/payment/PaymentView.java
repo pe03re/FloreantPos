@@ -33,7 +33,7 @@ public class PaymentView extends JPanel {
 	protected SettleTicketDialog settleTicketView;
 
 	// private PosButton btnGratuity;
-	private PosButton btnDelivery;
+	// private PosButton btnDelivery;
 	private com.floreantpos.swing.PosButton btnCancel;
 	private com.floreantpos.swing.PosButton btnFinish;
 	private com.floreantpos.swing.TransparentPanel calcButtonPanel;
@@ -206,11 +206,19 @@ public class PaymentView extends JPanel {
 		// }
 		// });
 
-		btnDelivery = new PosButton("ADD DELIVERY FEE");
-		actionButtonPanel.add(btnDelivery, "growx");
-		btnDelivery.addActionListener(new ActionListener() {
+		// btnDelivery = new PosButton("ADD DELIVERY FEE");
+		// actionButtonPanel.add(btnDelivery, "growx");
+		// btnDelivery.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// doSetDelivery();
+		// }
+		// });
+
+		btnViewCoupons = new PosButton(com.floreantpos.POSConstants.VIEW_DISCOUNTS);
+		actionButtonPanel.add(btnViewCoupons, "growx");
+		btnViewCoupons.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				doSetDelivery();
+				settleTicketView.doViewDiscounts();
 			}
 		});
 
@@ -219,14 +227,6 @@ public class PaymentView extends JPanel {
 		btnCoupon.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				settleTicketView.doApplyCoupon();
-			}
-		});
-
-		btnViewCoupons = new PosButton(com.floreantpos.POSConstants.VIEW_DISCOUNTS);
-		actionButtonPanel.add(btnViewCoupons, "growx");
-		btnViewCoupons.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				settleTicketView.doViewDiscounts();
 			}
 		});
 

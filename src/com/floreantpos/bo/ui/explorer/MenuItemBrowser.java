@@ -14,6 +14,7 @@ import com.floreantpos.bo.ui.Command;
 import com.floreantpos.bo.ui.ModelBrowser;
 import com.floreantpos.model.MenuItem;
 import com.floreantpos.model.RecepieItem;
+import com.floreantpos.model.TaxTreatment;
 import com.floreantpos.model.dao.MenuItemDAO;
 import com.floreantpos.ui.model.MenuItemForm;
 
@@ -118,8 +119,12 @@ public class MenuItemBrowser extends ModelBrowser<MenuItem> {
 			case 2:
 				return "Rs " + formatDouble(item.getBuyPrice());
 			case 3:
-				if (item.getTax() != null) {
-					return formatDouble(item.getTax().getRate()) + " %";
+				String taxList = "";
+				if (item.getTaxList() != null && !item.getTaxList().isEmpty()) {
+					for (TaxTreatment t : item.getTaxList()) {
+						taxList = taxList + " + " + t.getTax().getRate() + "%";
+					}
+					return taxList.substring(2);
 				}
 				return "";
 			case 4:

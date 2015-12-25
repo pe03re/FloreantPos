@@ -107,7 +107,8 @@ public class MenuItem extends BaseMenuItem {
 		ticketItem.setCategoryName(this.getParent().getParent().getDisplayName());
 		ticketItem.setUnitPrice(this.getPrice(Application.getInstance().getCurrentShift()));
 		ticketItem.setDiscountRate(this.getDiscountRate());
-		ticketItem.setTaxRate(this.getTax() == null ? 0 : this.getTax().getRate());
+		// ticketItem.setTaxRate(this.getTax() == null ? 0 :
+		// this.getTax().getRate());
 		ticketItem.setHasModifiers(hasModifiers());
 		if (this.getParent().getParent().isBeverage()) {
 			ticketItem.setBeverage(true);

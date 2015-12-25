@@ -60,12 +60,12 @@ public class DataImportAction extends AbstractAction {
 		}
 
 	}
-	
+
 	public static void importMenuItemsFromFile(File file) throws Exception {
 		if (file == null)
 			return;
 
-		FileInputStream	inputStream = new FileInputStream(file);
+		FileInputStream inputStream = new FileInputStream(file);
 		importMenuItems(inputStream);
 	}
 
@@ -74,7 +74,6 @@ public class DataImportAction extends AbstractAction {
 		Map<String, Object> objectMap = new HashMap<String, Object>();
 
 		try {
-
 
 			JAXBContext jaxbContext = JAXBContext.newInstance(Elements.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -181,11 +180,11 @@ public class DataImportAction extends AbstractAction {
 						menuItem.setParent(menuGroup);
 					}
 
-					Tax tax = menuItem.getTax();
-					if (tax != null) {
-						tax = (Tax) objectMap.get(tax.getUniqueId());
-						menuItem.setTax(tax);
-					}
+					// Tax tax = menuItem.getTax();
+					// if (tax != null) {
+					// tax = (Tax) objectMap.get(tax.getUniqueId());
+					// menuItem.setTax(tax);
+					// }
 
 					List<MenuItemModifierGroup> menuItemModiferGroups = menuItem.getMenuItemModiferGroups();
 					if (menuItemModiferGroups != null) {
