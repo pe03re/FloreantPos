@@ -219,7 +219,7 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 				}
 			}
 		}
-		tax += subtotal - (subtotal / (1 + (taxRate / 100.0)));
+		tax += subtotal * (taxRate / 100.0);
 
 		if (includeModifierTax) {
 			List<TicketItemModifierGroup> ticketItemModifierGroups = getTicketItemModifierGroups();

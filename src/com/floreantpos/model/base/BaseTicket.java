@@ -2,6 +2,8 @@ package com.floreantpos.model.base;
 
 import java.io.Serializable;
 
+import com.floreantpos.util.NumberUtil;
+
 /**
  * This is an object that contains data related to the TICKET table. Do not
  * modify this class because it will be overwritten if the configuration file
@@ -103,6 +105,15 @@ public abstract class BaseTicket implements Comparable, Serializable {
 	protected java.lang.Boolean customerWillPickup;
 	protected java.lang.String extraDeliveryInfo;
 	protected java.lang.String ticketType;
+	protected java.lang.String orderNo;
+
+	public java.lang.String getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(java.lang.String orderNo) {
+		this.orderNo = orderNo;
+	}
 
 	// many to one
 	private com.floreantpos.model.Shift shift;
@@ -407,6 +418,10 @@ public abstract class BaseTicket implements Comparable, Serializable {
 	 */
 	public java.lang.Double getTotalAmount() {
 		return totalAmount == null ? Double.valueOf(0) : totalAmount;
+	}
+
+	public java.lang.Double getRoundedOffAmount() {
+		return totalAmount == null ? Double.valueOf(0) : -NumberUtil.roundToTwoDigit(totalAmount) + NumberUtil.roundOff(NumberUtil.roundToTwoDigit(totalAmount));
 	}
 
 	/**

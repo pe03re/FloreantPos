@@ -6,9 +6,10 @@ import java.util.LinkedHashMap;
 import com.floreantpos.model.ITicketItem;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.ui.ticket.TicketItemRowCreator;
+import com.floreantpos.util.NumberUtil;
 
 public class TicketDataSource extends AbstractReportDataSource {
-	
+
 	public TicketDataSource() {
 		super(new String[] { "itemName", "itemQty", "itemSubtotal" });
 	}
@@ -18,7 +19,7 @@ public class TicketDataSource extends AbstractReportDataSource {
 
 		setTicket(ticket);
 	}
-	
+
 	private void setTicket(Ticket ticket) {
 		ArrayList<ITicketItem> rows = new ArrayList<ITicketItem>();
 
@@ -33,25 +34,25 @@ public class TicketDataSource extends AbstractReportDataSource {
 		ITicketItem item = (ITicketItem) rows.get(rowIndex);
 
 		switch (columnIndex) {
-			case 0:
-				return item.getNameDisplay();
+		case 0:
+			return item.getNameDisplay();
 
-			case 1:
-				Integer itemCountDisplay = item.getItemCountDisplay();
-				
-				if(itemCountDisplay == null) {
-					return null;
-				}
-				
-				return String.valueOf(itemCountDisplay);
+		case 1:
+			Integer itemCountDisplay = item.getItemCountDisplay();
 
-			case 2:
-				Double total = item.getTotalAmountWithoutModifiersDisplay();
-				if(total == null) {
-					return null;
-				}
-				
-				return String.valueOf(total);
+			if (itemCountDisplay == null) {
+				return null;
+			}
+
+			return String.valueOf(itemCountDisplay);
+
+		case 2:
+			Double total = item.getTotalAmountWithoutModifiersDisplay() - item.getTaxAmountWithoutModifiersDisplay();
+			if (total == null) {
+				return "0";
+			}
+
+			return String.valueOf(NumberUtil.roundToTwoDigit(total));
 		}
 
 		return null;

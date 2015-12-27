@@ -30,7 +30,9 @@ import com.floreantpos.model.OrderType;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.RefundTransaction;
 import com.floreantpos.model.Restaurant;
+import com.floreantpos.model.TaxTreatment;
 import com.floreantpos.model.Ticket;
+import com.floreantpos.model.TicketItem;
 import com.floreantpos.model.dao.KitchenTicketDAO;
 import com.floreantpos.model.dao.RestaurantDAO;
 import com.floreantpos.model.dao.TicketDAO;
@@ -41,6 +43,8 @@ public class ReceiptPrintService {
 	private static final String TIP_AMOUNT = "tipAmount";
 	private static final String SERVICE_CHARGE = "serviceCharge";
 	private static final String TAX_AMOUNT = "taxAmount";
+	private static final String TAX_TEXT = "taxText";
+
 	private static final String DISCOUNT_AMOUNT = "discountAmount";
 	private static final String HEADER_LINE5 = "headerLine5";
 	private static final String HEADER_LINE4 = "headerLine4";
@@ -111,7 +115,7 @@ public class ReceiptPrintService {
 	public static void printTicket(Ticket ticket) {
 		try {
 
-			TicketPrintProperties printProperties = new TicketPrintProperties("ORDER: " + TicketUtils.getTicketHeader(ticket), false, true, true);
+			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketHeader(ticket), true, true, true);
 			printProperties.setPrintCookingInstructions(false);
 			HashMap map = populateTicketProperties(ticket, printProperties, null);
 
@@ -128,7 +132,7 @@ public class ReceiptPrintService {
 	public static void printLastTicket(Ticket ticket) {
 		try {
 
-			TicketPrintProperties printProperties = new TicketPrintProperties("RECEIPT: " + TicketUtils.getTicketHeader(ticket), false, true, true);
+			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketHeader(ticket), true, true, true);
 			printProperties.setPrintCookingInstructions(false);
 			HashMap map = populateTicketProperties(ticket, printProperties, null);
 
@@ -170,7 +174,7 @@ public class ReceiptPrintService {
 		try {
 			Ticket ticket = transaction.getTicket();
 
-			TicketPrintProperties printProperties = new TicketPrintProperties("ORDER: " + TicketUtils.getTicketHeader(ticket), true, true, true);
+			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketHeader(ticket), true, true, true);
 			printProperties.setPrintCookingInstructions(false);
 			HashMap map = populateTicketProperties(ticket, printProperties, transaction);
 
@@ -207,102 +211,12 @@ public class ReceiptPrintService {
 		}
 	}
 
-	// public static void printTransaction(PosTransaction transaction) {
-	// try {
-	// Ticket ticket = transaction.getTicket();
-	// String serialID = "";
-	// Date ticketDate = new Date();
-	// int startCounter = -1;
-	// int startVCounter = -1;
-	// RestaurantDAO resDAO = RestaurantDAO.getInstance();
-	// Session session = resDAO.createNewSession();
-	// if (session != null) {
-	// Transaction tx = session.beginTransaction();
-	// try {
-	// Restaurant res = resDAO.findAll().get(0);
-	// Date resStartTime = res.getStartTime();
-	// Date resEndTime = res.getEndTime();
-	// if (resStartTime.getHours() * 60 + resStartTime.getMinutes() <=
-	// ticketDate.getHours() * 60 + ticketDate.getMinutes()
-	// && resEndTime.getHours() * 60 + resEndTime.getMinutes() >=
-	// ticketDate.getHours() * 60 + ticketDate.getMinutes()) {
-	// startCounter = res.getStartCounter();
-	// startCounter++;
-	// res.setStartCounter(startCounter);
-	// serialID = String.valueOf(startCounter);
-	// } else {
-	// startVCounter = res.getStartVCounter();
-	// startVCounter++;
-	// res.setStartVCounter(startVCounter);
-	// serialID = "V" + String.valueOf(startVCounter);
-	// }
-	// resDAO.saveOrUpdate(res);
-	// tx.commit();
-	// ticket.setSerialId(serialID);
-	// } catch (Exception e) {
-	// tx.rollback();
-	// } finally {
-	// session.close();
-	// }
-	// }
-	// String year = null;
-	// int yearInt = ticketDate.getYear() - 100;
-	// if (ticketDate.getMonth() >= 3) {
-	// year = yearInt + "-" + (yearInt + 1);
-	// } else {
-	// year = (yearInt - 1) + "-" + yearInt;
-	// }
-	// String newstring = new SimpleDateFormat("/MM/").format(ticketDate);
-	// System.out.println(year + newstring + ticket.getSerialId());
-	// TicketPrintProperties printProperties = new TicketPrintProperties("SNo:"
-	// + year + newstring + ticket.getSerialId(), true, true, true);
-	// printProperties.setPrintCookingInstructions(false);
-	// HashMap map = populateTicketProperties(ticket, printProperties,
-	// transaction);
-	//
-	// if (transaction != null && transaction.isCard()) {
-	// map.put("cardPayment", true);
-	// map.put("copyType", "Customer Copy");
-	// JasperPrint jasperPrint = createGeneralTicketPrint(ticket, map,
-	// transaction);
-	// jasperPrint.setName("Ticket-" + ticket.getId() + "-CustomerCopy");
-	// jasperPrint.setProperty("printerName",
-	// Application.getPrinters().getReceiptPrinter());
-	// printQuitely(jasperPrint);
-	//
-	// map.put("copyType", "Merchant Copy");
-	// jasperPrint = createGeneralTicketPrint(ticket, map, transaction);
-	// jasperPrint.setName("Ticket-" + ticket.getId() + "-MerchantCopy");
-	// jasperPrint.setProperty("printerName",
-	// Application.getPrinters().getReceiptPrinter());
-	// printQuitely(jasperPrint);
-	// } else {
-	// JasperPrint jasperPrint = createGeneralTicketPrint(ticket, map,
-	// transaction);
-	// jasperPrint.setName("Customer Ticket-" + ticket.getSerialId());
-	// jasperPrint.setProperty("printerName",
-	// Application.getPrinters().getReceiptPrinter());
-	// printQuitely(jasperPrint);
-	//
-	// // commented out second print command
-	// // JasperPrint jasperPrintMer = createMerchantPrint(ticket, map,
-	// transaction);
-	// // jasperPrintMer.setName("Merchant Ticket-" + ticket.getSerialId());
-	// // jasperPrintMer.setProperty("printerName",
-	// Application.getPrinters().getReceiptPrinter());
-	// // printQuitely(jasperPrintMer);
-	// }
-	// } catch (Exception e) {
-	// logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
-	// }
-	// }
-
 	// for credit card
 	public static void printTransaction(PosTransaction transaction, boolean printCustomerCopy) {
 		try {
 			Ticket ticket = transaction.getTicket();
 
-			TicketPrintProperties printProperties = new TicketPrintProperties("*** PAYMENT RECEIPT ***", true, true, true);
+			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: ", true, true, true);
 			printProperties.setPrintCookingInstructions(false);
 			HashMap map = populateTicketProperties(ticket, printProperties, transaction);
 
@@ -363,7 +277,9 @@ public class ReceiptPrintService {
 		map.put(SHOW_SUBTOTAL, Boolean.valueOf(printProperties.isShowSubtotal()));
 		map.put(SHOW_HEADER_SEPARATOR, Boolean.TRUE);
 		map.put(SHOW_FOOTER, Boolean.valueOf(printProperties.isShowFooter()));
-
+		if (ticket.getOrderNo() != null) {
+			map.put("orderNo", "Order : " + ticket.getOrderNo());
+		}
 		map.put(TERMINAL, POSConstants.RECEIPT_REPORT_TERMINAL_LABEL + Application.getInstance().getTerminal().getId());
 		map.put(CHECK_NO, POSConstants.RECEIPT_REPORT_TICKET_NO_LABEL + ticket.getId());
 		map.put(TABLE_NO, POSConstants.RECEIPT_REPORT_TABLE_NO_LABEL + ticket.getTableNumbers());
@@ -390,9 +306,7 @@ public class ReceiptPrintService {
 				map.put(DISCOUNT_AMOUNT, NumberUtil.formatNumber(ticket.getDiscountAmount()));
 			}
 
-			if (ticket.getTaxAmount() > 0.0) {
-				map.put(TAX_AMOUNT, NumberUtil.formatNumber(ticket.getTaxAmount()));
-			}
+			buildTaxDetails(ticket, map);
 
 			if (ticket.getServiceCharge() > 0.0) {
 				map.put(SERVICE_CHARGE, NumberUtil.formatNumber(ticket.getServiceCharge()));
@@ -402,25 +316,31 @@ public class ReceiptPrintService {
 				tipAmount = ticket.getGratuity().getAmount();
 				map.put(TIP_AMOUNT, NumberUtil.formatNumber(tipAmount));
 			}
+			map.put("subtotalText", POSConstants.SUBTOTAL + " ");
 
-			map.put("totalText", POSConstants.RECEIPT_REPORT_TOTAL_LABEL + currencySymbol);
-			map.put("discountText", POSConstants.RECEIPT_REPORT_DISCOUNT_LABEL + currencySymbol);
-			map.put("taxText", "VAT " + currencySymbol);
-			// map.put("taxText", POSConstants.RECEIPT_REPORT_TAX_LABEL +
-			// currencySymbol);
-			map.put("serviceChargeText", POSConstants.RECEIPT_REPORT_SERVICE_CHARGE_LABEL + currencySymbol);
-			map.put("tipsText", POSConstants.RECEIPT_REPORT_TIPS_LABEL + currencySymbol);
-			map.put("netAmountText", POSConstants.RECEIPT_REPORT_NETAMOUNT_LABEL + currencySymbol);
-			map.put("paidAmountText", POSConstants.RECEIPT_REPORT_PAIDAMOUNT_LABEL + currencySymbol);
-			map.put("dueAmountText", POSConstants.RECEIPT_REPORT_DUEAMOUNT_LABEL + currencySymbol);
-			map.put("changeAmountText", POSConstants.RECEIPT_REPORT_CHANGEAMOUNT_LABEL + currencySymbol);
+			map.put("totalText", POSConstants.RECEIPT_REPORT_TOTAL_LABEL);
+			map.put("discountText", POSConstants.RECEIPT_REPORT_DISCOUNT_LABEL);
+			map.put("serviceChargeText", POSConstants.RECEIPT_REPORT_SERVICE_CHARGE_LABEL);
 
-			map.put("netAmount", NumberUtil.formatNumber(totalAmount));
+			map.put("netAmountText", POSConstants.RECEIPT_REPORT_NETAMOUNT_LABEL);
+			map.put("paidAmountText", POSConstants.RECEIPT_REPORT_PAIDAMOUNT_LABEL);
+			map.put("dueAmountText", POSConstants.RECEIPT_REPORT_DUEAMOUNT_LABEL);
+			map.put("changeAmountText", POSConstants.RECEIPT_REPORT_CHANGEAMOUNT_LABEL);
+
+			map.put("totalAmount", NumberUtil.formatNumber(totalAmount));
+
+			double roundOff = NumberUtil.roundOff(totalAmount) - totalAmount;
+			map.put("netAmount", NumberUtil.formatNumber(NumberUtil.roundOff(totalAmount + roundOff)));
 			map.put("paidAmount", NumberUtil.formatNumber(ticket.getPaidAmount()));
 			map.put("dueAmount", NumberUtil.formatNumber(ticket.getDueAmount()));
+			map.put("roundOff", Double.toString(NumberUtil.roundToTwoDigit(roundOff)));
+			map.put("roundOffText", "Rounding Off");
+
 			map.put("grandSubtotal", NumberUtil.formatNumber(ticket.getSubtotalAmount()));
 			map.put("footerMessage", restaurant.getTicketFooterMessage());
-			map.put("copyType", printProperties.getReceiptCopyType());
+			// map.put("copyType", printProperties.getReceiptCopyType());
+			// map.put("tipsText", POSConstants.RECEIPT_REPORT_TIPS_LABEL +
+			// currencySymbol);
 
 			if (transaction != null) {
 				double changedAmount = transaction.getTenderAmount() - transaction.getAmount();
@@ -472,6 +392,51 @@ public class ReceiptPrintService {
 		}
 
 		return map;
+	}
+
+	private static void buildTaxDetails(Ticket ticket, HashMap map) {
+		Map<String, Double> taxMap = new HashMap<String, Double>();
+
+		if (ticket != null && ticket.getTicketItems() != null) {
+			for (TicketItem ti : ticket.getTicketItems()) {
+				if (ti != null && ti.getTaxList() != null) {
+					List<TaxTreatment> ttList = ti.getTaxList();
+					for (TaxTreatment t : ttList) {
+						if (t.getTax() != null && t.getTax().getRate() > 0.0) {
+							double tax = 0;
+							if (taxMap.containsKey(t.getTax().getName())) {
+								tax = taxMap.get(t.getTax().getName());
+							}
+							tax = tax + ti.getSubtotalAmount() * t.getTax().getRate() / 100;
+							taxMap.put(t.getTax().getName(), tax);
+						}
+					}
+				}
+			}
+		}
+
+		StringBuilder taxNameBuilder = new StringBuilder();
+		taxNameBuilder.append("<html>");
+
+		StringBuilder taxRateBuilder = new StringBuilder();
+		taxRateBuilder.append("<html>");
+
+		for (Map.Entry<String, Double> entry : taxMap.entrySet()) {
+			beginRow(taxNameBuilder);
+			addColumn(taxNameBuilder, entry.getKey());
+			endRow(taxNameBuilder);
+
+			beginRow(taxRateBuilder);
+			addColumn(taxRateBuilder, NumberUtil.formatNumber(entry.getValue()));
+			endRow(taxRateBuilder);
+		}
+
+		taxNameBuilder.append("</html>");
+		taxRateBuilder.append("</html>");
+
+		map.put(TAX_TEXT, taxNameBuilder.toString());
+		map.put(TAX_AMOUNT, taxRateBuilder.toString());
+
 	}
 
 	private static StringBuilder buildTicketHeader(Ticket ticket, TicketPrintProperties printProperties) {

@@ -33,33 +33,33 @@ import com.floreantpos.util.NumberUtil;
 public class SalesBalanceReportView extends JPanel {
 	private SimpleDateFormat fullDateFormatter = new SimpleDateFormat("yyyy MMM dd, hh:mm a");
 	private SimpleDateFormat shortDateFormatter = new SimpleDateFormat("yyyy MMM dd");
-	
+
 	private JXDatePicker fromDatePicker = UiUtil.getCurrentMonthStart();
 	private JXDatePicker toDatePicker = UiUtil.getCurrentMonthEnd();
 	private JButton btnGo = new JButton(com.floreantpos.POSConstants.GO);
 	private JPanel reportContainer;
-	
+
 	public SalesBalanceReportView() {
 		super(new BorderLayout());
-		
+
 		JPanel topPanel = new JPanel(new MigLayout());
-		
+
 		topPanel.add(new JLabel(com.floreantpos.POSConstants.FROM + ":"), "grow");
-		topPanel.add(fromDatePicker,"wrap");
+		topPanel.add(fromDatePicker, "wrap");
 		topPanel.add(new JLabel(com.floreantpos.POSConstants.TO + ":"), "grow");
-		topPanel.add(toDatePicker,"wrap");
+		topPanel.add(toDatePicker, "wrap");
 		topPanel.add(btnGo, "skip 1, al right");
 		add(topPanel, BorderLayout.NORTH);
-		
+
 		JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.setBorder(new EmptyBorder(0, 10,10,10));
+		centerPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
 		centerPanel.add(new JSeparator(), BorderLayout.NORTH);
-		
+
 		reportContainer = new JPanel(new BorderLayout());
 		centerPanel.add(reportContainer);
-		
+
 		add(centerPanel);
-		
+
 		btnGo.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -69,31 +69,31 @@ public class SalesBalanceReportView extends JPanel {
 					POSMessageDialog.showError(SalesBalanceReportView.this, POSConstants.ERROR_MESSAGE, e1);
 				}
 			}
-			
+
 		});
 	}
-	
+
 	private void viewReport() throws Exception {
 		Date fromDate = fromDatePicker.getDate();
 		Date toDate = toDatePicker.getDate();
-		
-		if(fromDate.after(toDate)) {
+
+		if (fromDate.after(toDate)) {
 			POSMessageDialog.showError(BackOfficeWindow.getInstance(), com.floreantpos.POSConstants.FROM_DATE_CANNOT_BE_GREATER_THAN_TO_DATE_);
 			return;
 		}
-		
+
 		fromDate = DateUtil.startOfDay(fromDate);
 		toDate = DateUtil.endOfDay(toDate);
-		
+
 		ReportService reportService = new ReportService();
 		SalesBalanceReport report = reportService.getSalesBalanceReport(fromDate, toDate);
-		
+
 		HashMap<String, String> map = new HashMap<String, String>();
 		ReportUtil.populateRestaurantProperties(map);
 		map.put("fromDate", shortDateFormatter.format(fromDate));
 		map.put("toDate", shortDateFormatter.format(toDate));
 		map.put("reportTime", fullDateFormatter.format(new Date()));
-		
+
 		map.put("grossTaxableSales", NumberUtil.formatNumber(report.getGrossTaxableSalesAmount()));
 		map.put("grossNonTaxableSales", NumberUtil.formatNumber(report.getGrossNonTaxableSalesAmount()));
 		map.put("discounts", NumberUtil.formatNumber(report.getDiscountAmount()));
@@ -120,13 +120,13 @@ public class SalesBalanceReportView extends JPanel {
 		map.put("coPrevious", NumberUtil.formatNumber(report.getCoPreviousAmount()));
 		map.put("coOverShort", NumberUtil.formatNumber(report.getOverShortAmount()));
 		map.put("days", String.valueOf((int) ((toDate.getTime() - fromDate.getTime()) * (1.15740741 * Math.pow(10, -8))) + 1));
-		
+
 		JasperReport jasperReport = ReportUtil.getReport("sales_summary_balance_report");
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, map, new JREmptyDataSource());
 		JRViewer viewer = new JRViewer(jasperPrint);
 		reportContainer.removeAll();
 		reportContainer.add(viewer);
 		reportContainer.revalidate();
-		
+
 	}
 }

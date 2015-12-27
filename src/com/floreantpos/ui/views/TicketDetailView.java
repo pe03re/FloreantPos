@@ -73,7 +73,7 @@ public class TicketDetailView extends JPanel {
 			for (Iterator iter = tickets.iterator(); iter.hasNext();) {
 				Ticket ticket = (Ticket) iter.next();
 
-				TicketPrintProperties printProperties = new TicketPrintProperties("ORDER: " + TicketUtils.getTicketHeader(ticket), false, true, true);
+				TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketHeader(ticket), true, true, true);
 				HashMap map = ReceiptPrintService.populateTicketProperties(ticket, printProperties, null);
 				JasperPrint jasperPrint = ReceiptPrintService.createGeneralTicketPrint(ticket, map, null);
 
