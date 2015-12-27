@@ -35,9 +35,10 @@ public class MenuItemBrowser extends ModelBrowser<MenuItem> {
 		this.btnRefreshPrice.setEnabled(true);
 		init(new MenuItemTableModel(), new Dimension(500, 400), new Dimension(500, 400));
 		browserTable.getColumn("NAME").setPreferredWidth(125);
-		browserTable.getColumn("SELL PRICE").setPreferredWidth(25);
+		browserTable.getColumn("BASE PRICE").setPreferredWidth(25);
+		browserTable.getColumn("TAX").setPreferredWidth(35);
+		browserTable.getColumn("TOTAL").setPreferredWidth(15);
 		browserTable.getColumn("BUY PRICE").setPreferredWidth(25);
-		browserTable.getColumn("TAX").setPreferredWidth(15);
 		browserTable.getColumn("GROUP").setPreferredWidth(100);
 		browserTable.getColumn("VISIBLE").setPreferredWidth(10);
 		hideDeleteBtn();
@@ -105,7 +106,7 @@ public class MenuItemBrowser extends ModelBrowser<MenuItem> {
 		private static final long serialVersionUID = 8008682351957964208L;
 
 		public MenuItemTableModel() {
-			super(new String[] { "NAME", "SELL PRICE", "BUY PRICE", "TAX", "GROUP", "VISIBLE" });
+			super(new String[] { "NAME", "BASE PRICE", "TAX", "TOTAL", "BUY PRICE", "GROUP", "VISIBLE" });
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
@@ -117,22 +118,31 @@ public class MenuItemBrowser extends ModelBrowser<MenuItem> {
 			case 1:
 				return "Rs " + formatDouble(item.getPrice());
 			case 2:
-				return "Rs " + formatDouble(item.getBuyPrice());
-			case 3:
 				String taxList = "";
 				if (item.getTaxList() != null && !item.getTaxList().isEmpty()) {
 					for (TaxTreatment t : item.getTaxList()) {
 						taxList = taxList + " + " + t.getTax().getRate() + "%";
 					}
 					return taxList.substring(2);
+				} else {
+					return taxList;
 				}
-				return "";
+			case 3:
+				double taxRate = 0;
+				if (item.getTaxList() != null && !item.getTaxList().isEmpty()) {
+					for (TaxTreatment t : item.getTaxList()) {
+						taxRate += t.getTax().getRate();
+					}
+				}
+				return "Rs " + formatDouble(item.getPrice() * (1 + taxRate / 100));
 			case 4:
+				return "Rs " + formatDouble(item.getBuyPrice());
+			case 5:
 				if (item.getParent() != null) {
 					return item.getParent().getName();
 				}
 				return "";
-			case 5:
+			case 6:
 				if (item.isVisible()) {
 					return "T";
 				} else {

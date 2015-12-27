@@ -13,6 +13,8 @@ public interface ITicketItem {
 
 	Integer getItemCountDisplay();
 
+	Double calculateTax(boolean includeModifierTax);
+
 	Double getTaxAmountWithoutModifiersDisplay();
 
 	Double getTotalAmountWithoutModifiersDisplay();

@@ -13,7 +13,6 @@
 		<property column="CATEGORY_NAME" length="20" name="categoryName" type="string" />
 		<property column="ITEM_PRICE" length="52" name="unitPrice" type="java.lang.Double" />
 		<property column="DISCOUNT_RATE" length="52" name="discountRate" type="java.lang.Double" />
-		<property column="ITEM_TAX_RATE" length="52" name="taxRate" type="java.lang.Double" />
 		<property column="SUB_TOTAL" name="subtotalAmount" type="java.lang.Double" />
 		<property column="SUB_TOTAL_WITHOUT_MODIFIERS" name="subtotalAmountWithoutModifiers" type="java.lang.Double" />
 		<property column="DISCOUNT" name="discountAmount" type="java.lang.Double" />
@@ -55,5 +54,11 @@
 		<many-to-one class="com.floreantpos.model.VirtualPrinter" lazy="false" cascade="none" name="virtualPrinter">
 			<column name="VPRINTER_ID" />
 		</many-to-one>
+		
+			<list name="taxList" cascade="all" inverse="false" lazy="false">
+			<key column="TAX_T_LIST_ID_T" />
+			<list-index column="idx" />
+			<one-to-many class="com.floreantpos.model.TaxTreatment" />
+		</list>
 	</class>
 </hibernate-mapping>

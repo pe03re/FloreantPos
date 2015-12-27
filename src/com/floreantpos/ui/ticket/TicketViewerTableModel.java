@@ -23,7 +23,7 @@ public class TicketViewerTableModel extends AbstractTableModel {
 	protected final HashMap<String, ITicketItem> tableRows = new LinkedHashMap<String, ITicketItem>();
 
 	private boolean priceIncludesTax = false;
-	
+
 	protected String[] excludingTaxColumnNames = { "Item", "U/Price", "Unit", "Tax", "Price" };
 	protected String[] includingTaxColumnNames = { "Item", "U/Price", "Unit", "Price" };
 
@@ -45,7 +45,7 @@ public class TicketViewerTableModel extends AbstractTableModel {
 
 	public int getRowCount() {
 		int size = tableRows.size();
-		
+
 		return size;
 	}
 
@@ -54,48 +54,45 @@ public class TicketViewerTableModel extends AbstractTableModel {
 	}
 
 	public int getColumnCount() {
-		if(priceIncludesTax) {
+		if (priceIncludesTax) {
 			return includingTaxColumnNames.length;
 		}
-		
+
 		return excludingTaxColumnNames.length;
 	}
 
 	@Override
 	public String getColumnName(int column) {
-		if(priceIncludesTax) {
+		if (priceIncludesTax) {
 			return includingTaxColumnNames[column];
 		}
-		
+
 		return excludingTaxColumnNames[column];
 	}
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		ITicketItem ticketItem = tableRows.get(String.valueOf(rowIndex));
-		
-		if(ticketItem == null) {
+
+		if (ticketItem == null) {
 			return null;
 		}
 
 		switch (columnIndex) {
-			case 0:
-				return ticketItem.getNameDisplay();
+		case 0:
+			return ticketItem.getNameDisplay();
 
-			case 1:
-				return ticketItem.getUnitPriceDisplay();
+		case 1:
+			return ticketItem.getUnitPriceDisplay();
 
-			case 2:
-				return ticketItem.getItemCountDisplay();
+		case 2:
+			return ticketItem.getItemCountDisplay();
 
-			case 3:
-				if(priceIncludesTax) {
-					return ticketItem.getTotalAmountWithoutModifiersDisplay();
-				}
-				
-				return ticketItem.getTaxAmountWithoutModifiersDisplay();
+		case 3:
+			return ticketItem.calculateTax(false);
+			// return ticketItem.getTaxAmountWithoutModifiersDisplay();
 
-			case 4:
-				return ticketItem.getTotalAmountWithoutModifiersDisplay();
+		case 4:
+			return ticketItem.getTotalAmountWithoutModifiersDisplay();
 		}
 
 		return null;
@@ -147,8 +144,7 @@ public class TicketViewerTableModel extends AbstractTableModel {
 
 			calculateRows();
 			fireTableDataChanged();
-		}
-		else {
+		} else {
 			List<TicketItem> ticketItems = ticket.getTicketItems();
 			boolean exists = false;
 			for (TicketItem item : ticketItems) {
@@ -224,8 +220,7 @@ public class TicketViewerTableModel extends AbstractTableModel {
 					break;
 				}
 			}
-		}
-		else if (object instanceof TicketItemModifier) {
+		} else if (object instanceof TicketItemModifier) {
 			TicketItemModifier itemModifier = (TicketItemModifier) object;
 			TicketItemModifierGroup ticketItemModifierGroup = itemModifier.getParent();
 			List<TicketItemModifier> ticketItemModifiers = ticketItemModifierGroup.getTicketItemModifiers();
@@ -242,8 +237,7 @@ public class TicketViewerTableModel extends AbstractTableModel {
 					}
 				}
 			}
-		}
-		else if (object instanceof TicketItemCookingInstruction) {
+		} else if (object instanceof TicketItemCookingInstruction) {
 			TicketItemCookingInstruction cookingInstruction = (TicketItemCookingInstruction) object;
 			int tableRowNum = cookingInstruction.getTableRowNum();
 

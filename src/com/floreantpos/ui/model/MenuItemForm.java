@@ -14,6 +14,8 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -62,6 +64,7 @@ import com.floreantpos.swing.DoubleTextField;
 import com.floreantpos.swing.IUpdatebleView;
 import com.floreantpos.ui.BeanEditor;
 import com.floreantpos.ui.dialog.POSMessageDialog;
+import com.floreantpos.util.NumberUtil;
 import com.floreantpos.util.POSUtil;
 import com.floreantpos.util.ShiftUtil;
 
@@ -74,12 +77,14 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	// private javax.swing.JButton btnNewTax;
 	private javax.swing.JComboBox cbGroup;
 	private javax.swing.JComboBox cbTax;
-	private javax.swing.JComboBox cbPriceIncluded;
+	// private javax.swing.JComboBox cbPriceIncluded;
 	private javax.swing.JCheckBox chkVisible;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel111;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
+	private javax.swing.JLabel jLabel3Base;
+
 	private javax.swing.JLabel jLabel4;
 	private javax.swing.JLabel jLabel5;
 	private javax.swing.JLabel jLabel6;
@@ -97,6 +102,8 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	private com.floreantpos.swing.FixedLengthTextField tfName;
 	private com.floreantpos.swing.FixedLengthTextField tfTransName;
 	private DoubleTextField tfPrice;
+	private DoubleTextField tfPriceBase;
+
 	private JLabel lblImagePreview;
 	private JButton btnClearImage;
 	private JButton btnSelectImage = new JButton("...");
@@ -157,22 +164,25 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		 */
 		this.cbGroup.setEnabled(enable);
 		this.cbTax.setEnabled(enable);
-		this.cbPriceIncluded.setEnabled(enable);
+		// this.cbPriceIncluded.setEnabled(enable);
 		this.taxTable.setEnabled(enable);
 		this.btnAddTax.setEnabled(enable);
 		this.btnDeleteTax.setEnabled(enable);
-		this.taxTable.setEnabled(enable);
 		this.jLabel1.setEnabled(enable);
 		this.jLabel111.setEnabled(enable);
 		this.chkVisible.setEnabled(enable);
 		this.jLabel2.setEnabled(enable);
 		this.jLabel3.setEnabled(enable);
+		this.jLabel3Base.setEnabled(enable);
+
 		this.jLabel4.setEnabled(enable);
 		this.jLabel5.setEnabled(enable);
 		this.jLabel6.setEnabled(enable);
 		this.jLabel7.setEnabled(enable);
 		this.tfDiscountRate.setEnabled(enable);
 		this.tfPrice.setEnabled(enable);
+		this.tfPriceBase.setEnabled(enable);
+
 		this.lblImagePreview.setEnabled(enable);
 		this.btnClearImage.setEnabled(enable);
 		this.fileChooser.setEnabled(enable);
@@ -194,7 +204,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		this.tfTransName.setText("");
 		this.cbGroup.setSelectedIndex(-1);
 		this.cbTax.setSelectedIndex(-1);
-		this.cbPriceIncluded.setSelectedIndex(-1);
+		// this.cbPriceIncluded.setSelectedIndex(-1);
 		this.tfPrice.setText("");
 		doClearImage();
 		this.tfBuyPrice.setText("");
@@ -297,12 +307,16 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		jLabel3 = new javax.swing.JLabel();
 		jLabel3.setHorizontalAlignment(SwingConstants.TRAILING);
 		tfPrice = new DoubleTextField();
+		tfPriceBase = new DoubleTextField();
+		jLabel3Base = new javax.swing.JLabel();
+		jLabel3Base.setHorizontalAlignment(SwingConstants.TRAILING);
+
 		jLabel6 = new javax.swing.JLabel();
 		jLabel6.setHorizontalAlignment(SwingConstants.TRAILING);
 		jLabel7 = new javax.swing.JLabel();
 		jLabel7.setHorizontalAlignment(SwingConstants.TRAILING);
 		cbTax = new javax.swing.JComboBox();
-		cbPriceIncluded = new javax.swing.JComboBox();
+		// cbPriceIncluded = new javax.swing.JComboBox();
 		// btnNewTax = new javax.swing.JButton();
 		jLabel2 = new javax.swing.JLabel();
 		jLabel2.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -328,34 +342,80 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		// doCreateNewGroup(evt);
 		// }
 		// });
-
-		if (Application.getInstance().isPriceIncludesTax()) {
-			jLabel3.setText(Messages.getString("LABEL_SALES_PRICE_INCLUDING_TAX"));
-		} else {
-			jLabel3.setText(Messages.getString("LABEL_SALES_PRICE_EXCLUDING_TAX"));
-		}
+		jLabel3.setText("Sales Price");
+		jLabel3Base.setText("Base Price");
+		// if (Application.getInstance().isPriceIncludesTax()) {
+		// jLabel3.setText(Messages.getString("LABEL_SALES_PRICE_INCLUDING_TAX"));
+		// } else {
+		// jLabel3.setText(Messages.getString("LABEL_SALES_PRICE_EXCLUDING_TAX"));
+		// }
 
 		tfPrice.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+		tfPrice.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				updateBasePrice();
+
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		tfPriceBase.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+		tfPriceBase.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				updateDisplayPrice();
+
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+
+		tfDiscountRate.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				updateDisplayPrice();
+
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 
 		jLabel6.setText(Messages.getString("LABEL_TAX"));
-		jLabel7.setText("Is Price Included");
+		// jLabel7.setText("Is Price Included");
 
 		TaxDAO taxDAO = new TaxDAO();
 		List<Tax> taxes = taxDAO.findAll();
 		cbTax.setModel(new ComboBoxModel(taxes));
 
-		List<Boolean> bool = new ArrayList<Boolean>();
-		bool.add(true);
-		bool.add(false);
-		cbPriceIncluded.setModel(new ComboBoxModel(bool));
+		// List<Boolean> bool = new ArrayList<Boolean>();
+		// bool.add(true);
+		// bool.add(false);
+		// cbPriceIncluded.setModel(new ComboBoxModel(bool));
 
 		taxTable = new JTable(new TaxTableModel());
 		TaxTableModel model = (TaxTableModel) this.taxTable.getModel();
 		model.setPageSize(100);
 
 		JScrollPane jsp = new JScrollPane(this.taxTable);
-		jsp.setPreferredSize(new Dimension(700, 100));
-		this.taxTable.setPreferredSize(new Dimension(600, 100));
+		jsp.setPreferredSize(new Dimension(400, 100));
+		this.taxTable.setPreferredSize(new Dimension(300, 100));
 
 		tt = new HashSet<TaxTreatment>();
 		btnAddTax = new JButton("Add Tax");
@@ -364,6 +424,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		this.btnAddTax.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addTaxTreatment();
+				updateBasePrice();
 			}
 		});
 		this.btnDeleteTax.addActionListener(new ActionListener() {
@@ -374,8 +435,14 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 				}
 
 				TaxTableModel model = (TaxTableModel) taxTable.getModel();
+				TaxTreatment tt = model.getRowData(selectedRow);
 				model.deleteItem(selectedRow);
+				//
 				taxTable.invalidate();
+				if (tt.isIncludedInPrice()) {
+					updateBasePrice();
+				}
+
 			}
 		});
 
@@ -415,9 +482,10 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tabGeneral.add(jLabel4, "cell 0 4,alignx left,aligny center");
 		tabGeneral.add(lblBuyPrice, "cell 0 5");
 		tabGeneral.add(jLabel3, "cell 0 6,alignx left,aligny center");
-		tabGeneral.add(jLabel2, "cell 0 7,alignx left,aligny center"); //$NON-NLS-1$
-		tabGeneral.add(jLabel6, "cell 1 8,alignx left,aligny center"); //$NON-NLS-1$
-		tabGeneral.add(jLabel7, "cell 2 8,alignx left,aligny center"); //$NON-NLS-1$
+		tabGeneral.add(jLabel3Base, "cell 0 7,alignx left,aligny center");
+		tabGeneral.add(jLabel2, "cell 0 8,alignx left,aligny center"); //$NON-NLS-1$
+		tabGeneral.add(jLabel6, "cell 1 9,alignx left,aligny center"); //$NON-NLS-1$
+		//		tabGeneral.add(jLabel7, "cell 2 9,alignx left,aligny center"); //$NON-NLS-1$
 		tabGeneral.add(jLabel1, "cell 0 0,alignx left,aligny center"); //$NON-NLS-1$
 		tabGeneral.add(jLabel111, "cell 0 1,alignx left,aligny center"); //$NON-NLS-1$
 
@@ -427,12 +495,14 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		//		tabGeneral.add(btnNewGroup, "cell 3 4,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(tfBuyPrice, "cell 1 5,growx");
 		tabGeneral.add(tfPrice, "cell 1 6,growx,aligny top"); //$NON-NLS-1$
-		tabGeneral.add(tfDiscountRate, "cell 1 7,growx,aligny top"); //$NON-NLS-1$
-		tabGeneral.add(cbTax, "cell 1 9,growx,aligny top"); //$NON-NLS-1$
-		tabGeneral.add(cbPriceIncluded, "cell 2 9,growx,aligny top");
-		tabGeneral.add(jsp, "cell 1 10 3 0,growx,aligny top");
+		tabGeneral.add(tfPriceBase, "cell 1 7,growx,aligny top"); //$NON-NLS-1$
 
-		tabGeneral.add(buttonPanel, "cell 1 11,growx,aligny top");
+		tabGeneral.add(tfDiscountRate, "cell 1 8,growx,aligny top"); //$NON-NLS-1$
+		tabGeneral.add(cbTax, "cell 1 10,growx,aligny top"); //$NON-NLS-1$
+		tabGeneral.add(buttonPanel, "cell 2 10,growx,aligny top");
+		tabGeneral.add(jsp, "cell 1 11 3 0,growx,aligny top");
+
+		// tabGeneral.add(buttonPanel, "cell 1 11,growx,aligny top");
 
 		lblImage.setHorizontalAlignment(SwingConstants.TRAILING);
 		tabGeneral.add(lblImage, "cell 0 12,aligny center");
@@ -477,7 +547,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tabGeneral.add(cbShowTextWithImage, "cell 1 15"); //$NON-NLS-1$
 		tabGeneral.add(chkVisible, "cell 1 16,alignx left,aligny top"); //$NON-NLS-1$
 		//		tabGeneral.add(btnNewTax, "cell 2 8,alignx left,aligny top"); //$NON-NLS-1$
-		tabGeneral.add(jLabel5, "cell 2 7"); //$NON-NLS-1$
+		tabGeneral.add(jLabel5, "cell 2 8"); //$NON-NLS-1$
 		add(tabbedPane);
 
 		btnButtonColor.addActionListener(new ActionListener() {
@@ -526,6 +596,42 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tabbedPane.addChangeListener(this);
 	}
 
+	private void updateBasePrice() {
+		tfPriceBase.setText(String.valueOf(NumberUtil.roundToTwoDigit(calculateBasePrice())));
+	}
+
+	private void updateDisplayPrice() {
+		tfPrice.setText(String.valueOf(NumberUtil.roundToTwoDigit(calculateDisplayPrice())));
+	}
+
+	private double calculateBasePrice() {
+		TaxTableModel model = (TaxTableModel) taxTable.getModel();
+		double taxRate = 0;
+		if (model != null && model.getRows() != null) {
+			for (TaxTreatment tt : model.getRows()) {
+				if (tt.isIncludedInPrice()) {
+					taxRate += tt.getTax().getRate();
+				}
+			}
+		}
+		double base = tfPrice.getDouble() / (1 + taxRate / 100);
+		base = base * (1 + tfDiscountRate.getDouble() / 100);
+		return base;
+	}
+
+	private double calculateDisplayPrice() {
+		double taxRate = 0;
+		if (getBean().getTaxList() != null) {
+			for (TaxTreatment tt : getBean().getTaxList()) {
+				if (tt.isIncludedInPrice()) {
+					taxRate += tt.getTax().getRate();
+				}
+			}
+		}
+		double display = NumberUtil.roundToTwoDigit((tfPriceBase.getDouble() * (1 - tfDiscountRate.getDouble() / 100)) * (1 + taxRate / 100));
+		return display;
+	}
+
 	// private void btnNewTaxdoCreateNewTax(java.awt.event.ActionEvent evt) {
 	// BeanEditorDialog dialog = new BeanEditorDialog(new TaxForm(),
 	// BackOfficeWindow.getInstance(), true);
@@ -554,12 +660,13 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 			allSet = false;
 			POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Tax can not be empty!");
 		}
-		if (this.cbPriceIncluded.getSelectedItem() != null) {
-			treat.setIncludedInPrice(((boolean) this.cbPriceIncluded.getSelectedItem()));
-		} else {
-			allSet = false;
-			POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Choose whether to include this tax in price!");
-		}
+		// if (this.cbPriceIncluded.getSelectedItem() != null) {
+		treat.setIncludedInPrice(true);
+		// } else {
+		// allSet = false;
+		// POSMessageDialog.showError(BackOfficeWindow.getInstance(),
+		// "Choose whether to include this tax in price!");
+		// }
 		if (allSet) {
 			TaxTableModel tableModel = (TaxTableModel) taxTable.getModel();
 			boolean flag = false;
@@ -608,6 +715,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 					actionPerformed = false;
 				} else {
 					MenuItemDAO menuItemDAO = new MenuItemDAO();
+					menuItem.setPrice(calculateBasePrice());
 					menuItemDAO.saveOrUpdate(menuItem);
 					actionPerformed = true;
 				}
@@ -637,8 +745,10 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tfName.setText(menuItem.getName());
 		tfTransName.setText(menuItem.getTranslatedName());
 		tfBuyPrice.setText(String.valueOf(formatDouble(menuItem.getBuyPrice())));
-		tfPrice.setText(String.valueOf(menuItem.getPrice()));
 		tfDiscountRate.setText(String.valueOf(menuItem.getDiscountRate()));
+		tfPriceBase.setText(String.valueOf(NumberUtil.roundToTwoDigit(menuItem.getPrice())));
+		tfPrice.setText(String.valueOf(calculateDisplayPrice()));
+
 		chkVisible.setSelected(menuItem.isVisible());
 		cbShowTextWithImage.setSelected(menuItem.isShowImageOnly());
 		if (menuItem.getImage() != null) {
@@ -648,7 +758,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 
 		cbGroup.setSelectedItem(menuItem.getParent());
 		cbTax.setSelectedIndex(-1);
-		cbPriceIncluded.setSelectedIndex(-1);
+		// cbPriceIncluded.setSelectedIndex(-1);
 		tt.clear();
 		loadTableData();
 
@@ -878,7 +988,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		private static final long serialVersionUID = -2216293918891106404L;
 
 		TaxTableModel() {
-			super(new String[] { "TAX", "RATE %", "INCLUDED" });
+			super(new String[] { "TAX", "RATE %" });
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
@@ -888,8 +998,8 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 				return taxT.getTax().getName();
 			case 1:
 				return formatDouble(taxT.getTax().getRate());
-			case 2:
-				return (taxT.isIncludedInPrice()) ? "Yes" : "No";
+				// case 2:
+				// return (taxT.isIncludedInPrice()) ? "Yes" : "No";
 			}
 			return null;
 		}

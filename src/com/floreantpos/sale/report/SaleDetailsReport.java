@@ -139,7 +139,7 @@ public class SaleDetailsReport extends Report {
 					reportItem.setBuyPrice(mi.getBuyPrice());
 					reportItem.setProfit(ticketItem.getUnitPrice() - mi.getBuyPrice());
 					reportItem.setName(ticketItem.getName());
-					reportItem.setTaxRate(ticketItem.getTaxRate());
+					reportItem.setTaxList(ticketItem.getTaxList());
 					reportItem.setDiscount(ticketItem.getDiscountAmount());
 					reportItem.setQuantity(ticketItem.getItemCount());
 					itemMap.put(key, reportItem);
@@ -162,7 +162,8 @@ public class SaleDetailsReport extends Report {
 								modifierReportItem.setId(key);
 								modifierReportItem.setPrice(modifier.getUnitPrice());
 								modifierReportItem.setName(modifier.getName());
-								modifierReportItem.setTaxRate(modifier.getTaxRate());
+								// modifierReportItem.setTaxRate(modifier.getTaxRate());
+								modifierReportItem.setTaxList(modifier.getTaxList());
 
 								modifierMap.put(key, modifierReportItem);
 							}

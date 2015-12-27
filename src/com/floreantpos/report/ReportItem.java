@@ -1,13 +1,25 @@
 package com.floreantpos.report;
 
+import java.util.List;
+
+import com.floreantpos.model.TaxTreatment;
+
 public class ReportItem {
 	private String id;
 	private String name;
 	private double price;
 	private int quantity;
-	private double taxRate;
 	private double total;
-	
+	private List<TaxTreatment> taxList;
+
+	public List<TaxTreatment> getTaxList() {
+		return taxList;
+	}
+
+	public void setTaxList(List<TaxTreatment> taxList) {
+		this.taxList = taxList;
+	}
+
 	public ReportItem() {
 		super();
 	}
@@ -26,14 +38,6 @@ public class ReportItem {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-	}
-
-	public double getTaxRate() {
-		return taxRate;
-	}
-
-	public void setTaxRate(double taxRate) {
-		this.taxRate = taxRate;
 	}
 
 	public double getTotal() {

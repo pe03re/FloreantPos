@@ -24,80 +24,84 @@ public class SalesReportModelFactory {
 	private Date startDate;
 	private Date endDate;
 	private boolean settled = true;
-	
+
 	private SalesReportModel itemReportModel;
 	private SalesReportModel modifierReportModel;
-	
+
 	public SalesReportModelFactory() {
 		super();
 	}
-	
+
 	public void createModels() {
 		Date currentDate = new Date();
-		if(startDate == null) {
+		if (startDate == null) {
 			startDate = DateUtils.startOfDay(currentDate);
 		}
-		if(endDate == null) {
+		if (endDate == null) {
 			endDate = DateUtils.endOfDay(currentDate);
 		}
-		
+
 		List<Ticket> tickets = TicketDAO.getInstance().findTickets(startDate, endDate, settled);
-		
+
 		HashMap<String, ReportItem> itemMap = new HashMap<String, ReportItem>();
 		HashMap<String, ReportItem> modifierMap = new HashMap<String, ReportItem>();
-		
+
 		for (Iterator iter = tickets.iterator(); iter.hasNext();) {
 			Ticket t = (Ticket) iter.next();
 			Ticket ticket = TicketDAO.getInstance().loadFullTicket(t.getId());
-			
+
 			List<TicketItem> ticketItems = ticket.getTicketItems();
-			if(ticketItems == null) continue;
-			
+			if (ticketItems == null)
+				continue;
+
 			String key = null;
 			for (TicketItem ticketItem : ticketItems) {
-				if(ticketItem.getItemId() == null) {
+				if (ticketItem.getItemId() == null) {
 					key = ticketItem.getName();
-				}
-				else {
+				} else {
 					key = ticketItem.getItemId().toString();
 				}
 				ReportItem reportItem = itemMap.get(key);
-				
-				if(reportItem == null) {
+
+				if (reportItem == null) {
 					reportItem = new ReportItem();
 					reportItem.setId(key);
 					reportItem.setPrice(ticketItem.getUnitPrice());
 					reportItem.setName(ticketItem.getName());
-					reportItem.setTaxRate(ticketItem.getTaxRate());
+					reportItem.setTaxList(ticketItem.getTaxList());
 
 					itemMap.put(key, reportItem);
 				}
 				reportItem.setQuantity(ticketItem.getItemCount() + reportItem.getQuantity());
 				reportItem.setTotal(reportItem.getTotal() + ticketItem.getSubtotalAmountWithoutModifiers());
-				
-//				if(ticketItem.isHasModifiers() && ticketItem.getModifiers() != null && ticketItem.getModifiers().size() > 0) {
-//					List<TicketItemModifier> modifiers = ticketItem.getModifiers();
-//					for (TicketItemModifier modifier : modifiers) {
-//						if(modifier.getItemId() == null) {
-//							key = modifier.getName();
-//						}
-//						else {
-//							key = modifier.getItemId().toString();
-//						}
-//						ReportItem modifierReportItem = modifierMap.get(key);
-//						if(modifierReportItem == null) {
-//							modifierReportItem = new ReportItem();
-//							modifierReportItem.setId(key);
-//							modifierReportItem.setPrice(modifier.getPrice());
-//							modifierReportItem.setName(modifier.getName());
-//							modifierReportItem.setTaxRate(modifier.getTaxRate());
-//
-//							modifierMap.put(key, modifierReportItem);
-//						}
-//						modifierReportItem.setQuantity(modifierReportItem.getQuantity() + 1);
-//						modifierReportItem.setTotal(modifierReportItem.getTotal() + modifier.getTotal());
-//					}
-//				}
+
+				// if(ticketItem.isHasModifiers() && ticketItem.getModifiers()
+				// != null && ticketItem.getModifiers().size() > 0) {
+				// List<TicketItemModifier> modifiers =
+				// ticketItem.getModifiers();
+				// for (TicketItemModifier modifier : modifiers) {
+				// if(modifier.getItemId() == null) {
+				// key = modifier.getName();
+				// }
+				// else {
+				// key = modifier.getItemId().toString();
+				// }
+				// ReportItem modifierReportItem = modifierMap.get(key);
+				// if(modifierReportItem == null) {
+				// modifierReportItem = new ReportItem();
+				// modifierReportItem.setId(key);
+				// modifierReportItem.setPrice(modifier.getPrice());
+				// modifierReportItem.setName(modifier.getName());
+				// modifierReportItem.setTaxRate(modifier.getTaxRate());
+				//
+				// modifierMap.put(key, modifierReportItem);
+				// }
+				// modifierReportItem.setQuantity(modifierReportItem.getQuantity()
+				// + 1);
+				// modifierReportItem.setTotal(modifierReportItem.getTotal() +
+				// modifier.getTotal());
+				// }
+				// }
 			}
 			ticket = null;
 			iter.remove();
@@ -105,35 +109,33 @@ public class SalesReportModelFactory {
 		itemReportModel = new SalesReportModel();
 		itemReportModel.setItems(new ArrayList<ReportItem>(itemMap.values()));
 		itemReportModel.calculateGrandTotal();
-		
+
 		modifierReportModel = new SalesReportModel();
 		modifierReportModel.setItems(new ArrayList<ReportItem>(modifierMap.values()));
 		modifierReportModel.calculateGrandTotal();
 	}
-		
-	
-	
+
 	public static void main(String[] args) throws Exception {
 		SalesReportModelFactory factory = new SalesReportModelFactory();
 		factory.createModels();
-		
+
 		SalesReportModel itemReportModel = factory.getItemReportModel();
 		SalesReportModel modifierReportModel = factory.getModifierReportModel();
-		
+
 		JasperReport itemReport = ReportUtil.getReport("SalesSubReport");
 		JasperReport modifierReport = ReportUtil.getReport("SalesSubReport");
-		
+
 		HashMap map = new HashMap();
-		map.put("itemDataSource", new  JRTableModelDataSource(itemReportModel));
-		map.put("modifierDataSource", new  JRTableModelDataSource(modifierReportModel));
+		map.put("itemDataSource", new JRTableModelDataSource(itemReportModel));
+		map.put("modifierDataSource", new JRTableModelDataSource(modifierReportModel));
 		map.put("currencySymbol", Application.getCurrencySymbol());
 		map.put("itemGrandTotal", itemReportModel.getGrandTotalAsString());
 		map.put("modifierGrandTotal", modifierReportModel.getGrandTotalAsString());
 		map.put("itemReport", itemReport);
 		map.put("modifierReport", modifierReport);
-		
+
 		JasperReport masterReport = ReportUtil.getReport("SalesReport");
-		
+
 		JasperPrint print = JasperFillManager.fillReport(masterReport, map, new JREmptyDataSource());
 		JasperViewer.viewReport(print, false);
 	}

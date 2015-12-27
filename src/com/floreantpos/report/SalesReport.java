@@ -103,7 +103,7 @@ public class SalesReport extends Report {
 					reportItem.setId(key);
 					reportItem.setPrice(ticketItem.getUnitPrice());
 					reportItem.setName(ticketItem.getName());
-					reportItem.setTaxRate(ticketItem.getTaxRate());
+					reportItem.setTaxList(ticketItem.getTaxList());
 
 					itemMap.put(key, reportItem);
 				}
@@ -127,7 +127,7 @@ public class SalesReport extends Report {
 								modifierReportItem.setId(key);
 								modifierReportItem.setPrice(modifier.getUnitPrice());
 								modifierReportItem.setName(modifier.getName());
-								modifierReportItem.setTaxRate(modifier.getTaxRate());
+								modifierReportItem.setTaxList(modifier.getTaxList());
 
 								modifierMap.put(key, modifierReportItem);
 							}

@@ -286,11 +286,11 @@ public class Application {
 				RestaurantDAO.getInstance().saveOrUpdate(restaurant);
 			}
 
-			if (restaurant.isItemPriceIncludesTax()) {
-				posWindow.setStatus("Tax is included in item price");
-			} else {
-				posWindow.setStatus("Tax is not included in item price");
-			}
+			// if (restaurant.isItemPriceIncludesTax()) {
+			// posWindow.setStatus("Tax is included in item price");
+			// } else {
+			// posWindow.setStatus("Tax is not included in item price");
+			// }
 		} catch (Exception e) {
 			throw new DatabaseConnectionException();
 		}

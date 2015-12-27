@@ -48,7 +48,8 @@ public class SaleDetailsReportModel extends AbstractTableModel {
 		case 2:
 			return String.valueOf(item.getQuantity());
 		case 3:
-			return String.valueOf(item.getTaxRate()) + "%";
+			return "";
+			// return String.valueOf(item.getTaxRate()) + "%";
 		case 4:
 			return currencySymbol + " " + formatter.format(item.getPrice());
 		case 5:

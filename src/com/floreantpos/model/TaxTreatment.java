@@ -12,6 +12,11 @@ public class TaxTreatment extends BaseTaxTreatment {
 		super();
 	}
 
+	public TaxTreatment(TaxTreatment t) {
+		this.tax = t.tax;
+		this.includedInPrice = t.includedInPrice;
+	}
+
 	/**
 	 * Constructor for primary key
 	 */

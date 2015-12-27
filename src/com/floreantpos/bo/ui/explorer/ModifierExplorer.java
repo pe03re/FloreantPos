@@ -32,14 +32,14 @@ public class ModifierExplorer extends TransparentPanel {
 
 	public ModifierExplorer() {
 		currencySymbol = Application.getCurrencySymbol();
-		
+
 		ModifierDAO dao = new ModifierDAO();
 		modifierList = dao.findAll();
 
 		tableModel = new ModifierExplorerTableModel();
 		table = new JXTable(tableModel);
 		table.setDefaultRenderer(Object.class, new PosTableRenderer());
-		
+
 		setLayout(new BorderLayout(5, 5));
 		add(new JScrollPane(table));
 
@@ -55,7 +55,7 @@ public class ModifierExplorer extends TransparentPanel {
 					int index = table.getSelectedRow();
 					if (index < 0)
 						return;
-					
+
 					index = table.convertRowIndexToModel(index);
 					MenuModifier modifier = modifierList.get(index);
 
@@ -67,7 +67,7 @@ public class ModifierExplorer extends TransparentPanel {
 
 					table.repaint();
 				} catch (Throwable x) {
-				BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
+					BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
 				}
 			}
 		});
@@ -83,7 +83,7 @@ public class ModifierExplorer extends TransparentPanel {
 					MenuModifier modifier = (MenuModifier) editor.getBean();
 					tableModel.addModifier(modifier);
 				} catch (Throwable x) {
-				BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
+					BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
 				}
 			}
 
@@ -95,9 +95,9 @@ public class ModifierExplorer extends TransparentPanel {
 					int index = table.getSelectedRow();
 					if (index < 0)
 						return;
-					
+
 					index = table.convertRowIndexToModel(index);
-					
+
 					if (ConfirmDeleteDialog.showMessage(ModifierExplorer.this, com.floreantpos.POSConstants.CONFIRM_DELETE, com.floreantpos.POSConstants.DELETE) != ConfirmDeleteDialog.NO) {
 						MenuModifier category = modifierList.get(index);
 						ModifierDAO modifierDAO = new ModifierDAO();
@@ -105,7 +105,7 @@ public class ModifierExplorer extends TransparentPanel {
 						tableModel.deleteModifier(category, index);
 					}
 				} catch (Throwable x) {
-				BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
+					BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
 				}
 
 			}
@@ -119,11 +119,8 @@ public class ModifierExplorer extends TransparentPanel {
 	}
 
 	class ModifierExplorerTableModel extends AbstractTableModel {
-		String[] columnNames = {com.floreantpos.POSConstants.ID, com.floreantpos.POSConstants.NAME, POSConstants.TRANSLATED_NAME,
-				com.floreantpos.POSConstants.PRICE + " (" + currencySymbol + ")", 
-				com.floreantpos.POSConstants.EXTRA_PRICE, com.floreantpos.POSConstants.TAX + "(%)", 
-				com.floreantpos.POSConstants.MODIFIER_GROUP,
-				POSConstants.BUTTON_COLOR, POSConstants.SORT_ORDER}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String[] columnNames = { com.floreantpos.POSConstants.ID, com.floreantpos.POSConstants.NAME, POSConstants.TRANSLATED_NAME, com.floreantpos.POSConstants.PRICE + " (" + currencySymbol + ")",
+				com.floreantpos.POSConstants.EXTRA_PRICE, com.floreantpos.POSConstants.TAX + "(%)", com.floreantpos.POSConstants.MODIFIER_GROUP, POSConstants.BUTTON_COLOR, POSConstants.SORT_ORDER }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		public int getRowCount() {
 			if (modifierList == null) {
@@ -153,42 +150,43 @@ public class ModifierExplorer extends TransparentPanel {
 			MenuModifier modifier = modifierList.get(rowIndex);
 
 			switch (columnIndex) {
-				case 0:
-					return String.valueOf(modifier.getId());
+			case 0:
+				return String.valueOf(modifier.getId());
 
-				case 1:
-					return modifier.getName();
-					
-				case 2:
-					return modifier.getTranslatedName();
+			case 1:
+				return modifier.getName();
 
-				case 3:
-					return Double.valueOf(modifier.getPrice());
-					
-				case 4:
-					return Double.valueOf(modifier.getExtraPrice());
-					
-				case 5:
-					if(modifier.getTax() == null) {
-						return ""; //$NON-NLS-1$
-					}
-					return Double.valueOf(modifier.getTax().getRate());
-					
-				case 6:
-					if(modifier.getModifierGroup() == null) {
-						return ""; //$NON-NLS-1$
-					}
-					return modifier.getModifierGroup().getName();
-					
-				case 7:
-					if(modifier.getButtonColor() != null) {
-						return new Color(modifier.getButtonColor());
-					}
-					
-					return null;
-					
-				case 8:
-					return modifier.getSortOrder();
+			case 2:
+				return modifier.getTranslatedName();
+
+			case 3:
+				return Double.valueOf(modifier.getPrice());
+
+			case 4:
+				return Double.valueOf(modifier.getExtraPrice());
+
+			case 5:
+				return "";
+				// if(modifier.getTax() == null) {
+				//						return ""; //$NON-NLS-1$
+				// }
+				// return Double.valueOf(modifier.getTax().getRate());
+
+			case 6:
+				if (modifier.getModifierGroup() == null) {
+					return ""; //$NON-NLS-1$
+				}
+				return modifier.getModifierGroup().getName();
+
+			case 7:
+				if (modifier.getButtonColor() != null) {
+					return new Color(modifier.getButtonColor());
+				}
+
+				return null;
+
+			case 8:
+				return modifier.getSortOrder();
 			}
 			return null;
 		}

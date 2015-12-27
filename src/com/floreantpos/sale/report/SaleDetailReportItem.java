@@ -1,5 +1,9 @@
 package com.floreantpos.sale.report;
 
+import java.util.List;
+
+import com.floreantpos.model.TaxTreatment;
+
 public class SaleDetailReportItem {
 	private String date;
 	private String id;
@@ -8,7 +12,7 @@ public class SaleDetailReportItem {
 	private double buyPrice;
 	private double profit;
 	private int quantity;
-	private double taxRate;
+	private List<TaxTreatment> taxList;
 	private double discount;
 
 	public SaleDetailReportItem() {
@@ -29,14 +33,6 @@ public class SaleDetailReportItem {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-	}
-
-	public double getTaxRate() {
-		return taxRate;
-	}
-
-	public void setTaxRate(double taxRate) {
-		this.taxRate = taxRate;
 	}
 
 	public double getPrice() {
@@ -85,6 +81,14 @@ public class SaleDetailReportItem {
 
 	public void setDiscount(double discount) {
 		this.discount = discount;
+	}
+
+	public List<TaxTreatment> getTaxList() {
+		return taxList;
+	}
+
+	public void setTaxList(List<TaxTreatment> taxList) {
+		this.taxList = taxList;
 	}
 
 }

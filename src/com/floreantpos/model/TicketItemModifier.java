@@ -7,14 +7,14 @@ import com.floreantpos.model.base.BaseTicketItemModifier;
 import com.floreantpos.util.NumberUtil;
 
 public class TicketItemModifier extends BaseTicketItemModifier implements ITicketItem {
-	private static final long	serialVersionUID			= 1L;
+	private static final long serialVersionUID = 1L;
 
-	public final static int		MODIFIER_NOT_INITIALIZED	= 0;
-	public final static int		NORMAL_MODIFIER				= 1;
-	public final static int		NO_MODIFIER					= 2;
-	public final static int		EXTRA_MODIFIER				= 3;
+	public final static int MODIFIER_NOT_INITIALIZED = 0;
+	public final static int NORMAL_MODIFIER = 1;
+	public final static int NO_MODIFIER = 2;
+	public final static int EXTRA_MODIFIER = 3;
 
-	/*[CONSTRUCTOR MARKER BEGIN]*/
+	/* [CONSTRUCTOR MARKER BEGIN] */
 	public TicketItemModifier() {
 		super();
 	}
@@ -26,11 +26,11 @@ public class TicketItemModifier extends BaseTicketItemModifier implements ITicke
 		super(id);
 	}
 
-	/*[CONSTRUCTOR MARKER END]*/
-	
+	/* [CONSTRUCTOR MARKER END] */
+
 	boolean priceIncludesTax;
 
-	private int	tableRowNum;
+	private int tableRowNum;
 
 	public int getTableRowNum() {
 		return tableRowNum;
@@ -67,32 +67,36 @@ public class TicketItemModifier extends BaseTicketItemModifier implements ITicke
 
 	public void calculatePrice() {
 		priceIncludesTax = Application.getInstance().isPriceIncludesTax();
-		
+
 		calculateSubTotal();
 		calculateTax();
 		setTotalAmount(NumberUtil.roundToTwoDigit(calculateTotal()));
 	}
 
 	private void calculateTax() {
-		double tax = getSubTotalAmount() * (getTaxRate() / 100);
 		double subtotal = getSubTotalAmount();
-		double taxRate = getTaxRate();
-		
-		if(priceIncludesTax) {
-			tax = getSubTotalAmount() * (getTaxRate() / 100);
+		List<TaxTreatment> taxRateList = getTaxList();
+		double tax = 0;
+
+		if (taxRateList != null) {
+			for (TaxTreatment t : taxRateList) {
+				if (t.getTax() != null) {
+					if (t.isIncludedInPrice()) {
+						tax += subtotal - (subtotal / (1 + (t.getTax().getRate() / 100.0)));
+					} else {
+						tax += subtotal * (t.getTax().getRate() / 100.0);
+					}
+				}
+			}
 		}
-		else {
-			tax = subtotal * (taxRate / 100);
-		}
-		
 		setTaxAmount(NumberUtil.roundToTwoDigit(tax));
 	}
 
 	private double calculateTotal() {
-		if(priceIncludesTax) {
+		if (priceIncludesTax) {
 			return getSubTotalAmount();
 		}
-		
+
 		return getSubTotalAmount() + getTaxAmount();
 	}
 
@@ -115,8 +119,7 @@ public class TicketItemModifier extends BaseTicketItemModifier implements ITicke
 			if (getItemCount() <= maxItemCount) {
 				normalItemCount = getItemCount();
 				extraItemCount = 0;
-			}
-			else {
+			} else {
 				normalItemCount = maxItemCount;
 				extraItemCount = getItemCount() - maxItemCount;
 			}
@@ -130,8 +133,7 @@ public class TicketItemModifier extends BaseTicketItemModifier implements ITicke
 			if (getItemCount() <= maxItemCount) {
 				normalItemCount = getItemCount();
 				extraItemCount = 0;
-			}
-			else {
+			} else {
 				normalItemCount = maxItemCount;
 				extraItemCount = getItemCount() - maxItemCount;
 			}
@@ -152,8 +154,7 @@ public class TicketItemModifier extends BaseTicketItemModifier implements ITicke
 		if (getModifierType() == TicketItemModifier.NO_MODIFIER) {
 			display = " - No " + display;
 			return display;
-		}
-		else if (getModifierType() == TicketItemModifier.EXTRA_MODIFIER) {
+		} else if (getModifierType() == TicketItemModifier.EXTRA_MODIFIER) {
 			display = " - Extra " + display;
 			return display;
 		}
@@ -181,7 +182,7 @@ public class TicketItemModifier extends BaseTicketItemModifier implements ITicke
 		if (getModifierType() == TicketItemModifier.NO_MODIFIER) {
 			return null;
 		}
-		
+
 		return getItemCount();
 	}
 
@@ -210,9 +211,15 @@ public class TicketItemModifier extends BaseTicketItemModifier implements ITicke
 	public void setPriceIncludesTax(boolean priceIncludesTax) {
 		this.priceIncludesTax = priceIncludesTax;
 	}
-	
+
 	@Override
 	public String getItemCode() {
 		return "";
+	}
+
+	@Override
+	public Double calculateTax(boolean includeModifierTax) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -18,26 +18,25 @@ import com.floreantpos.model.dao.TaxDAO;
 import com.floreantpos.swing.TransparentPanel;
 import com.floreantpos.ui.PosTableRenderer;
 import com.floreantpos.ui.dialog.BeanEditorDialog;
-import com.floreantpos.ui.dialog.ConfirmDeleteDialog;
 import com.floreantpos.ui.model.TaxForm;
 
 public class TaxExplorer extends TransparentPanel {
 	private List<Tax> taxList;
-	
+
 	private JTable table;
 
 	private TaxExplorerTableModel tableModel;
-	
+
 	public TaxExplorer() {
 		taxList = TaxDAO.getInstance().findAll();
-		
+
 		tableModel = new TaxExplorerTableModel();
 		table = new JTable(tableModel);
 		table.setDefaultRenderer(Object.class, new PosTableRenderer());
-		
-		setLayout(new BorderLayout(5,5));
+
+		setLayout(new BorderLayout(5, 5));
 		add(new JScrollPane(table));
-		
+
 		JButton addButton = new JButton(com.floreantpos.POSConstants.ADD);
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -50,12 +49,12 @@ public class TaxExplorer extends TransparentPanel {
 
 					tableModel.addTax((Tax) editor.getBean());
 				} catch (Exception x) {
-				BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
+					BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
 				}
 			}
-			
+
 		});
-		
+
 		JButton editButton = new JButton(com.floreantpos.POSConstants.EDIT);
 		editButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -73,43 +72,47 @@ public class TaxExplorer extends TransparentPanel {
 
 					table.repaint();
 				} catch (Throwable x) {
-				BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
+					BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
 				}
 			}
-			
-		});
-		JButton deleteButton = new JButton(com.floreantpos.POSConstants.DELETE);
-		deleteButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					int index = table.getSelectedRow();
-					if (index < 0)
-						return;
 
-					if (ConfirmDeleteDialog.showMessage(TaxExplorer.this, com.floreantpos.POSConstants.CONFIRM_DELETE, com.floreantpos.POSConstants.DELETE) == ConfirmDeleteDialog.YES) {
-						Tax tax = taxList.get(index);
-						TaxDAO.getInstance().delete(tax);
-						tableModel.deleteTax(tax, index);
-					}
-				} catch (Exception x) {
-				BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
-				}
-			}
-			
 		});
+		// JButton deleteButton = new
+		// JButton(com.floreantpos.POSConstants.DELETE);
+		// deleteButton.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// try {
+		// int index = table.getSelectedRow();
+		// if (index < 0)
+		// return;
+		//
+		// if (ConfirmDeleteDialog.showMessage(TaxExplorer.this,
+		// com.floreantpos.POSConstants.CONFIRM_DELETE,
+		// com.floreantpos.POSConstants.DELETE) == ConfirmDeleteDialog.YES) {
+		// Tax tax = taxList.get(index);
+		// TaxDAO.getInstance().delete(tax);
+		// tableModel.deleteTax(tax, index);
+		// }
+		// } catch (Exception x) {
+		// BOMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE,
+		// x);
+		// }
+		// }
+		//
+		// });
 
 		TransparentPanel panel = new TransparentPanel();
 		panel.add(addButton);
 		panel.add(editButton);
-		panel.add(deleteButton);
+		// panel.add(deleteButton);
 		add(panel, BorderLayout.SOUTH);
 	}
-	
+
 	class TaxExplorerTableModel extends AbstractTableModel {
-		String[] columnNames = {POSConstants.ID, POSConstants.NAME, POSConstants.RATE};
-		
+		String[] columnNames = { POSConstants.ID, POSConstants.NAME, POSConstants.RATE };
+
 		public int getRowCount() {
-			if(taxList == null) {
+			if (taxList == null) {
 				return 0;
 			}
 			return taxList.size();
@@ -118,33 +121,33 @@ public class TaxExplorer extends TransparentPanel {
 		public int getColumnCount() {
 			return columnNames.length;
 		}
-		
+
 		@Override
 		public String getColumnName(int column) {
 			return columnNames[column];
 		}
-		
+
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
 			return false;
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			if(taxList == null)
+			if (taxList == null)
 				return ""; //$NON-NLS-1$
-			
+
 			Tax tax = taxList.get(rowIndex);
-			
-			switch(columnIndex) {
-				case 0:
-					return String.valueOf(tax.getId());
-					
-				case 1:
-					return tax.getName();
-					
-				case 2:
-					return tax.getRate();
-					
+
+			switch (columnIndex) {
+			case 0:
+				return String.valueOf(tax.getId());
+
+			case 1:
+				return tax.getName();
+
+			case 2:
+				return tax.getRate();
+
 			}
 
 			return null;
@@ -155,7 +158,7 @@ public class TaxExplorer extends TransparentPanel {
 			taxList.add(tax);
 			fireTableRowsInserted(size, size);
 		}
-		
+
 		public void deleteTax(Tax tax, int index) {
 			taxList.remove(tax);
 			fireTableRowsDeleted(index, index);

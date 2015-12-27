@@ -9,14 +9,14 @@ public class TicketItemModifierGroup extends BaseTicketItemModifierGroup {
 	private static final long serialVersionUID = 1L;
 
 	/* [CONSTRUCTOR MARKER BEGIN] */
-	public TicketItemModifierGroup () {
+	public TicketItemModifierGroup() {
 		super();
 	}
 
 	/**
 	 * Constructor for primary key
 	 */
-	public TicketItemModifierGroup (java.lang.Integer id) {
+	public TicketItemModifierGroup(java.lang.Integer id) {
 		super(id);
 	}
 
@@ -33,12 +33,10 @@ public class TicketItemModifierGroup extends BaseTicketItemModifierGroup {
 				if (modifier.getModifierType() != TicketItemModifier.NO_MODIFIER) {
 					count += modifier.getItemCount();
 				}
-			}
-			else {
+			} else {
 				if (modifier.getModifierType() == TicketItemModifier.NO_MODIFIER) {
 					count++;
-				}
-				else {
+				} else {
 					count += modifier.getItemCount();
 				}
 			}
@@ -50,8 +48,7 @@ public class TicketItemModifierGroup extends BaseTicketItemModifierGroup {
 		List<TicketItemModifier> ticketItemModifiers = getTicketItemModifiers();
 		if (ticketItemModifiers == null) {
 			return null;
-		}
-		else {
+		} else {
 			for (TicketItemModifier ticketItemModifier : ticketItemModifiers) {
 				if (modifier.getId().equals(ticketItemModifier.getItemId())) {
 					return ticketItemModifier;
@@ -70,7 +67,7 @@ public class TicketItemModifierGroup extends BaseTicketItemModifierGroup {
 		ticketItemModifier.setName(menuModifier.getDisplayName());
 		ticketItemModifier.setUnitPrice(menuModifier.getPrice());
 		ticketItemModifier.setExtraUnitPrice(menuModifier.getExtraPrice());
-		ticketItemModifier.setTaxRate(menuModifier.getTax() == null ? 0 : menuModifier.getTax().getRate());
+		ticketItemModifier.setTaxList(menuModifier.getTaxList());
 		ticketItemModifier.setModifierType(modifierType);
 		ticketItemModifier.setShouldPrintToKitchen(menuModifier.isShouldPrintToKitchen());
 		ticketItemModifier.setParent(this);
@@ -94,7 +91,7 @@ public class TicketItemModifierGroup extends BaseTicketItemModifierGroup {
 		}
 		return ticketItemModifier;
 	}
-	
+
 	public void calculatePrice() {
 		if (getTicketItemModifiers() == null) {
 			return;
@@ -129,7 +126,7 @@ public class TicketItemModifierGroup extends BaseTicketItemModifierGroup {
 		for (TicketItemModifier modifier : ticketItemModifiers) {
 			tax += modifier.getTaxAmount();
 		}
-		
+
 		return tax;
 	}
 

@@ -23,8 +23,8 @@ import com.floreantpos.POSConstants;
 import com.floreantpos.swing.PosButton;
 
 public abstract class SelectionView extends JPanel implements ComponentListener {
-	private final static int HORIZONTAL_GAP = 15;
-	private final static int VERTICAL_GAP = 15;
+	private final static int HORIZONTAL_GAP = 5;
+	private final static int VERTICAL_GAP = 5;
 
 	private Dimension buttonSize;
 
@@ -145,7 +145,7 @@ public abstract class SelectionView extends JPanel implements ComponentListener 
 		Dimension size = buttonsPanel.getSize();
 		Dimension itemButtonSize = getButtonSize();
 
-		int horizontalButtonCount = getButtonCount(size.width, getButtonSize().width);
+		int horizontalButtonCount = Math.min(6, getButtonCount(size.width, getButtonSize().width));
 		int verticalButtonCount = getButtonCount(size.height, getButtonSize().height);
 
 		buttonsPanel.setLayout(new MigLayout("alignx 50%, wrap " + horizontalButtonCount));

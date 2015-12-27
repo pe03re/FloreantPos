@@ -6,32 +6,34 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import com.floreantpos.main.Application;
+import com.floreantpos.model.TaxTreatment;
 
 public class SalesReportModel extends AbstractTableModel {
 	private static DecimalFormat formatter = new DecimalFormat("#,##0.00");
 	private String currencySymbol;
-	
-	private String[] columnNames = {com.floreantpos.POSConstants.NAME, com.floreantpos.POSConstants.PRICE, com.floreantpos.POSConstants.QTY, com.floreantpos.POSConstants.TAX, com.floreantpos.POSConstants.TOTAL};
+
+	private String[] columnNames = { com.floreantpos.POSConstants.NAME, com.floreantpos.POSConstants.PRICE, com.floreantpos.POSConstants.QTY, com.floreantpos.POSConstants.TAX,
+			com.floreantpos.POSConstants.TOTAL };
 	private List<ReportItem> items;
 	private double grandTotal;
-	
+
 	public SalesReportModel() {
 		super();
 		currencySymbol = Application.getCurrencySymbol();
 	}
 
 	public int getRowCount() {
-		if(items == null) {
+		if (items == null) {
 			return 0;
 		}
-		
+
 		return items.size();
 	}
 
 	public int getColumnCount() {
 		return columnNames.length;
 	}
-	
+
 	@Override
 	public String getColumnName(int column) {
 		return columnNames[column];
@@ -39,25 +41,29 @@ public class SalesReportModel extends AbstractTableModel {
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		ReportItem item = items.get(rowIndex);
-		
-		switch(columnIndex) {
-			case 0:
-				return item.getName();
-				
-			case 1:
-				return currencySymbol + " " + formatter.format(item.getPrice());
-				
-			case 2:
-				return String.valueOf(item.getQuantity());
-				
-			case 3:
-				return String.valueOf(item.getTaxRate()) + "%";
-				
-			case 4:
-				return currencySymbol + " " + formatter.format(item.getTotal());
+
+		switch (columnIndex) {
+		case 0:
+			return item.getName();
+
+		case 1:
+			return currencySymbol + " " + formatter.format(item.getPrice());
+
+		case 2:
+			return String.valueOf(item.getQuantity());
+
+		case 3:
+			String taxList = "";
+			if (item.getTaxList() != null && !item.getTaxList().isEmpty()) {
+				for (TaxTreatment t : item.getTaxList()) {
+					taxList = taxList + " + " + t.getTax().getRate() + "%";
+				}
+				return taxList.substring(2);
+			}
+		case 4:
+			return currencySymbol + " " + formatter.format(item.getTotal());
 		}
-		
-		
+
 		return null;
 	}
 
@@ -83,10 +89,10 @@ public class SalesReportModel extends AbstractTableModel {
 
 	public void calculateGrandTotal() {
 		grandTotal = 0;
-		if(items == null) {
+		if (items == null) {
 			return;
 		}
-		
+
 		for (ReportItem item : items) {
 			grandTotal += item.getTotal();
 		}

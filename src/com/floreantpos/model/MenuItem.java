@@ -1,5 +1,6 @@
 package com.floreantpos.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -107,8 +108,11 @@ public class MenuItem extends BaseMenuItem {
 		ticketItem.setCategoryName(this.getParent().getParent().getDisplayName());
 		ticketItem.setUnitPrice(this.getPrice(Application.getInstance().getCurrentShift()));
 		ticketItem.setDiscountRate(this.getDiscountRate());
-		// ticketItem.setTaxRate(this.getTax() == null ? 0 :
-		// this.getTax().getRate());
+		List<TaxTreatment> tl = new ArrayList<TaxTreatment>();
+		for (TaxTreatment tax : this.getTaxList()) {
+			tl.add(new TaxTreatment(tax));
+		}
+		ticketItem.setTaxList(tl);
 		ticketItem.setHasModifiers(hasModifiers());
 		if (this.getParent().getParent().isBeverage()) {
 			ticketItem.setBeverage(true);

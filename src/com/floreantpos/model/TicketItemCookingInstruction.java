@@ -2,17 +2,15 @@ package com.floreantpos.model;
 
 import com.floreantpos.model.base.BaseTicketItemCookingInstruction;
 
-
-
 public class TicketItemCookingInstruction extends BaseTicketItemCookingInstruction implements ITicketItem {
 	private static final long serialVersionUID = 1L;
 
-/*[CONSTRUCTOR MARKER BEGIN]*/
-	public TicketItemCookingInstruction () {
+	/* [CONSTRUCTOR MARKER BEGIN] */
+	public TicketItemCookingInstruction() {
 		super();
 	}
 
-/*[CONSTRUCTOR MARKER END]*/
+	/* [CONSTRUCTOR MARKER END] */
 
 	private int tableRowNum;
 
@@ -27,12 +25,12 @@ public class TicketItemCookingInstruction extends BaseTicketItemCookingInstructi
 	public boolean canAddCookingInstruction() {
 		return false;
 	}
-	
+
 	@Override
 	public String toString() {
 		return getDescription();
 	}
-	
+
 	@Override
 	public String getNameDisplay() {
 		return "   * " + getDescription();
@@ -57,9 +55,15 @@ public class TicketItemCookingInstruction extends BaseTicketItemCookingInstructi
 	public Double getTotalAmountWithoutModifiersDisplay() {
 		return null;
 	}
-	
+
 	@Override
 	public String getItemCode() {
 		return "";
+	}
+
+	@Override
+	public Double calculateTax(boolean includeModifierTax) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
