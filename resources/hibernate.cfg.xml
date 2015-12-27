@@ -73,6 +73,7 @@
 		<mapping resource="com/floreantpos/model/ShopTable.hbm.xml" />
 		<mapping resource="com/floreantpos/model/ShopTableType.hbm.xml" />
 		<mapping resource="com/floreantpos/model/Tax.hbm.xml" />
+		<mapping resource="com/floreantpos/model/TaxTreatment.hbm.xml" />
 		<mapping resource="com/floreantpos/model/Terminal.hbm.xml" />
 		<mapping resource="com/floreantpos/model/Ticket.hbm.xml" />
 		<mapping resource="com/floreantpos/model/TicketCouponAndDiscount.hbm.xml" />
