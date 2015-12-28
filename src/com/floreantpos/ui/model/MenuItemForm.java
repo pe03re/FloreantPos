@@ -59,7 +59,6 @@ import com.floreantpos.model.dao.MenuGroupDAO;
 import com.floreantpos.model.dao.MenuItemDAO;
 import com.floreantpos.model.dao.TaxDAO;
 import com.floreantpos.swing.ComboBoxModel;
-import com.floreantpos.swing.DoubleDocument;
 import com.floreantpos.swing.DoubleTextField;
 import com.floreantpos.swing.IUpdatebleView;
 import com.floreantpos.ui.BeanEditor;
@@ -81,7 +80,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	private javax.swing.JCheckBox chkVisible;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel111;
-	private javax.swing.JLabel jLabel2;
+	// private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JLabel jLabel3Base;
 
@@ -98,7 +97,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	private javax.swing.JTabbedPane tabbedPane;
 	private javax.swing.JTable shiftTable;
 	private javax.swing.JTable tableTicketItemModifierGroups;
-	private DoubleTextField tfDiscountRate;
+	// private DoubleTextField tfDiscountRate;
 	private com.floreantpos.swing.FixedLengthTextField tfName;
 	private com.floreantpos.swing.FixedLengthTextField tfTransName;
 	private DoubleTextField tfPrice;
@@ -171,7 +170,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		this.jLabel1.setEnabled(enable);
 		this.jLabel111.setEnabled(enable);
 		this.chkVisible.setEnabled(enable);
-		this.jLabel2.setEnabled(enable);
+		// this.jLabel2.setEnabled(enable);
 		this.jLabel3.setEnabled(enable);
 		this.jLabel3Base.setEnabled(enable);
 
@@ -179,7 +178,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		this.jLabel5.setEnabled(enable);
 		this.jLabel6.setEnabled(enable);
 		this.jLabel7.setEnabled(enable);
-		this.tfDiscountRate.setEnabled(enable);
+		// this.tfDiscountRate.setEnabled(enable);
 		this.tfPrice.setEnabled(enable);
 		this.tfPriceBase.setEnabled(enable);
 
@@ -318,11 +317,11 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		cbTax = new javax.swing.JComboBox();
 		// cbPriceIncluded = new javax.swing.JComboBox();
 		// btnNewTax = new javax.swing.JButton();
-		jLabel2 = new javax.swing.JLabel();
-		jLabel2.setHorizontalAlignment(SwingConstants.TRAILING);
+		// jLabel2 = new javax.swing.JLabel();
+		// jLabel2.setHorizontalAlignment(SwingConstants.TRAILING);
 		jLabel5 = new javax.swing.JLabel();
-		tfDiscountRate = new DoubleTextField();
-		tfDiscountRate.setHorizontalAlignment(SwingConstants.TRAILING);
+		// tfDiscountRate = new DoubleTextField();
+		// tfDiscountRate.setHorizontalAlignment(SwingConstants.TRAILING);
 		chkVisible = new javax.swing.JCheckBox();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		tableTicketItemModifierGroups = new javax.swing.JTable();
@@ -382,20 +381,20 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 			}
 		});
 
-		tfDiscountRate.addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusLost(FocusEvent e) {
-				updateDisplayPrice();
-
-			}
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		// tfDiscountRate.addFocusListener(new FocusListener() {
+		//
+		// @Override
+		// public void focusLost(FocusEvent e) {
+		// updateDisplayPrice();
+		//
+		// }
+		//
+		// @Override
+		// public void focusGained(FocusEvent e) {
+		// // TODO Auto-generated method stub
+		//
+		// }
+		// });
 
 		jLabel6.setText(Messages.getString("LABEL_TAX"));
 		// jLabel7.setText("Is Price Included");
@@ -457,7 +456,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		// }
 		// });
 
-		jLabel2.setText(com.floreantpos.POSConstants.DISCOUNT_RATE + ":");
+		// jLabel2.setText(com.floreantpos.POSConstants.DISCOUNT_RATE + ":");
 
 		jLabel5.setText("%");
 
@@ -469,7 +468,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		btnAddShift.addActionListener(this);
 		btnDeleteShift.addActionListener(this);
 
-		tfDiscountRate.setDocument(new DoubleDocument());
+		// tfDiscountRate.setDocument(new DoubleDocument());
 		tabGeneral.setLayout(new MigLayout("", "[104px][100px,grow][][49px]", "[19px][][][][25px][][19px][19px][25px][][][][][][15px]"));
 
 		lblBuyPrice = new JLabel(Messages.getString("LABEL_BUY_PRICE"));
@@ -483,7 +482,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tabGeneral.add(lblBuyPrice, "cell 0 5");
 		tabGeneral.add(jLabel3, "cell 0 6,alignx left,aligny center");
 		tabGeneral.add(jLabel3Base, "cell 0 7,alignx left,aligny center");
-		tabGeneral.add(jLabel2, "cell 0 8,alignx left,aligny center"); //$NON-NLS-1$
+		//tabGeneral.add(jLabel2, "cell 0 8,alignx left,aligny center"); //$NON-NLS-1$
 		tabGeneral.add(jLabel6, "cell 1 9,alignx left,aligny center"); //$NON-NLS-1$
 		//		tabGeneral.add(jLabel7, "cell 2 9,alignx left,aligny center"); //$NON-NLS-1$
 		tabGeneral.add(jLabel1, "cell 0 0,alignx left,aligny center"); //$NON-NLS-1$
@@ -497,7 +496,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tabGeneral.add(tfPrice, "cell 1 6,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(tfPriceBase, "cell 1 7,growx,aligny top"); //$NON-NLS-1$
 
-		tabGeneral.add(tfDiscountRate, "cell 1 8,growx,aligny top"); //$NON-NLS-1$
+		//tabGeneral.add(tfDiscountRate, "cell 1 8,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(cbTax, "cell 1 10,growx,aligny top"); //$NON-NLS-1$
 		tabGeneral.add(buttonPanel, "cell 2 10,growx,aligny top");
 		tabGeneral.add(jsp, "cell 1 11 3 0,growx,aligny top");
@@ -615,20 +614,23 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 			}
 		}
 		double base = tfPrice.getDouble() / (1 + taxRate / 100);
-		base = base * (1 + tfDiscountRate.getDouble() / 100);
+		// base = base * (1 + tfDiscountRate.getDouble() / 100);
 		return base;
 	}
 
 	private double calculateDisplayPrice() {
+		TaxTableModel model = (TaxTableModel) taxTable.getModel();
 		double taxRate = 0;
-		if (getBean().getTaxList() != null) {
-			for (TaxTreatment tt : getBean().getTaxList()) {
+		if (model != null && model.getRows() != null) {
+			for (TaxTreatment tt : model.getRows()) {
 				if (tt.isIncludedInPrice()) {
 					taxRate += tt.getTax().getRate();
 				}
 			}
 		}
-		double display = NumberUtil.roundToTwoDigit((tfPriceBase.getDouble() * (1 - tfDiscountRate.getDouble() / 100)) * (1 + taxRate / 100));
+		double display = NumberUtil.roundToTwoDigit(tfPriceBase.getDouble() * (1 + taxRate / 100));
+		// double display = NumberUtil.roundToTwoDigit((tfPriceBase.getDouble()
+		// * (1 - tfDiscountRate.getDouble() / 100)) * (1 + taxRate / 100));
 		return display;
 	}
 
@@ -652,12 +654,10 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	// }
 
 	private void addTaxTreatment() {
-		boolean allSet = true;
 		TaxTreatment treat = new TaxTreatment();
 		if (this.cbTax.getSelectedItem() != null) {
 			treat.setTax((Tax) this.cbTax.getSelectedItem());
 		} else {
-			allSet = false;
 			POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Tax can not be empty!");
 		}
 		// if (this.cbPriceIncluded.getSelectedItem() != null) {
@@ -667,25 +667,23 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		// POSMessageDialog.showError(BackOfficeWindow.getInstance(),
 		// "Choose whether to include this tax in price!");
 		// }
-		if (allSet) {
-			TaxTableModel tableModel = (TaxTableModel) taxTable.getModel();
-			boolean flag = false;
-			if (tableModel.getRows() != null) {
-				for (TaxTreatment t : tableModel.getRows()) {
-					if (t.equals(treat)) {
-						flag = true;
-						break;
-					}
+		TaxTableModel tableModel = (TaxTableModel) taxTable.getModel();
+		boolean flag = false;
+		if (tableModel.getRows() != null) {
+			for (TaxTreatment t : tableModel.getRows()) {
+				if (t.equals(treat)) {
+					flag = true;
+					break;
 				}
 			}
-			if (!flag) {
-				if (tt.contains(treat)) {
-					tt.remove(treat);
-				}
-				tableModel.addItem(treat);
-			} else {
-				POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Duplicate entry!");
+		}
+		if (!flag) {
+			if (tt.contains(treat)) {
+				tt.remove(treat);
 			}
+			tableModel.addItem(treat);
+		} else {
+			POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Duplicate entry!");
 		}
 		taxTable.invalidate();
 	}
@@ -745,9 +743,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tfName.setText(menuItem.getName());
 		tfTransName.setText(menuItem.getTranslatedName());
 		tfBuyPrice.setText(String.valueOf(formatDouble(menuItem.getBuyPrice())));
-		tfDiscountRate.setText(String.valueOf(menuItem.getDiscountRate()));
-		tfPriceBase.setText(String.valueOf(NumberUtil.roundToTwoDigit(menuItem.getPrice())));
-		tfPrice.setText(String.valueOf(calculateDisplayPrice()));
+		// tfDiscountRate.setText(String.valueOf(menuItem.getDiscountRate()));
 
 		chkVisible.setSelected(menuItem.isVisible());
 		cbShowTextWithImage.setSelected(menuItem.isShowImageOnly());
@@ -759,8 +755,11 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		cbGroup.setSelectedItem(menuItem.getParent());
 		cbTax.setSelectedIndex(-1);
 		// cbPriceIncluded.setSelectedIndex(-1);
+		clearTableModel();
 		tt.clear();
 		loadTableData();
+		tfPriceBase.setText(String.valueOf(NumberUtil.roundToTwoDigit(menuItem.getPrice())));
+		tfPrice.setText(String.valueOf(calculateDisplayPrice()));
 
 		if (menuItem.getButtonColor() != null) {
 			Color color = new Color(menuItem.getButtonColor());
@@ -786,7 +785,11 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		MenuItem m = (MenuItem) getBean();
 		TaxTableModel tableModel = (TaxTableModel) this.taxTable.getModel();
 		if (m.getId() != null) {
-			List<TaxTreatment> taxes = m.getTaxList();
+			List<TaxTreatment> taxes = new ArrayList<TaxTreatment>();
+			if (m.getTaxList() != null) {
+				taxes.addAll(m.getTaxList());
+			}
+
 			tableModel.setRows(taxes);
 		}
 	}
@@ -827,10 +830,10 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		menuItem.setButtonColor(btnButtonColor.getBackground().getRGB());
 		menuItem.setTextColor(btnTextColor.getForeground().getRGB());
 
-		try {
-			menuItem.setDiscountRate(Double.parseDouble(tfDiscountRate.getText()));
-		} catch (Exception x) {
-		}
+		// try {
+		// menuItem.setDiscountRate(Double.parseDouble(tfDiscountRate.getText()));
+		// } catch (Exception x) {
+		// }
 		menuItem.setShifts(shiftTableModel.getShifts());
 
 		int tabCount = tabbedPane.getTabCount();

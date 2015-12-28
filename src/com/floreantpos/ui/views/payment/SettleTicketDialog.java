@@ -24,10 +24,10 @@ import com.floreantpos.PosException;
 import com.floreantpos.config.CardConfig;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.CardReader;
+import com.floreantpos.model.CardTransaction;
 import com.floreantpos.model.CashTransaction;
 import com.floreantpos.model.CouponAndDiscount;
 import com.floreantpos.model.CreditCardTransaction;
-import com.floreantpos.model.GiftCertificateTransaction;
 import com.floreantpos.model.Gratuity;
 import com.floreantpos.model.MerchantGateway;
 import com.floreantpos.model.OrderType;
@@ -45,7 +45,6 @@ import com.floreantpos.ui.dialog.CouponAndDiscountDialog;
 import com.floreantpos.ui.dialog.DiscountListDialog;
 import com.floreantpos.ui.dialog.POSDialog;
 import com.floreantpos.ui.dialog.POSMessageDialog;
-import com.floreantpos.ui.dialog.PaymentTypeSelectionDialog;
 import com.floreantpos.ui.dialog.TransactionCompletionDialog;
 import com.floreantpos.ui.views.SwitchboardView;
 import com.floreantpos.ui.views.TicketDetailView;
@@ -209,7 +208,7 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 		}
 	}// GEN-LAST:event_btnViewDiscountsdoViewDiscounts
 
-	public void doSettle() {
+	public void doSettle(PaymentType p) {
 		try {
 			if (ticket == null)
 				return;
@@ -223,36 +222,44 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 
 			// Commented to remove card payment!
 
-			PaymentTypeSelectionDialog dialog = new PaymentTypeSelectionDialog();
-			dialog.setResizable(false);
-			dialog.pack();
-			dialog.open();
-			if (dialog.isCanceled()) {
-				return;
-			}
+			// PaymentTypeSelectionDialog dialog = new
+			// PaymentTypeSelectionDialog();
+			// dialog.setResizable(false);
+			// dialog.pack();
+			// dialog.open();
+			// if (dialog.isCanceled()) {
+			// return;
+			// }
 
-			paymentType = dialog.getSelectedPaymentType();
-			cardName = paymentType.getDisplayString();
+			// paymentType = dialog.getSelectedPaymentType();
+			// cardName = paymentType.getDisplayString();
 
-			paymentType = PaymentType.CASH;
 			PosTransaction transaction = null;
 
-			switch (paymentType) {
+			switch (p) {
 			case CASH:
-				ConfirmPayDialog confirmPayDialog = new ConfirmPayDialog();
-				confirmPayDialog.setAmount(tenderAmount);
-				confirmPayDialog.open();
-
-				if (confirmPayDialog.isCanceled()) {
-					return;
-				}
+				// ConfirmPayDialog confirmPayDialog = new ConfirmPayDialog();
+				// confirmPayDialog.setAmount(tenderAmount);
+				// confirmPayDialog.open();
+				//
+				// if (confirmPayDialog.isCanceled()) {
+				// return;
+				// }
 
 				transaction = new CashTransaction();
-				transaction.setPaymentType(paymentType.name());
+				transaction.setPaymentType(p.name());
 				transaction.setTicket(ticket);
 				transaction.setCaptured(true);
 				setTransactionAmounts(transaction);
+				settleTicket(transaction);
+				break;
 
+			case CARD:
+				transaction = new CardTransaction();
+				transaction.setPaymentType(p.name());
+				transaction.setTicket(ticket);
+				transaction.setCaptured(true);
+				setTransactionAmounts(transaction);
 				settleTicket(transaction);
 				break;
 
@@ -268,39 +275,40 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 				payUsingCard(cardName, tenderAmount);
 				break;
 
-			case GIFT_CERTIFICATE:
-				GiftCertDialog giftCertDialog = new GiftCertDialog(this);
-				giftCertDialog.pack();
-				giftCertDialog.open();
-
-				// Commented to remove card payment!
-				if (dialog.isCanceled())
-					return;
-
-				transaction = new GiftCertificateTransaction();
-				transaction.setPaymentType(PaymentType.GIFT_CERTIFICATE.name());
-				transaction.setTicket(ticket);
-				transaction.setCaptured(true);
-				setTransactionAmounts(transaction);
-
-				double giftCertFaceValue = giftCertDialog.getGiftCertFaceValue();
-				double giftCertCashBackAmount = 0;
-				transaction.setTenderAmount(giftCertFaceValue);
-
-				if (giftCertFaceValue >= ticket.getDueAmount()) {
-					transaction.setAmount(ticket.getDueAmount());
-					giftCertCashBackAmount = giftCertFaceValue - ticket.getDueAmount();
-				} else {
-					transaction.setAmount(giftCertFaceValue);
-				}
-
-				transaction.setGiftCertNumber(giftCertDialog.getGiftCertNumber());
-				transaction.setGiftCertFaceValue(giftCertFaceValue);
-				transaction.setGiftCertPaidAmount(transaction.getAmount());
-				transaction.setGiftCertCashBackAmount(giftCertCashBackAmount);
-
-				settleTicket(transaction);
-				break;
+			// case GIFT_CERTIFICATE:
+			// GiftCertDialog giftCertDialog = new GiftCertDialog(this);
+			// giftCertDialog.pack();
+			// giftCertDialog.open();
+			//
+			// // Commented to remove card payment!
+			// if (dialog.isCanceled())
+			// return;
+			//
+			// transaction = new GiftCertificateTransaction();
+			// transaction.setPaymentType(PaymentType.GIFT_CERTIFICATE.name());
+			// transaction.setTicket(ticket);
+			// transaction.setCaptured(true);
+			// setTransactionAmounts(transaction);
+			//
+			// double giftCertFaceValue = giftCertDialog.getGiftCertFaceValue();
+			// double giftCertCashBackAmount = 0;
+			// transaction.setTenderAmount(giftCertFaceValue);
+			//
+			// if (giftCertFaceValue >= ticket.getDueAmount()) {
+			// transaction.setAmount(ticket.getDueAmount());
+			// giftCertCashBackAmount = giftCertFaceValue -
+			// ticket.getDueAmount();
+			// } else {
+			// transaction.setAmount(giftCertFaceValue);
+			// }
+			//
+			// transaction.setGiftCertNumber(giftCertDialog.getGiftCertNumber());
+			// transaction.setGiftCertFaceValue(giftCertFaceValue);
+			// transaction.setGiftCertPaidAmount(transaction.getAmount());
+			// transaction.setGiftCertCashBackAmount(giftCertCashBackAmount);
+			//
+			// settleTicket(transaction);
+			// break;
 
 			default:
 				break;

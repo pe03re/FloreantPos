@@ -28,6 +28,7 @@
 		<property column="ADVANCE_AMOUNT" length="52" name="advanceAmount" type="java.lang.Double" />
 		<!--tableNumber should be -1 for take out -->
 		<property column="NUMBER_OF_GUESTS" name="numberOfGuests" type="java.lang.Integer" />
+		<property column="TOKEN_NO" name="tokenNo" type="java.lang.Integer" />
 		<property column="STATUS" name="status" type="string" length="30" />
 		<!-- property name="gratuityAmount" type="java.lang.Double" column="GRATUITY_AMOUNT" /> <property name="gratuityPaid" type="java.lang.Boolean" column="GRATUITY_PAID" 
 			/ -->

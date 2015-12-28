@@ -277,15 +277,15 @@ public class ReceiptPrintService {
 		map.put(SHOW_SUBTOTAL, Boolean.valueOf(printProperties.isShowSubtotal()));
 		map.put(SHOW_HEADER_SEPARATOR, Boolean.TRUE);
 		map.put(SHOW_FOOTER, Boolean.valueOf(printProperties.isShowFooter()));
-		if (ticket.getOrderNo() != null) {
-			map.put("orderNo", "Order : " + ticket.getOrderNo());
+		if (ticket.getTokenNo() > 0) {
+			map.put("orderNo", "Token: " + ticket.getTokenNo());
 		}
 		map.put(TERMINAL, POSConstants.RECEIPT_REPORT_TERMINAL_LABEL + Application.getInstance().getTerminal().getId());
 		map.put(CHECK_NO, POSConstants.RECEIPT_REPORT_TICKET_NO_LABEL + ticket.getId());
 		map.put(TABLE_NO, POSConstants.RECEIPT_REPORT_TABLE_NO_LABEL + ticket.getTableNumbers());
 		map.put(GUEST_COUNT, POSConstants.RECEIPT_REPORT_GUEST_NO_LABEL + ticket.getNumberOfGuests());
 		map.put(SERVER_NAME, POSConstants.RECEIPT_REPORT_SERVER_LABEL + ticket.getOwner());
-		String dateString = new SimpleDateFormat("dd-MM-yyyy HH:mm").format((new Date()));
+		String dateString = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(ticket.getCreateDate());
 		map.put(REPORT_DATE, dateString);
 
 		StringBuilder ticketHeaderBuilder = buildTicketHeader(ticket, printProperties);
@@ -294,11 +294,19 @@ public class ReceiptPrintService {
 		map.put("barcode", String.valueOf(ticket.getId()));
 
 		if (printProperties.isShowHeader()) {
-			map.put(HEADER_LINE1, restaurant.getName());
-			map.put(HEADER_LINE2, restaurant.getAddressLine1());
-			map.put(HEADER_LINE3, restaurant.getAddressLine2());
-			map.put(HEADER_LINE4, restaurant.getAddressLine3());
-			map.put(HEADER_LINE5, restaurant.getTelephone());
+			// map.put(HEADER_LINE1, restaurant.getName());
+			if (restaurant.getAddressLine1() != null) {
+				map.put(HEADER_LINE2, restaurant.getAddressLine1());
+			}
+			if (restaurant.getAddressLine2() != null) {
+				map.put(HEADER_LINE3, restaurant.getAddressLine2().trim().length() > 0 ? restaurant.getAddressLine2().trim() : null);
+			}
+			if (restaurant.getAddressLine3() != null) {
+				map.put(HEADER_LINE4, restaurant.getAddressLine3().trim().length() > 0 ? restaurant.getAddressLine3().trim() : null);
+			}
+			if (restaurant.getTelephone() != null) {
+				map.put(HEADER_LINE5, restaurant.getTelephone().trim().length() > 0 ? restaurant.getTelephone().trim() : null);
+			}
 		}
 
 		if (printProperties.isShowFooter()) {
@@ -333,10 +341,17 @@ public class ReceiptPrintService {
 			map.put("netAmount", NumberUtil.formatNumber(NumberUtil.roundOff(totalAmount + roundOff)));
 			map.put("paidAmount", NumberUtil.formatNumber(ticket.getPaidAmount()));
 			map.put("dueAmount", NumberUtil.formatNumber(ticket.getDueAmount()));
-			map.put("roundOff", Double.toString(NumberUtil.roundToTwoDigit(roundOff)));
-			map.put("roundOffText", "Rounding Off");
-
+			if (roundOff != 0) {
+				map.put("roundOff", Double.toString(NumberUtil.roundToTwoDigit(roundOff)));
+				map.put("roundOffText", "Rounding Off");
+			}
 			map.put("grandSubtotal", NumberUtil.formatNumber(ticket.getSubtotalAmount()));
+			if (restaurant.getTicketFeedbackMessage() != null) {
+				map.put("feedback", restaurant.getTicketFeedbackMessage().trim());
+			}
+			if (restaurant.getTicketTINMessage() != null) {
+				map.put("tin", restaurant.getTicketTINMessage().trim());
+			}
 			map.put("footerMessage", restaurant.getTicketFooterMessage());
 			// map.put("copyType", printProperties.getReceiptCopyType());
 			// map.put("tipsText", POSConstants.RECEIPT_REPORT_TIPS_LABEL +

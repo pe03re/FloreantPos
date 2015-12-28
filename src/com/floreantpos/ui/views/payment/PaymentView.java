@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.floreantpos.POSConstants;
 import com.floreantpos.model.Gratuity;
+import com.floreantpos.model.PaymentType;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.dao.TicketDAO;
 import com.floreantpos.swing.PosButton;
@@ -35,7 +36,8 @@ public class PaymentView extends JPanel {
 	// private PosButton btnGratuity;
 	// private PosButton btnDelivery;
 	private com.floreantpos.swing.PosButton btnCancel;
-	private com.floreantpos.swing.PosButton btnFinish;
+	private com.floreantpos.swing.PosButton btnCashFinish;
+	private com.floreantpos.swing.PosButton btnCardFinish;
 	private com.floreantpos.swing.TransparentPanel calcButtonPanel;
 	private javax.swing.JLabel jLabel4;
 	private javax.swing.JLabel jLabel6;
@@ -189,11 +191,19 @@ public class PaymentView extends JPanel {
 		// btnMyKalaDiscount.setText("LOYALTY DISCOUNT");
 		// jPanel4.add(btnMyKalaDiscount, "cell 1 0,growx");
 
-		btnFinish = new com.floreantpos.swing.PosButton(POSConstants.PAY.toUpperCase());
-		actionButtonPanel.add(btnFinish, "span 2, growx, wrap");
-		btnFinish.addActionListener(new java.awt.event.ActionListener() {
+		btnCashFinish = new com.floreantpos.swing.PosButton("PAY BY CASH");
+		actionButtonPanel.add(btnCashFinish, "growx");
+		btnCashFinish.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				doFinish(evt);
+				doFinishCash(evt);
+			}
+		});
+
+		btnCardFinish = new com.floreantpos.swing.PosButton("PAY BY CARD");
+		actionButtonPanel.add(btnCardFinish, "growx, wrap");
+		btnCardFinish.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				doFinishCard(evt);
 			}
 		});
 
@@ -299,9 +309,13 @@ public class PaymentView extends JPanel {
 	protected void doTaxExempt() {
 	}
 
-	private void doFinish(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_doFinish
-		settleTicketView.doSettle();
-	}// GEN-LAST:event_doFinish
+	private void doFinishCash(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_doFinish
+		settleTicketView.doSettle(PaymentType.CASH);
+	}
+
+	private void doFinishCard(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_doFinish
+		settleTicketView.doSettle(PaymentType.CARD);
+	}
 
 	private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnCancelActionPerformed
 		settleTicketView.setCanceled(true);

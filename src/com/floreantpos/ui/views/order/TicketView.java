@@ -51,10 +51,12 @@ import com.floreantpos.model.dao.InventoryWarehouseItemDAO;
 import com.floreantpos.model.dao.MenuItemDAO;
 import com.floreantpos.model.dao.TicketDAO;
 import com.floreantpos.report.ReceiptPrintService;
+import com.floreantpos.swing.IntegerTextField;
 import com.floreantpos.swing.PosButton;
 import com.floreantpos.swing.PosScrollPane;
 import com.floreantpos.ui.dialog.BeanEditorDialog;
 import com.floreantpos.ui.dialog.POSMessageDialog;
+import com.floreantpos.ui.util.TicketUtils;
 import com.floreantpos.ui.views.CashierSwitchBoardView;
 import com.floreantpos.ui.views.CookingInstructionSelectionView;
 import com.floreantpos.ui.views.SwitchboardView;
@@ -135,14 +137,23 @@ public class TicketView extends JPanel {
 		setLayout(new java.awt.BorderLayout(5, 5));
 		jPanel1.setLayout(new BorderLayout(5, 5));
 		ticketAmountPanel.setLayout(new MigLayout("alignx trailing,fill", "[grow][]", "[][][][][][][][]"));
+
+		lblTokenNo = new javax.swing.JLabel();
+		lblTokenNo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+		lblTokenNo.setText("TOKEN NO:");
+		ticketAmountPanel.add(lblTokenNo, "cell 0 1,growx");
+		tfTokenNo = new IntegerTextField(6);
+		tfTokenNo.setHorizontalAlignment(SwingConstants.LEFT);
+		ticketAmountPanel.add(tfTokenNo, "cell 0 2");
+
 		jLabel5 = new javax.swing.JLabel();
 		jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 		jLabel5.setText(com.floreantpos.POSConstants.SUBTOTAL + ":");
-		ticketAmountPanel.add(jLabel5, "cell 0 1,growx,aligny center");
+		ticketAmountPanel.add(jLabel5, "cell 2 1,growx,aligny center");
 		tfSubtotal = new javax.swing.JTextField(10);
 		tfSubtotal.setHorizontalAlignment(SwingConstants.TRAILING);
 		tfSubtotal.setEditable(false);
-		ticketAmountPanel.add(tfSubtotal, "cell 1 1,growx,aligny center");
+		ticketAmountPanel.add(tfSubtotal, "cell 3 1,growx,aligny center");
 
 		// jLabel1 = new javax.swing.JLabel();
 		// jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -159,12 +170,12 @@ public class TicketView extends JPanel {
 		lblTax = new javax.swing.JLabel();
 		lblTax.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 		lblTax.setText(com.floreantpos.POSConstants.TAX + ":");
-		ticketAmountPanel.add(lblTax, "cell 0 3,growx,aligny center");
+		ticketAmountPanel.add(lblTax, "cell 2 3,growx,aligny center");
 		tfTax = new javax.swing.JTextField();
 		tfTax.setHorizontalAlignment(SwingConstants.TRAILING);
 
 		tfTax.setEditable(false);
-		ticketAmountPanel.add(tfTax, "cell 1 3,growx,aligny center");
+		ticketAmountPanel.add(tfTax, "cell 3 3,growx,aligny center");
 
 		// lblServiceCharge = new JLabel();
 		// lblServiceCharge.setText("Service Charge:");
@@ -182,12 +193,12 @@ public class TicketView extends JPanel {
 		jLabel6.setFont(jLabel6.getFont().deriveFont(Font.BOLD, 16));
 		jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 		jLabel6.setText(com.floreantpos.POSConstants.TOTAL + ":");
-		ticketAmountPanel.add(jLabel6, "cell 0 5,growx,aligny center");
+		ticketAmountPanel.add(jLabel6, "cell 2 5,growx,aligny center");
 		tfTotal = new javax.swing.JTextField(10);
 		tfTotal.setFont(tfTotal.getFont().deriveFont(Font.BOLD, 16));
 		tfTotal.setHorizontalAlignment(SwingConstants.TRAILING);
 		tfTotal.setEditable(false);
-		ticketAmountPanel.add(tfTotal, "cell 1 5,growx,aligny center");
+		ticketAmountPanel.add(tfTotal, "cell 3 5,growx,aligny center");
 
 		controlPanel.setLayout(new MigLayout("insets 0, fill, hidemode 3", "fill, grow", ""));
 
@@ -458,7 +469,7 @@ public class TicketView extends JPanel {
 		if (ticket.getTicketItems() == null || ticket.getTicketItems().size() == 0) {
 			throw new PosException(com.floreantpos.POSConstants.TICKET_IS_EMPTY_);
 		}
-
+		ticket.setTokenNo(tfTokenNo.getInteger());
 		ticket.calculatePrice();
 	}
 
@@ -535,6 +546,7 @@ public class TicketView extends JPanel {
 	// private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel lblTax;
 	private javax.swing.JLabel jLabel5;
+	private javax.swing.JLabel lblTokenNo;
 	private javax.swing.JLabel jLabel6;
 	private com.floreantpos.swing.TransparentPanel jPanel1;
 	private com.floreantpos.swing.TransparentPanel jPanel2;
@@ -543,6 +555,7 @@ public class TicketView extends JPanel {
 	private javax.swing.JScrollPane ticketScrollPane;
 	// private javax.swing.JTextField tfDiscount;
 	private javax.swing.JTextField tfSubtotal;
+	private IntegerTextField tfTokenNo;
 	private javax.swing.JTextField tfTax;
 	private javax.swing.JTextField tfTotal;
 	private com.floreantpos.ui.ticket.TicketViewerTable ticketViewerTable;
@@ -608,11 +621,12 @@ public class TicketView extends JPanel {
 		//
 		// tfServiceCharge.setText(NumberUtil.formatNumber(ticket.getServiceCharge()));
 		tfTotal.setText(NumberUtil.formatNumber(ticket.getTotalAmount()));
+		tfTokenNo.setText(String.valueOf(ticket.getTokenNo()));
 
 		if (ticket.getId() == null) {
 			setBorder(BorderFactory.createTitledBorder(null, "Ticket [ NEW ]", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
 		} else {
-			setBorder(BorderFactory.createTitledBorder(null, "Ticket #" + ticket.getId(), TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
+			setBorder(BorderFactory.createTitledBorder(null, "Ticket #" + TicketUtils.getTicketHeader(ticket), TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
 		}
 
 		if (ticket.getType() != null && ticket.getType().getProperties() != null) {

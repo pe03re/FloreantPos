@@ -30,6 +30,8 @@ public class RestaurantConfigurationView extends ConfigurationView {
 	private POSTextField tfCurrencySymbol;
 	private POSTextField tfServiceCharge;
 	private POSTextField tfDefaultGratuity;
+	private POSTextField tfTicketFeedback;
+	private POSTextField tfTicketTIN;
 	private POSTextField tfTicketFooter;
 	private POSTextField tfStartDate;
 	// private DateTimePicker tfEndDate;
@@ -126,18 +128,30 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		JLabel label_1 = new JLabel("%");
 		add(label_1, "cell 2 13");
 
+		JLabel lblTicketFeedbackMessage = new JLabel("Ticket feedback message" + ":");
+		add(lblTicketFeedbackMessage, "cell 0 14,alignx trailing");
+
+		tfTicketFeedback = new POSTextField();
+		add(tfTicketFeedback, "cell 1 14 3 1,growx");
+
+		JLabel lblTicketTINMessage = new JLabel("Ticket TIN and STR details" + ":");
+		add(lblTicketTINMessage, "cell 0 15,alignx trailing");
+
+		tfTicketTIN = new POSTextField();
+		add(tfTicketTIN, "cell 1 15 3 1,growx");
+
 		JLabel lblTicketFooterMessage = new JLabel("Ticket footer message" + ":");
-		add(lblTicketFooterMessage, "cell 0 14,alignx trailing");
+		add(lblTicketFooterMessage, "cell 0 16,alignx trailing");
 
 		tfTicketFooter = new POSTextField();
-		add(tfTicketFooter, "cell 1 14 3 1,growx");
+		add(tfTicketFooter, "cell 1 16 3 1,growx");
 
-		JLabel lblStartTime = new JLabel("Start Time" + ":");
-		add(lblStartTime, "cell 0 15,alignx trailing");
+		JLabel lblStartTime = new JLabel("Counter Reset Time" + ":");
+		add(lblStartTime, "cell 0 17,alignx trailing");
 		lblStartTime.setEnabled(false);
 
 		tfStartDate = new POSTextField();
-		add(tfStartDate, "cell 1 15 3 1,growx");
+		add(tfStartDate, "cell 1 17 3 1,growx");
 		tfStartDate.setEnabled(false);
 
 		// tfEndDate = new DateTimePicker();
@@ -145,10 +159,10 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		// add(tfEndDate, "cell 1 16 3 1,growx");
 
 		JLabel lblStartCounter = new JLabel("Normal Start Counter" + ":");
-		add(lblStartCounter, "cell 0 17,alignx trailing");
+		add(lblStartCounter, "cell 0 18,alignx trailing");
 
 		tfStartCounter = new POSTextField();
-		add(tfStartCounter, "cell 1 17 3 1,growx");
+		add(tfStartCounter, "cell 1 18 3 1,growx");
 
 		// JLabel lblVStartCounter = new JLabel("V Start Counter" + ":");
 		// add(lblVStartCounter, "cell 0 18,alignx trailing");
@@ -230,7 +244,10 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		restaurant.setCurrencySymbol(currencySymbol);
 		restaurant.setServiceChargePercentage(serviceCharge);
 		restaurant.setDefaultGratuityPercentage(gratuityPercentage);
+		restaurant.setTicketFeedbackMessage(tfTicketFeedback.getText());
+		restaurant.setTicketTINMessage(tfTicketTIN.getText());
 		restaurant.setTicketFooterMessage(tfTicketFooter.getText());
+
 		// restaurant.setEndTime(tfEndDate.getDate());
 		restaurant.setStartCounter(Integer.parseInt(tfStartCounter.getText()));
 		// restaurant.setStartVCounter(Integer.parseInt(tfStartVCounter.getText()));
@@ -258,6 +275,8 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		tfCurrencySymbol.setText(restaurant.getCurrencySymbol());
 		tfServiceCharge.setText(String.valueOf(restaurant.getServiceChargePercentage()));
 		tfDefaultGratuity.setText(String.valueOf(restaurant.getDefaultGratuityPercentage()));
+		tfTicketFeedback.setText(restaurant.getTicketFeedbackMessage());
+		tfTicketTIN.setText(restaurant.getTicketTINMessage());
 		tfTicketFooter.setText(restaurant.getTicketFooterMessage());
 		tfStartDate.setText(ft.format(restaurant.getStartTime()));
 		// tfEndDate.setDate(restaurant.getEndTime());

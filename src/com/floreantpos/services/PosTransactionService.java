@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 
 import com.floreantpos.main.Application;
 import com.floreantpos.model.ActionHistory;
+import com.floreantpos.model.CardTransaction;
 import com.floreantpos.model.CashTransaction;
 import com.floreantpos.model.GiftCertificateTransaction;
 import com.floreantpos.model.OrderType;
@@ -56,8 +57,8 @@ public class PosTransactionService {
 				ticket.setClosed(false);
 			}
 
-			transaction.setTransactionType(TransactionType.CREDIT.name());
-			// transaction.setPaymentType(transaction.getPaymentType());
+			// transaction.setTransactionType(TransactionType.CREDIT.name());
+			transaction.setPaymentType(transaction.getPaymentType());
 			transaction.setTerminal(terminal);
 			transaction.setUser(currentUser);
 			transaction.setTransactionTime(currentDate);
@@ -112,6 +113,12 @@ public class PosTransactionService {
 
 			double currentBalance = terminal.getCurrentBalance();
 			double newBalance = currentBalance + transaction.getAmount();
+
+			terminal.setCurrentBalance(newBalance);
+		} else if (transaction instanceof CardTransaction) {
+
+			double currentBalance = terminal.getCurrentBalance();
+			double newBalance = currentBalance - transaction.getAmount();
 
 			terminal.setCurrentBalance(newBalance);
 

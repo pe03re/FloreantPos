@@ -134,7 +134,12 @@ public class MenuItemBrowser extends ModelBrowser<MenuItem> {
 						taxRate += t.getTax().getRate();
 					}
 				}
-				return "Rs " + formatDouble(item.getPrice() * (1 + taxRate / 100));
+				if (item.getDiscountRate() < 0) {
+					return "Rs " + formatDouble(item.getPrice() * (1 + taxRate / 100));
+				} else {
+					double discAmt = item.getPrice() * item.getDiscountRate() / 100;
+					return "Rs " + formatDouble((item.getPrice() - discAmt) * (1 + taxRate / 100));
+				}
 			case 4:
 				return "Rs " + formatDouble(item.getBuyPrice());
 			case 5:

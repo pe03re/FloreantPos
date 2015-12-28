@@ -16,6 +16,8 @@ public abstract class BaseRestaurant implements Comparable, Serializable {
 	public static String REF = "Restaurant";
 	public static String PROP_ITEM_PRICE_INCLUDES_TAX = "itemPriceIncludesTax";
 	public static String PROP_TELEPHONE = "telephone";
+	public static String PROP_TICKET_FEEDBACK_MESSAGE = "ticketFeedbackMessage";
+	public static String PROP_TICKET_TIN_MESSAGE = "ticketTINMessage";
 	public static String PROP_TICKET_FOOTER_MESSAGE = "ticketFooterMessage";
 	public static String PROP_SERVICE_CHARGE_PERCENTAGE = "serviceChargePercentage";
 	public static String PROP_UNIQUE_ID = "uniqueId";
@@ -70,6 +72,25 @@ public abstract class BaseRestaurant implements Comparable, Serializable {
 	protected java.lang.String currencySymbol;
 	protected java.lang.Double serviceChargePercentage;
 	protected java.lang.Double defaultGratuityPercentage;
+	protected java.lang.String ticketFeedbackMessage;
+
+	public java.lang.String getTicketFeedbackMessage() {
+		return ticketFeedbackMessage;
+	}
+
+	public void setTicketFeedbackMessage(java.lang.String ticketFeedbackMessage) {
+		this.ticketFeedbackMessage = ticketFeedbackMessage;
+	}
+
+	public java.lang.String getTicketTINMessage() {
+		return ticketTINMessage;
+	}
+
+	public void setTicketTINMessage(java.lang.String ticketTINMessage) {
+		this.ticketTINMessage = ticketTINMessage;
+	}
+
+	protected java.lang.String ticketTINMessage;
 	protected java.lang.String ticketFooterMessage;
 	protected java.lang.Boolean itemPriceIncludesTax;
 	protected Date startTime;

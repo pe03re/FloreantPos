@@ -105,14 +105,14 @@ public abstract class BaseTicket implements Comparable, Serializable {
 	protected java.lang.Boolean customerWillPickup;
 	protected java.lang.String extraDeliveryInfo;
 	protected java.lang.String ticketType;
-	protected java.lang.String orderNo;
+	protected java.lang.Integer tokenNo;
 
-	public java.lang.String getOrderNo() {
-		return orderNo;
+	public java.lang.Integer getTokenNo() {
+		return tokenNo;
 	}
 
-	public void setOrderNo(java.lang.String orderNo) {
-		this.orderNo = orderNo;
+	public void setTokenNo(java.lang.Integer tokenNo) {
+		this.tokenNo = tokenNo;
 	}
 
 	// many to one

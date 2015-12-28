@@ -71,6 +71,9 @@
 
 		<subclass discriminator-value="CASH" name="com.floreantpos.model.CashTransaction">
 		</subclass>
+		
+		<subclass discriminator-value="CARD" name="com.floreantpos.model.CardTransaction">
+		</subclass>
 
 		<subclass discriminator-value="GIFT_CERT" name="com.floreantpos.model.GiftCertificateTransaction">
 		</subclass>

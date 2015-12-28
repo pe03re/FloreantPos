@@ -3,10 +3,8 @@ package com.floreantpos.model;
 import com.floreantpos.config.CardConfig;
 
 public enum PaymentType {
-	CASH("CASH"), DEBIT_VISA("Visa", "visa_card.png"), DEBIT_MASTER_CARD("MasterCard", "master_card.png"), 
-	CREDIT_VISA("Visa", "visa_card.png"), CREDIT_MASTER_CARD("MasterCard", "master_card.png"), 
-	CREDIT_AMEX("Amex", "am_ex_card.png"), CREDIT_DISCOVERY("Discover", "discover_card.png"), 
-	GIFT_CERTIFICATE("GIFT CERTIFICATE");
+	CASH("CASH"), CARD("CARD"), DEBIT_VISA("Visa", "visa_card.png"), DEBIT_MASTER_CARD("MasterCard", "master_card.png"), CREDIT_VISA("Visa", "visa_card.png"), CREDIT_MASTER_CARD("MasterCard",
+			"master_card.png"), CREDIT_AMEX("Amex", "am_ex_card.png"), CREDIT_DISCOVERY("Discover", "discover_card.png"), GIFT_CERTIFICATE("GIFT CERTIFICATE");
 
 	private String displayString;
 	private String imageFile;
@@ -40,7 +38,7 @@ public enum PaymentType {
 	public void setImageFile(String imageFile) {
 		this.imageFile = imageFile;
 	};
-	
+
 	public boolean isSupported() {
 		switch (this) {
 		case CASH:
@@ -50,33 +48,33 @@ public enum PaymentType {
 			return CardConfig.isSwipeCardSupported() || CardConfig.isManualEntrySupported() || CardConfig.isExtTerminalSupported();
 		}
 	}
-	
+
 	public PosTransaction createTransaction() {
 		PosTransaction transaction = null;
 		switch (this) {
-			case CREDIT_VISA:
-			case CREDIT_AMEX:
-			case CREDIT_DISCOVERY:
-			case CREDIT_MASTER_CARD:
-				transaction = new CreditCardTransaction();
-				transaction.setAuthorizable(true);
-				break;
-				
-			case DEBIT_MASTER_CARD:
-			case DEBIT_VISA:
-				transaction = new DebitCardTransaction();
-				transaction.setAuthorizable(true);
-				break;
-				
-			case GIFT_CERTIFICATE:
-				transaction = new GiftCertificateTransaction();
-				break;
-				
-			default:
-				transaction = new CashTransaction();
-				break;
+		case CREDIT_VISA:
+		case CREDIT_AMEX:
+		case CREDIT_DISCOVERY:
+		case CREDIT_MASTER_CARD:
+			transaction = new CreditCardTransaction();
+			transaction.setAuthorizable(true);
+			break;
+
+		case DEBIT_MASTER_CARD:
+		case DEBIT_VISA:
+			transaction = new DebitCardTransaction();
+			transaction.setAuthorizable(true);
+			break;
+
+		case GIFT_CERTIFICATE:
+			transaction = new GiftCertificateTransaction();
+			break;
+
+		default:
+			transaction = new CashTransaction();
+			break;
 		}
-		
+
 		transaction.setPaymentType(name());
 		return transaction;
 	}

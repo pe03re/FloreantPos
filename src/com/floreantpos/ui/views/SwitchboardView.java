@@ -56,7 +56,9 @@ import com.floreantpos.swing.POSToggleButton;
 import com.floreantpos.swing.PosButton;
 import com.floreantpos.ui.dialog.NumberSelectionDialog2;
 import com.floreantpos.ui.dialog.POSMessageDialog;
+import com.floreantpos.ui.dialog.TicketSelectionDialog;
 import com.floreantpos.ui.dialog.VoidTicketDialog;
+import com.floreantpos.ui.util.TicketUtils;
 import com.floreantpos.ui.views.order.DefaultOrderServiceExtension;
 import com.floreantpos.ui.views.order.OrderController;
 import com.floreantpos.ui.views.order.OrderView;
@@ -484,7 +486,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 	private void doReopenTicket() {
 		try {
 
-			int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
+			int ticketId = NumberSelectionDialog2.takeIntInput("Enter ticket id");
 
 			if (ticketId == -1) {
 				return;
@@ -535,8 +537,13 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			if (selectedTickets.size() > 0) {
 				ticket = selectedTickets.get(0);
 			} else {
-				int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
-				if (ticketId == -1) {
+				// int ticketId =
+				// NumberSelectionDialog2.takeIntInput("Enter ticket id");
+				// if (ticketId == -1) {
+				// return;
+				// }
+				String ticketId = TicketSelectionDialog.takeTicketInput("Enter ticket id", TicketUtils.getTicketPrefix());
+				if (ticketId == null) {
 					return;
 				}
 				ticket = TicketService.getTicket(ticketId);
@@ -594,8 +601,13 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			if (selectedTickets.size() > 0) {
 				ticket = selectedTickets.get(0);
 			} else {
-				int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
-				if (ticketId == -1) {
+				// int ticketId =
+				// NumberSelectionDialog2.takeIntInput("Enter ticket id");
+				// if (ticketId == -1) {
+				// return;
+				// }
+				String ticketId = TicketSelectionDialog.takeTicketInput("Enter ticket id", TicketUtils.getTicketPrefix());
+				if (ticketId == null) {
 					return;
 				}
 				ticket = TicketService.getTicket(ticketId);
@@ -647,10 +659,16 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			if (selectedTickets.size() > 0) {
 				ticket = selectedTickets.get(0);
 			} else {
-				int ticketId = NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
-				if (ticketId == -1) {
+				// int ticketId =
+				// NumberSelectionDialog2.takeIntInput("Enter or scan ticket id");
+				// if (ticketId == -1) {
+				// return;
+				// }
+				String ticketId = TicketSelectionDialog.takeTicketInput("Enter ticket id", TicketUtils.getTicketPrefix());
+				if (ticketId == null) {
 					return;
 				}
+
 				ticket = TicketService.getTicket(ticketId);
 			}
 
