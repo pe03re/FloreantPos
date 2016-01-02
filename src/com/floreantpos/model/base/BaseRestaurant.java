@@ -36,6 +36,7 @@ public abstract class BaseRestaurant implements Comparable, Serializable {
 	public static String PROP_END_TIME = "endTime";
 	public static String PROP_START_COUNTER = "startCounter";
 	public static String PROP_START_V_COUNTER = "startVCounter";
+	public static String PROP_TICKET_HISTORY = "ticketHistory";
 
 	// constructors
 	public BaseRestaurant() {
@@ -94,6 +95,18 @@ public abstract class BaseRestaurant implements Comparable, Serializable {
 	protected java.lang.String ticketFooterMessage;
 	protected java.lang.Boolean itemPriceIncludesTax;
 	protected Date startTime;
+	protected Date endTime;
+	protected java.lang.Integer startCounter;
+	protected java.lang.Integer startVCounter;
+	protected java.lang.Integer ticketHistory;
+
+	public java.lang.Integer getTicketHistory() {
+		return ticketHistory;
+	}
+
+	public void setTicketHistory(java.lang.Integer ticketHistory) {
+		this.ticketHistory = ticketHistory;
+	}
 
 	public Date getStartTime() {
 		return startTime;
@@ -126,10 +139,6 @@ public abstract class BaseRestaurant implements Comparable, Serializable {
 	public void setStartVCounter(java.lang.Integer startVCounter) {
 		this.startVCounter = startVCounter;
 	}
-
-	protected Date endTime;
-	protected java.lang.Integer startCounter;
-	protected java.lang.Integer startVCounter;
 
 	/**
 	 * Return the unique identifier of this class

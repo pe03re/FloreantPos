@@ -115,7 +115,7 @@ public class ReceiptPrintService {
 	public static void printTicket(Ticket ticket) {
 		try {
 
-			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketHeader(ticket), true, true, true);
+			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);
 			printProperties.setPrintCookingInstructions(false);
 			HashMap map = populateTicketProperties(ticket, printProperties, null);
 
@@ -132,7 +132,7 @@ public class ReceiptPrintService {
 	public static void printLastTicket(Ticket ticket) {
 		try {
 
-			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketHeader(ticket), true, true, true);
+			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);
 			printProperties.setPrintCookingInstructions(false);
 			HashMap map = populateTicketProperties(ticket, printProperties, null);
 
@@ -174,7 +174,7 @@ public class ReceiptPrintService {
 		try {
 			Ticket ticket = transaction.getTicket();
 
-			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketHeader(ticket), true, true, true);
+			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);
 			printProperties.setPrintCookingInstructions(false);
 			HashMap map = populateTicketProperties(ticket, printProperties, transaction);
 
@@ -277,7 +277,7 @@ public class ReceiptPrintService {
 		map.put(SHOW_SUBTOTAL, Boolean.valueOf(printProperties.isShowSubtotal()));
 		map.put(SHOW_HEADER_SEPARATOR, Boolean.TRUE);
 		map.put(SHOW_FOOTER, Boolean.valueOf(printProperties.isShowFooter()));
-		if (ticket.getTokenNo() > 0) {
+		if (ticket.getTokenNo() != null && ticket.getTokenNo() > 0) {
 			map.put("orderNo", "Token: " + ticket.getTokenNo());
 		}
 		map.put(TERMINAL, POSConstants.RECEIPT_REPORT_TERMINAL_LABEL + Application.getInstance().getTerminal().getId());
@@ -548,13 +548,22 @@ public class ReceiptPrintService {
 		map.put(SHOW_HEADER_SEPARATOR, Boolean.TRUE);
 		map.put(SHOW_HEADER_SEPARATOR, Boolean.TRUE);
 		map.put(CHECK_NO, POSConstants.RECEIPT_REPORT_TICKET_NO_LABEL + ticket.getTicketId());
-		if (ticket.getTableNumbers() != null) {
-			map.put(TABLE_NO, POSConstants.RECEIPT_REPORT_TABLE_NO_LABEL + ticket.getTableNumbers());
-		}
+		// if (ticket.getTableNumbers() != null) {
+		// map.put(TABLE_NO, POSConstants.RECEIPT_REPORT_TABLE_NO_LABEL +
+		// ticket.getTableNumbers());
+		// }
 		// map.put(GUEST_COUNT, POSConstants.RECEIPT_REPORT_GUEST_NO_LABEL +
 		// ticket.getNumberOfGuests());
+		// map.put(SERVER_NAME, POSConstants.RECEIPT_REPORT_SERVER_LABEL +
+		// ticket.getServerName());
+
 		map.put(SERVER_NAME, POSConstants.RECEIPT_REPORT_SERVER_LABEL + ticket.getServerName());
-		map.put(REPORT_DATE, Application.formatDate(new Date()));
+		String dateString = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(ticket.getCreateDate());
+		map.put(REPORT_DATE, dateString);
+		map.put("TicketNo", "Ticket: " + ticket.getSerialId());
+		if (ticket.getTokenNo() != null && ticket.getTokenNo() > 0) {
+			map.put("OrderNo", "Token: " + ticket.getTokenNo());
+		}
 
 		map.put("ticketHeader", "KTICHEN RECEIPT");
 
@@ -577,7 +586,7 @@ public class ReceiptPrintService {
 				String deviceName = kitchenTicket.getPrinter().getDeviceName();
 
 				JasperPrint jasperPrint = createKitchenPrint(kitchenTicket);
-				jasperPrint.setName("KitchenReceipt-" + ticket.getId() + "-" + deviceName);
+				jasperPrint.setName("KitchenReceipt-" + ticket.getSerialId());
 				jasperPrint.setProperty("printerName", deviceName);
 
 				// KitchenDisplayWindow.instance.addTicket(kitchenTicket);

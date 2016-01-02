@@ -29,6 +29,10 @@ public class TaxForm extends BeanEditor {
 		setBean(tax);
 	}
 
+	public void setTaxRateEditable(boolean canEdit) {
+		tfRate.setEditable(canEdit);
+	}
+
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 * WARNING: Do NOT modify this code. The content of this method is always

@@ -38,7 +38,7 @@ public class OrderInfoView extends JPanel {
 			JLabel ticketLabel = new JLabel();
 			ticketLabel.setText("#TICKET STATUS: " + TicketUtils.getTicketStatus(ticket));
 
-			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketHeader(ticket), true, true, true);
+			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);
 			HashMap map = ReceiptPrintService.populateTicketProperties(ticket, printProperties, null);
 			JasperPrint jasperPrint = ReceiptPrintService.createGeneralTicketPrint(ticket, map, null);
 

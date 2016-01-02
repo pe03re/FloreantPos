@@ -43,6 +43,7 @@ public class TaxExplorer extends TransparentPanel {
 				try {
 					TaxForm editor = new TaxForm();
 					BeanEditorDialog dialog = new BeanEditorDialog(editor, BackOfficeWindow.getInstance(), true);
+					editor.setTaxRateEditable(true);
 					dialog.open();
 					if (dialog.isCanceled())
 						return;

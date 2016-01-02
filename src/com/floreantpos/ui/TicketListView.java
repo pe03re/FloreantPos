@@ -37,13 +37,14 @@ public class TicketListView extends JPanel {
 
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(5);
-		columnModel.getColumn(1).setPreferredWidth(30);
-		columnModel.getColumn(2).setPreferredWidth(250);
-		columnModel.getColumn(3).setPreferredWidth(30);
-		columnModel.getColumn(4).setPreferredWidth(50);
-		columnModel.getColumn(5).setPreferredWidth(10);
+		columnModel.getColumn(1).setPreferredWidth(2);
+		columnModel.getColumn(2).setPreferredWidth(40);
+		columnModel.getColumn(3).setPreferredWidth(250);
+		columnModel.getColumn(4).setPreferredWidth(30);
+		columnModel.getColumn(5).setPreferredWidth(50);
 		columnModel.getColumn(6).setPreferredWidth(10);
-		columnModel.getColumn(7).setPreferredWidth(100);
+		columnModel.getColumn(7).setPreferredWidth(10);
+		columnModel.getColumn(8).setPreferredWidth(80);
 
 		PosScrollPane scrollPane = new PosScrollPane(table, PosScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, PosScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -105,7 +106,7 @@ public class TicketListView extends JPanel {
 
 	private class TicketListTableModel extends ListTableModel {
 		public TicketListTableModel() {
-			super(new String[] { POSConstants.ID, "DATE", "ITEMS", POSConstants.TICKET_TYPE, "STATUS", POSConstants.TOTAL, POSConstants.DUE, "CUSTOMER" });
+			super(new String[] { "TICKET ID", "TOKEN", "DATE", "ITEMS", POSConstants.TICKET_TYPE, "STATUS", POSConstants.TOTAL, POSConstants.DUE, "CUSTOMER" });
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
@@ -113,11 +114,13 @@ public class TicketListView extends JPanel {
 
 			switch (columnIndex) {
 			case 0:
-				return ticket.getSerialId();
+				return ticket.getCreateDate().getDate() + "/" + ticket.getSerialId();
 			case 1:
+				return ticket.getTokenNo();
+			case 2:
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
 				return simpleDateFormat.format(ticket.getCreateDate());
-			case 2:
+			case 3:
 				List<TicketItem> list = ticket.getTicketItems();
 				String items = list.size() + "";
 				int count = 2;
@@ -132,15 +135,18 @@ public class TicketListView extends JPanel {
 				}
 				return items.substring(2);
 
-			case 3:
-				return ticket.getType();
 			case 4:
-				return TicketUtils.getTicketStatus(ticket);
+				return ticket.getType();
 			case 5:
-				return ticket.getTotalAmount();
+				return TicketUtils.getTicketStatus(ticket);
 			case 6:
-				return ticket.getDueAmount();
+				return ticket.getTotalAmount();
 			case 7:
+				return ticket.getDueAmount();
+			case 8:
+				if (ticket.getCustomer() != null) {
+					return ticket.getCustomer().getName();
+				}
 				return "***";
 			}
 

@@ -9,7 +9,7 @@ import com.floreantpos.model.TicketStatus;
 
 public class TicketUtils {
 
-	public static String getTicketHeader(Ticket ticket) {
+	public static String getTicketNumber(Ticket ticket) {
 		String header = "***";
 		Date ticketDate = ticket.getCreateDate();
 		String year = null;

@@ -44,6 +44,11 @@ public class CustomerSelectionDialog extends POSDialog {
 	private PosSmallButton btnInfo;
 
 	protected Customer selectedCustomer;
+
+	public Customer getSelectedCustomer() {
+		return selectedCustomer;
+	}
+
 	private PosSmallButton btnRemoveCustomer;
 
 	private Ticket ticket;
@@ -110,7 +115,9 @@ public class CustomerSelectionDialog extends POSDialog {
 		panel_2.add(scrollPane, BorderLayout.CENTER);
 
 		customerTable = new CustomerTable();
-		customerTable.setModel(new CustomerListTableModel());
+		CustomerListTableModel model = new CustomerListTableModel();
+		model.setPageSize(5);
+		customerTable.setModel(model);
 		customerTable.setFocusable(false);
 		customerTable.setRowHeight(35);
 		customerTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -208,15 +215,24 @@ public class CustomerSelectionDialog extends POSDialog {
 		});
 	}
 
-	private void loadCustomerFromTicket() {
-		String customerIdString = ticket.getProperty(Ticket.CUSTOMER_ID);
-		if (StringUtils.isNotEmpty(customerIdString)) {
-			int customerId = Integer.parseInt(customerIdString);
-			Customer customer = CustomerDAO.getInstance().get(customerId);
+	// private void loadCustomerFromTicket() {
+	// String customerIdString = ticket.getProperty(Ticket.CUSTOMER_ID);
+	// if (StringUtils.isNotEmpty(customerIdString)) {
+	// int customerId = Integer.parseInt(customerIdString);
+	// Customer customer = CustomerDAO.getInstance().get(customerId);
+	//
+	// List<Customer> list = new ArrayList<Customer>();
+	// list.add(customer);
+	// customerTable.setModel(new CustomerListTableModel(list));
+	// }
+	// }
 
+	private void loadCustomerFromTicket() {
+		Customer customer = ticket.getCustomer();
+		if (customer != null) {
 			List<Customer> list = new ArrayList<Customer>();
 			list.add(customer);
-			customerTable.setModel(new CustomerListTableModel(list));
+			((CustomerListTableModel) customerTable.getModel()).setRows(list);
 		}
 	}
 
@@ -233,7 +249,7 @@ public class CustomerSelectionDialog extends POSDialog {
 			return;
 		}
 
-		ticket.removeCustomer();
+		ticket.setCustomer(null);
 		TicketDAO.getInstance().saveOrUpdate(ticket);
 		setCanceled(false);
 		dispose();

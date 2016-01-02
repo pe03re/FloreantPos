@@ -12,112 +12,112 @@ import org.apache.commons.lang.StringUtils;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.base.BaseKitchenTicket;
 import com.floreantpos.model.dao.KitchenTicketDAO;
-
-
+import com.floreantpos.ui.util.TicketUtils;
 
 public class KitchenTicket extends BaseKitchenTicket {
 	private static final long serialVersionUID = 1L;
 
-/*[CONSTRUCTOR MARKER BEGIN]*/
-	public KitchenTicket () {
+	/* [CONSTRUCTOR MARKER BEGIN] */
+	public KitchenTicket() {
 		super();
 	}
 
 	/**
 	 * Constructor for primary key
 	 */
-	public KitchenTicket (java.lang.Integer id) {
+	public KitchenTicket(java.lang.Integer id) {
 		super(id);
 	}
 
-/*[CONSTRUCTOR MARKER END]*/
-	
+	/* [CONSTRUCTOR MARKER END] */
+
 	public OrderType getType() {
 		String type = getTicketType();
-		
-		if(StringUtils.isEmpty(type)) {
+
+		if (StringUtils.isEmpty(type)) {
 			return OrderType.DINE_IN;
 		}
-		
+
 		return OrderType.valueOf(type);
 	}
-	
+
 	public void setType(OrderType type) {
 		setTicketType(type.name());
 	}
-	
+
 	public Printer getPrinter() {
 		PosPrinters printers = Application.getPrinters();
 		VirtualPrinter virtualPrinter = getVirtualPrinter();
-		
-		if(virtualPrinter == null) {
+
+		if (virtualPrinter == null) {
 			return printers.getDefaultKitchenPrinter();
 		}
-		
+
 		return printers.getKitchenPrinterFor(virtualPrinter);
 	}
 
 	public static List<KitchenTicket> fromTicket(Ticket ticket) {
 		Map<Printer, KitchenTicket> itemMap = new HashMap<Printer, KitchenTicket>();
 		List<KitchenTicket> kitchenTickets = new ArrayList<KitchenTicket>(2);
-		
+
 		List<TicketItem> ticketItems = ticket.getTicketItems();
-		if(ticketItems == null) {
+		if (ticketItems == null) {
 			return kitchenTickets;
 		}
-		
+
 		for (TicketItem ticketItem : ticketItems) {
-			if(ticketItem.isPrintedToKitchen() || !ticketItem.isShouldPrintToKitchen()) {
+			if (ticketItem.isPrintedToKitchen() || !ticketItem.isShouldPrintToKitchen()) {
 				continue;
 			}
-			
+
 			Printer printer = ticketItem.getPrinter();
-			if(printer == null) {
+			if (printer == null) {
 				continue;
 			}
-			
+
 			KitchenTicket kitchenTicket = itemMap.get(printer);
-			if(kitchenTicket == null) {
+			if (kitchenTicket == null) {
 				kitchenTicket = new KitchenTicket();
 				kitchenTicket.setVirtualPrinter(ticketItem.getVirtualPrinter());
 				kitchenTicket.setTicketId(ticket.getId());
 				kitchenTicket.setCreateDate(new Date());
 				kitchenTicket.setTicketType(ticket.getTicketType());
-				
-				if(ticket.getTableNumbers() != null) {
+
+				if (ticket.getTableNumbers() != null) {
 					kitchenTicket.setTableNumbers(new ArrayList<String>(ticket.getTableNumbers()));
 				}
-				
+
 				kitchenTicket.setServerName(ticket.getOwner().getFirstName());
 				kitchenTicket.setStatus(KitchenTicketStatus.WAITING.name());
 				kitchenTicket.setVirtualPrinter(printer.getVirtualPrinter());
-				
+				kitchenTicket.setTokenNo(ticket.getTokenNo());
+				kitchenTicket.setSerialId(TicketUtils.getTicketNumber(ticket));
 				KitchenTicketDAO.getInstance().saveOrUpdate(kitchenTicket);
-				
+
 				itemMap.put(printer, kitchenTicket);
 			}
-			
+
 			KitchenTicketItem item = new KitchenTicketItem();
 			item.setMenuItemCode(ticketItem.getItemCode());
 			item.setMenuItemName(ticketItem.getNameDisplay());
 			item.setQuantity(ticketItem.getItemCountDisplay());
 			item.setStatus(KitchenTicketStatus.WAITING.name());
 			kitchenTicket.addToticketItems(item);
-			
+
 			ticketItem.setPrintedToKitchen(true);
-			
+
 			includeModifiers(ticketItem, kitchenTicket);
 			includeCookintInstructions(ticketItem, kitchenTicket);
 		}
-		
+
 		Collection<KitchenTicket> values = itemMap.values();
 		for (KitchenTicket kitchenTicket : values) {
 			kitchenTickets.add(kitchenTicket);
 		}
-		
+
 		return kitchenTickets;
 	}
-	
+
 	private static void includeCookintInstructions(TicketItem ticketItem, KitchenTicket kitchenTicket) {
 		List<TicketItemCookingInstruction> cookingInstructions = ticketItem.getCookingInstructions();
 		if (cookingInstructions != null) {
@@ -149,14 +149,14 @@ public class KitchenTicket extends BaseKitchenTicket {
 						item.setQuantity(itemModifier.getItemCountDisplay());
 						item.setStatus(KitchenTicketStatus.WAITING.name());
 						kitchenTicket.addToticketItems(item);
-						
+
 						itemModifier.setPrintedToKitchen(true);
 					}
 				}
 			}
 		}
 	}
-	
+
 	public static enum KitchenTicketStatus {
 		WAITING, VOID, DONE;
 	}

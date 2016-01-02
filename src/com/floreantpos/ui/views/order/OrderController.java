@@ -132,7 +132,7 @@ public class OrderController implements OrderListener, CategorySelectionListener
 		}
 	}
 
-	public static void assignOrderNumber(Ticket ticket) {
+	public static void assignTicketNumber(Ticket ticket) {
 		String serialID = "";
 		int startCounter = 1;
 		RestaurantDAO resDAO = RestaurantDAO.getInstance();

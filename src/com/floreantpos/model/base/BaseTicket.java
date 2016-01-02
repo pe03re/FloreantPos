@@ -46,6 +46,7 @@ public abstract class BaseTicket implements Comparable, Serializable {
 	public static String PROP_TAX_EXEMPT = "taxExempt";
 	public static String PROP_ID = "id";
 	public static String PROP_SERIAL_ID = "serialId";
+	public static String PROP_CUSTOMER_ID = "customerId";
 	public static String PROP_WASTED = "wasted";
 	public static String PROP_VOIDED = "voided";
 	public static String PROP_TOTAL_AMOUNT = "totalAmount";
@@ -117,6 +118,7 @@ public abstract class BaseTicket implements Comparable, Serializable {
 
 	// many to one
 	private com.floreantpos.model.Shift shift;
+	private com.floreantpos.model.Customer customer;
 	private com.floreantpos.model.User owner;
 	private com.floreantpos.model.User assignedDriver;
 	private com.floreantpos.model.Gratuity gratuity;
@@ -897,6 +899,14 @@ public abstract class BaseTicket implements Comparable, Serializable {
 
 	public String toString() {
 		return super.toString();
+	}
+
+	public com.floreantpos.model.Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(com.floreantpos.model.Customer customer) {
+		this.customer = customer;
 	}
 
 }

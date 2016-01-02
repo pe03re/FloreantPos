@@ -203,6 +203,21 @@ public class TicketDAO extends BaseTicketDAO {
 		}
 	}
 
+	public List<Ticket> findLastNTickets(int n) {
+		Session session = null;
+
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.addOrder(Order.desc(Ticket.PROP_ID));
+			criteria.setMaxResults(n);
+			List list = criteria.list();
+			return list;
+		} finally {
+			closeSession(session);
+		}
+	}
+
 	public List<Ticket> findOpenTicketsForUser(User user) {
 		Session session = null;
 

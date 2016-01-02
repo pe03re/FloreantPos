@@ -138,13 +138,17 @@ public class TicketView extends JPanel {
 		jPanel1.setLayout(new BorderLayout(5, 5));
 		ticketAmountPanel.setLayout(new MigLayout("alignx trailing,fill", "[grow][]", "[][][][][][][][]"));
 
+		lblCustomerName = new javax.swing.JLabel();
+		lblCustomerName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+		lblCustomerName.setText("CUSTOMER: ");
+		ticketAmountPanel.add(lblCustomerName, "cell 0 1,growx");
 		lblTokenNo = new javax.swing.JLabel();
 		lblTokenNo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 		lblTokenNo.setText("TOKEN NO:");
-		ticketAmountPanel.add(lblTokenNo, "cell 0 1,growx");
+		ticketAmountPanel.add(lblTokenNo, "cell 0 3,growx");
 		tfTokenNo = new IntegerTextField(6);
 		tfTokenNo.setHorizontalAlignment(SwingConstants.LEFT);
-		ticketAmountPanel.add(tfTokenNo, "cell 0 2");
+		ticketAmountPanel.add(tfTokenNo, "cell 0 4");
 
 		jLabel5 = new javax.swing.JLabel();
 		jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -424,13 +428,13 @@ public class TicketView extends JPanel {
 				ticketDAO.refresh(ticket);
 			}
 
+			OrderController.assignTicketNumber(ticket);
+			OrderController.saveOrder(ticket);
+
 			if (ticket.needsKitchenPrint()) {
 				ReceiptPrintService.printToKitchen(ticket);
 				ticketDAO.refresh(ticket);
 			}
-			OrderController.assignOrderNumber(ticket);
-			OrderController.saveOrder(ticket);
-
 			closeView(false);
 
 		} catch (StaleObjectStateException e) {
@@ -477,7 +481,7 @@ public class TicketView extends JPanel {
 		try {
 			updateModel();
 			updateInventory(ticket);
-			OrderController.assignOrderNumber(ticket);
+			OrderController.assignTicketNumber(ticket);
 			OrderController.saveOrder(ticket);
 
 			firePayOrderSelected();
@@ -547,6 +551,7 @@ public class TicketView extends JPanel {
 	private javax.swing.JLabel lblTax;
 	private javax.swing.JLabel jLabel5;
 	private javax.swing.JLabel lblTokenNo;
+	private javax.swing.JLabel lblCustomerName;
 	private javax.swing.JLabel jLabel6;
 	private com.floreantpos.swing.TransparentPanel jPanel1;
 	private com.floreantpos.swing.TransparentPanel jPanel2;
@@ -621,12 +626,17 @@ public class TicketView extends JPanel {
 		//
 		// tfServiceCharge.setText(NumberUtil.formatNumber(ticket.getServiceCharge()));
 		tfTotal.setText(NumberUtil.formatNumber(ticket.getTotalAmount()));
+		if (ticket.getCustomer() != null) {
+			lblCustomerName.setText("CUSTOMER: " + ticket.getCustomer().getName());
+		} else {
+			lblCustomerName.setText("CUSTOMER: ");
+		}
 		tfTokenNo.setText(String.valueOf(ticket.getTokenNo()));
 
 		if (ticket.getId() == null) {
 			setBorder(BorderFactory.createTitledBorder(null, "Ticket [ NEW ]", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
 		} else {
-			setBorder(BorderFactory.createTitledBorder(null, "Ticket #" + TicketUtils.getTicketHeader(ticket), TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
+			setBorder(BorderFactory.createTitledBorder(null, "Ticket #" + TicketUtils.getTicketNumber(ticket), TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
 		}
 
 		if (ticket.getType() != null && ticket.getType().getProperties() != null) {

@@ -136,6 +136,7 @@ public class OthersView extends JPanel {
 		CustomerSelectionDialog dialog = new CustomerSelectionDialog(getCurrentTicket());
 		dialog.setSize(800, 650);
 		dialog.open();
+		OrderView.getInstance().getTicketView().updateView();
 	}
 
 	private void doInsertMisc(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_doInsertMisc

@@ -551,15 +551,15 @@ public class Ticket extends BaseTicket {
 		return s;
 	}
 
-	public void setCustomer(Customer customer) {
-		addProperty(Ticket.CUSTOMER_ID, String.valueOf(customer.getAutoId()));
-		addProperty(Ticket.CUSTOMER_NAME, customer.getName());
-		addProperty(Ticket.CUSTOMER_PHONE, customer.getTelephoneNo());
-	}
-
-	public void removeCustomer() {
-		removeProperty(CUSTOMER_ID);
-		removeProperty(CUSTOMER_NAME);
-		removeProperty(CUSTOMER_PHONE);
-	}
+	// public void setCustomer(Customer customer) {
+	// addProperty(Ticket.CUSTOMER_ID, String.valueOf(customer.getAutoId()));
+	// addProperty(Ticket.CUSTOMER_NAME, customer.getName());
+	// addProperty(Ticket.CUSTOMER_PHONE, customer.getTelephoneNo());
+	// }
+	//
+	// public void removeCustomer() {
+	// removeProperty(CUSTOMER_ID);
+	// removeProperty(CUSTOMER_NAME);
+	// removeProperty(CUSTOMER_PHONE);
+	// }
 }

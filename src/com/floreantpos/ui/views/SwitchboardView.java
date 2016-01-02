@@ -46,10 +46,12 @@ import com.floreantpos.extension.OrderServiceExtension;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.OrderType;
 import com.floreantpos.model.OrderTypeProperties;
+import com.floreantpos.model.Restaurant;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.User;
 import com.floreantpos.model.UserPermission;
 import com.floreantpos.model.UserType;
+import com.floreantpos.model.dao.RestaurantDAO;
 import com.floreantpos.model.dao.TicketDAO;
 import com.floreantpos.services.TicketService;
 import com.floreantpos.swing.POSToggleButton;
@@ -796,18 +798,28 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			// ticketListUpdateTimer.stop();
 			Application.getPosWindow().setGlassPaneVisible(true);
 
-			User user = Application.getCurrentUser();
+			// User user = Application.getCurrentUser();
 
 			TicketDAO dao = TicketDAO.getInstance();
-			List<Ticket> openTickets = null;
 
-			if (user.canViewAllOpenTickets()) {
-				openTickets = dao.findOpenTickets();
-			} else {
-				openTickets = dao.findOpenTicketsForUser(user);
-			}
-			openTicketList.setTickets(openTickets);
+			// List<Ticket> openTickets = null;
+			//
+			// if (user.canViewAllOpenTickets()) {
+			// openTickets = dao.findOpenTickets();
+			// } else {
+			// openTickets = dao.findOpenTicketsForUser(user);
+			// }
+			// openTicketList.setTickets(openTickets);
 
+			// For now show last N (ticketHistory) tickets.
+			List<Ticket> lastTickets = null;
+
+			RestaurantDAO resDao = RestaurantDAO.getInstance();
+			Restaurant res = resDao.findAll().get(0);
+
+			lastTickets = dao.findLastNTickets(res.getTicketHistory());
+
+			openTicketList.setTickets(lastTickets);
 		} catch (Exception e) {
 			POSMessageDialog.showError(this, "Error getting open ticket list", e);
 		} finally {

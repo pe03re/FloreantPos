@@ -30,7 +30,6 @@ import com.floreantpos.model.CouponAndDiscount;
 import com.floreantpos.model.CreditCardTransaction;
 import com.floreantpos.model.Gratuity;
 import com.floreantpos.model.MerchantGateway;
-import com.floreantpos.model.OrderType;
 import com.floreantpos.model.PaymentType;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.Restaurant;
@@ -215,10 +214,10 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 
 			tenderAmount = paymentView.getTenderedAmount();
 
-			if (ticket.getType() == OrderType.BAR_TAB) {
-				doSettleBarTabTicket(ticket);
-				return;
-			}
+			// if (ticket.getType() == OrderType.BAR_TAB) {
+			// doSettleBarTabTicket(ticket);
+			// return;
+			// }
 
 			// Commented to remove card payment!
 

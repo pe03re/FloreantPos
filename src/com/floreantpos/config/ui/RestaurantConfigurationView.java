@@ -36,6 +36,7 @@ public class RestaurantConfigurationView extends ConfigurationView {
 	private POSTextField tfStartDate;
 	// private DateTimePicker tfEndDate;
 	private POSTextField tfStartCounter;
+	private POSTextField tfTicketHistory;
 	// private POSTextField tfStartVCounter;
 	private JTextField tfZipCode;
 	private final SimpleDateFormat ft = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
@@ -146,7 +147,7 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		tfTicketFooter = new POSTextField();
 		add(tfTicketFooter, "cell 1 16 3 1,growx");
 
-		JLabel lblStartTime = new JLabel("Counter Reset Time" + ":");
+		JLabel lblStartTime = new JLabel("Last Counter Reset Time" + ":");
 		add(lblStartTime, "cell 0 17,alignx trailing");
 		lblStartTime.setEnabled(false);
 
@@ -158,11 +159,18 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		// tfEndDate.setFormats("dd-MM-yyyy HH:mm");
 		// add(tfEndDate, "cell 1 16 3 1,growx");
 
-		JLabel lblStartCounter = new JLabel("Normal Start Counter" + ":");
+		JLabel lblStartCounter = new JLabel("Today's Ticket Count" + ":");
 		add(lblStartCounter, "cell 0 18,alignx trailing");
 
 		tfStartCounter = new POSTextField();
 		add(tfStartCounter, "cell 1 18 3 1,growx");
+		tfStartCounter.setEditable(false);
+
+		JLabel lblTicketHistory = new JLabel("Ticket History" + ":");
+		add(lblTicketHistory, "cell 0 19,alignx trailing");
+
+		tfTicketHistory = new POSTextField();
+		add(tfTicketHistory, "cell 1 19 3 1,growx");
 
 		// JLabel lblVStartCounter = new JLabel("V Start Counter" + ":");
 		// add(lblVStartCounter, "cell 0 18,alignx trailing");
@@ -251,6 +259,7 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		// restaurant.setEndTime(tfEndDate.getDate());
 		restaurant.setStartCounter(Integer.parseInt(tfStartCounter.getText()));
 		// restaurant.setStartVCounter(Integer.parseInt(tfStartVCounter.getText()));
+		restaurant.setTicketHistory(Integer.parseInt(tfTicketHistory.getText()));
 
 		dao.saveOrUpdate(restaurant);
 
@@ -282,6 +291,7 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		// tfEndDate.setDate(restaurant.getEndTime());
 		tfStartCounter.setText(restaurant.getStartCounter().toString());
 		// tfStartVCounter.setText(restaurant.getStartVCounter().toString());
+		tfTicketHistory.setText(restaurant.getTicketHistory().toString());
 
 		setInitialized(true);
 	}

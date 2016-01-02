@@ -60,7 +60,7 @@ public class RefundAction extends PosAction {
 
 			ticket = TicketDAO.getInstance().loadFullTicket(ticket.getId());
 
-			message = "<html>" + "Ticket #" + TicketUtils.getTicketHeader(ticket) + "<br/>Total paid " + ticket.getPaidAmount();
+			message = "<html>" + "Ticket #" + TicketUtils.getTicketNumber(ticket) + "<br/>Total paid " + ticket.getPaidAmount();
 
 			if (ticket.getGratuity() != null) {
 				message += ", including tips " + ticket.getGratuity().getAmount();
