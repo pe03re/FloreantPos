@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <printers>
+    <defaultKitchenPrinter>
+        <defaultPrinter>false</defaultPrinter>
+        <deviceName>CutePDF Writer</deviceName>
+        <virtualPrinter>
+            <name>Kitchen Printer</name>
+        </virtualPrinter>
+    </defaultKitchenPrinter>
+    <kitchenPrinters>
+        <defaultPrinter>false</defaultPrinter>
+        <deviceName>CutePDF Writer</deviceName>
+        <virtualPrinter>
+            <name>Kitchen Printer</name>
+        </virtualPrinter>
+    </kitchenPrinters>
     <receiptPrinter>CutePDF Writer</receiptPrinter>
     <reportPrinter>CutePDF Writer</reportPrinter>
 </printers>

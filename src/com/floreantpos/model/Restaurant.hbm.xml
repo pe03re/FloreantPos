@@ -26,5 +26,6 @@
     <property column="END_TIME" name="endTime" type="timestamp"/>
     <property column="START_COUNTER" name="startCounter" type="java.lang.Integer"/>
     <property column="START_V_COUNTER" name="startVCounter" type="java.lang.Integer"/>
+    <property column="TICKET_HISTORY" name="ticketHistory" type= "java.lang.Integer"/>
   </class>
 </hibernate-mapping>
