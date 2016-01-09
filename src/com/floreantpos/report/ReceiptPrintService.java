@@ -332,7 +332,7 @@ public class ReceiptPrintService {
 
 			map.put("netAmountText", POSConstants.RECEIPT_REPORT_NETAMOUNT_LABEL);
 			map.put("paidAmountText", POSConstants.RECEIPT_REPORT_PAIDAMOUNT_LABEL);
-			map.put("dueAmountText", POSConstants.RECEIPT_REPORT_DUEAMOUNT_LABEL);
+			map.put("dueAmountText", POSConstants.RECEIPT_REPORT_DUEAMOUNT_LABEL.trim());
 			
 
 			map.put("totalAmount", NumberUtil.formatNumber(totalAmount));

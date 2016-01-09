@@ -23,9 +23,9 @@ public class TransactionCompletionDialog extends POSDialog {
 	private double gratuityAmount;
 	private double changeAmount;
 
-	private JLabel lblTenderedAmount;
-	private JLabel lblTotalAmount;
-	private JLabel lblPaidAmount;
+//	private JLabel lblTenderedAmount;
+//	private JLabel lblTotalAmount;
+//	private JLabel lblPaidAmount;
 	private JLabel lblDueAmount;
 	private JLabel lblChangeDue;
 	//private JLabel lblGratuityAmount;
@@ -41,25 +41,25 @@ public class TransactionCompletionDialog extends POSDialog {
 
 		setLayout(new MigLayout("align 50% 0%, ins 20", "[]20[]", ""));
 
-		add(createLabel("TOTAL AMOUNT" + ":", JLabel.LEFT), "grow");
-		lblTotalAmount = createLabel("0.0", JLabel.RIGHT);
-		add(lblTotalAmount, "span, grow");
-
-		add(createLabel("TENDERED AMOUNT" + ":", JLabel.LEFT), "newline,grow");
-		lblTenderedAmount = createLabel("0.0", JLabel.RIGHT);
-		add(lblTenderedAmount, "span, grow");
-
-		add(new JSeparator(), "newline,span, grow");
-
-		add(createLabel("PAID AMOUNT" + ":", JLabel.LEFT), "newline,grow");
-		lblPaidAmount = createLabel("0.0", JLabel.RIGHT);
-		add(lblPaidAmount, "span, grow");
+//		add(createLabel("TOTAL AMOUNT" + ":", JLabel.LEFT), "grow");
+//		lblTotalAmount = createLabel("0.0", JLabel.RIGHT);
+//		add(lblTotalAmount, "span, grow");
+//
+//		add(createLabel("TENDERED AMOUNT" + ":", JLabel.LEFT), "newline,grow");
+//		lblTenderedAmount = createLabel("0.0", JLabel.RIGHT);
+//		add(lblTenderedAmount, "span, grow");
+//
+//		add(new JSeparator(), "newline,span, grow");
+//
+//		add(createLabel("PAID AMOUNT" + ":", JLabel.LEFT), "newline,grow");
+//		lblPaidAmount = createLabel("0.0", JLabel.RIGHT);
+//		add(lblPaidAmount, "span, grow");
 
 		add(createLabel("DUE AMOUNT" + ":", JLabel.LEFT), "newline,grow");
 		lblDueAmount = createLabel("0.0", JLabel.RIGHT);
 		add(lblDueAmount, "span, grow");
 
-		add(new JSeparator(), "newline,span, grow");
+		//add(new JSeparator(), "newline,span, grow");
 
 //		add(createLabel("GRATUITY AMOUNT" + ":", JLabel.LEFT), "newline,grow");
 //		lblGratuityAmount = createLabel("0.0", JLabel.RIGHT);
@@ -110,7 +110,7 @@ public class TransactionCompletionDialog extends POSDialog {
 		// });
 
 		JPanel p = new JPanel();
-		p.add(btnClose, "skip, h 50");
+		p.add(btnClose, "skip, h 25 w 25");
 
 		// if (completedTransaction.isCard()) {
 		// p.add(btnPrintAllCopy, "newline,skip, h 50");
@@ -144,9 +144,9 @@ public class TransactionCompletionDialog extends POSDialog {
 	}
 
 	public void updateView() {
-		lblTotalAmount.setText(NumberUtil.formatNumber(totalAmount));
-		lblTenderedAmount.setText(NumberUtil.formatNumber(tenderedAmount));
-		lblPaidAmount.setText(NumberUtil.formatNumber(paidAmount));
+//		lblTotalAmount.setText(NumberUtil.formatNumber(totalAmount));
+//		lblTenderedAmount.setText(NumberUtil.formatNumber(tenderedAmount));
+//		lblPaidAmount.setText(NumberUtil.formatNumber(paidAmount));
 		lblDueAmount.setText(NumberUtil.formatNumber(dueAmount));
 		//lblGratuityAmount.setText(NumberUtil.formatNumber(gratuityAmount));
 		lblChangeDue.setText(NumberUtil.formatNumber(changeAmount));
