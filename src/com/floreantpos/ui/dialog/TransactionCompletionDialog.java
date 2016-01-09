@@ -28,7 +28,7 @@ public class TransactionCompletionDialog extends POSDialog {
 	private JLabel lblPaidAmount;
 	private JLabel lblDueAmount;
 	private JLabel lblChangeDue;
-	private JLabel lblGratuityAmount;
+	//private JLabel lblGratuityAmount;
 
 	private PosTransaction completedTransaction;
 
@@ -61,10 +61,10 @@ public class TransactionCompletionDialog extends POSDialog {
 
 		add(new JSeparator(), "newline,span, grow");
 
-		add(createLabel("GRATUITY AMOUNT" + ":", JLabel.LEFT), "newline,grow");
-		lblGratuityAmount = createLabel("0.0", JLabel.RIGHT);
-		add(lblGratuityAmount, "span, grow");
-		add(new JSeparator(), "newline,span, grow");
+//		add(createLabel("GRATUITY AMOUNT" + ":", JLabel.LEFT), "newline,grow");
+//		lblGratuityAmount = createLabel("0.0", JLabel.RIGHT);
+//		add(lblGratuityAmount, "span, grow");
+//		add(new JSeparator(), "newline,span, grow");
 
 		add(createLabel("CHANGE DUE" + ":", JLabel.LEFT), "grow");
 		lblChangeDue = createLabel("0.0", JLabel.RIGHT);
@@ -148,7 +148,7 @@ public class TransactionCompletionDialog extends POSDialog {
 		lblTenderedAmount.setText(NumberUtil.formatNumber(tenderedAmount));
 		lblPaidAmount.setText(NumberUtil.formatNumber(paidAmount));
 		lblDueAmount.setText(NumberUtil.formatNumber(dueAmount));
-		lblGratuityAmount.setText(NumberUtil.formatNumber(gratuityAmount));
+		//lblGratuityAmount.setText(NumberUtil.formatNumber(gratuityAmount));
 		lblChangeDue.setText(NumberUtil.formatNumber(changeAmount));
 	}
 

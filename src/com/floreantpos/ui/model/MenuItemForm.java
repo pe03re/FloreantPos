@@ -98,6 +98,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 	private javax.swing.JTable shiftTable;
 	private javax.swing.JTable tableTicketItemModifierGroups;
 	// private DoubleTextField tfDiscountRate;
+	private JCheckBox printToKitchen;
 	private com.floreantpos.swing.FixedLengthTextField tfName;
 	private com.floreantpos.swing.FixedLengthTextField tfTransName;
 	private DoubleTextField tfPrice;
@@ -187,6 +188,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		this.fileChooser.setEnabled(enable);
 		this.btnSelectImage.setEnabled(enable);
 		this.lblImage.setEnabled(enable);
+		this.printToKitchen.setEnabled(enable);
 		this.cbShowTextWithImage.setEnabled(enable);
 		this.lblButtonColor.setEnabled(enable);
 		this.lblTextColor.setEnabled(enable);
@@ -320,6 +322,11 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		// jLabel2 = new javax.swing.JLabel();
 		// jLabel2.setHorizontalAlignment(SwingConstants.TRAILING);
 		jLabel5 = new javax.swing.JLabel();
+		// labPrintToKitchen = new JLabel();
+		// labPrintToKitchen.setText("Print to kitchen printer");
+		printToKitchen = new JCheckBox("Print to kitchen printer");
+		printToKitchen.setSelected(true);
+
 		// tfDiscountRate = new DoubleTextField();
 		// tfDiscountRate.setHorizontalAlignment(SwingConstants.TRAILING);
 		chkVisible = new javax.swing.JCheckBox();
@@ -458,7 +465,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 
 		// jLabel2.setText(com.floreantpos.POSConstants.DISCOUNT_RATE + ":");
 
-		jLabel5.setText("%");
+		// jLabel5.setText("%");
 
 		chkVisible.setText(com.floreantpos.POSConstants.VISIBLE);
 		chkVisible.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -482,6 +489,8 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tabGeneral.add(lblBuyPrice, "cell 0 5");
 		tabGeneral.add(jLabel3, "cell 0 6,alignx left,aligny center");
 		tabGeneral.add(jLabel3Base, "cell 0 7,alignx left,aligny center");
+		tabGeneral.add(printToKitchen, "cell 0 8,alignx left,aligny center"); //$NON-NLS-1$
+
 		//tabGeneral.add(jLabel2, "cell 0 8,alignx left,aligny center"); //$NON-NLS-1$
 		tabGeneral.add(jLabel6, "cell 1 9,alignx left,aligny center"); //$NON-NLS-1$
 		//		tabGeneral.add(jLabel7, "cell 2 9,alignx left,aligny center"); //$NON-NLS-1$
@@ -546,7 +555,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tabGeneral.add(cbShowTextWithImage, "cell 1 15"); //$NON-NLS-1$
 		tabGeneral.add(chkVisible, "cell 1 16,alignx left,aligny top"); //$NON-NLS-1$
 		//		tabGeneral.add(btnNewTax, "cell 2 8,alignx left,aligny top"); //$NON-NLS-1$
-		tabGeneral.add(jLabel5, "cell 2 8"); //$NON-NLS-1$
+		//		tabGeneral.add(jLabel5, "cell 2 8"); //$NON-NLS-1$
 		add(tabbedPane);
 
 		btnButtonColor.addActionListener(new ActionListener() {
@@ -744,7 +753,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		tfTransName.setText(menuItem.getTranslatedName());
 		tfBuyPrice.setText(String.valueOf(formatDouble(menuItem.getBuyPrice())));
 		// tfDiscountRate.setText(String.valueOf(menuItem.getDiscountRate()));
-
+		printToKitchen.setSelected(menuItem.getPrintToKitchen());
 		chkVisible.setSelected(menuItem.isVisible());
 		cbShowTextWithImage.setSelected(menuItem.isShowImageOnly());
 		if (menuItem.getImage() != null) {
@@ -824,6 +833,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		menuItem.setTaxList(taxes);
 
 		menuItem.setVisible(chkVisible.isSelected());
+		menuItem.setPrintToKitchen(printToKitchen.isSelected());
 		menuItem.setShowImageOnly(cbShowTextWithImage.isSelected());
 		menuItem.setTranslatedName(printName);
 		menuItem.setSortOrder(menuItem.getSortOrder());

@@ -114,13 +114,15 @@ public class MenuItem extends BaseMenuItem {
 		}
 		ticketItem.setTaxList(tl);
 		ticketItem.setHasModifiers(hasModifiers());
-		if (this.getParent().getParent().isBeverage()) {
-			ticketItem.setBeverage(true);
-			ticketItem.setShouldPrintToKitchen(false);
-		} else {
-			ticketItem.setBeverage(false);
-			ticketItem.setShouldPrintToKitchen(true);
-		}
+		ticketItem.setShouldPrintToKitchen(printToKitchen);
+		ticketItem.setBeverage(this.getParent().getParent().isBeverage());
+		// if (this.getParent().getParent().isBeverage()) {
+		// ticketItem.setBeverage(true);
+		// // ticketItem.setShouldPrintToKitchen(false);
+		// } else {
+		// ticketItem.setBeverage(false);
+		// ticketItem.setShouldPrintToKitchen(true);
+		// }
 		ticketItem.setVirtualPrinter(this.getVirtualPrinter());
 
 		return ticketItem;

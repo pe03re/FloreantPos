@@ -333,7 +333,7 @@ public class ReceiptPrintService {
 			map.put("netAmountText", POSConstants.RECEIPT_REPORT_NETAMOUNT_LABEL);
 			map.put("paidAmountText", POSConstants.RECEIPT_REPORT_PAIDAMOUNT_LABEL);
 			map.put("dueAmountText", POSConstants.RECEIPT_REPORT_DUEAMOUNT_LABEL);
-			map.put("changeAmountText", POSConstants.RECEIPT_REPORT_CHANGEAMOUNT_LABEL);
+			
 
 			map.put("totalAmount", NumberUtil.formatNumber(totalAmount));
 
@@ -358,10 +358,14 @@ public class ReceiptPrintService {
 			// currencySymbol);
 
 			if (transaction != null) {
+				double tenderedAmount = transaction.getTenderAmount();
 				double changedAmount = transaction.getTenderAmount() - transaction.getAmount();
 				if (changedAmount < 0) {
 					changedAmount = 0;
 				}
+				map.put("tenderedAmountText", "Tendered Amount");
+				map.put("tenderedAmount", NumberUtil.formatNumber(tenderedAmount));
+				map.put("changeAmountText", "Change Returned");
 				map.put("changedAmount", NumberUtil.formatNumber(changedAmount));
 
 				if (transaction.isCard()) {
@@ -572,14 +576,14 @@ public class ReceiptPrintService {
 		return createJasperPrint(ReportUtil.getReport("kitchen-receipt"), map, new JRTableModelDataSource(dataSource));
 	}
 
-	public static void printToKitchen(Ticket ticket) {
+	public static void printToKitchen(Ticket ticket, boolean printAll) {
 		Session session = null;
 		Transaction transaction = null;
 		try {
 			session = KitchenTicketDAO.getInstance().createNewSession();
 			transaction = session.beginTransaction();
 
-			List<KitchenTicket> kitchenTickets = KitchenTicket.fromTicket(ticket);
+			List<KitchenTicket> kitchenTickets = KitchenTicket.fromTicket(ticket, printAll);
 
 			for (KitchenTicket kitchenTicket : kitchenTickets) {
 

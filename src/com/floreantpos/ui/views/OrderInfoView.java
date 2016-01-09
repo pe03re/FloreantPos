@@ -11,7 +11,9 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import net.sf.jasperreports.engine.JasperPrint;
 
+import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.Ticket;
+import com.floreantpos.model.dao.PosTransactionDAO;
 import com.floreantpos.report.ReceiptPrintService;
 import com.floreantpos.report.TicketPrintProperties;
 import com.floreantpos.swing.PosScrollPane;
@@ -39,8 +41,9 @@ public class OrderInfoView extends JPanel {
 			ticketLabel.setText("#TICKET STATUS: " + TicketUtils.getTicketStatus(ticket));
 
 			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);
-			HashMap map = ReceiptPrintService.populateTicketProperties(ticket, printProperties, null);
-			JasperPrint jasperPrint = ReceiptPrintService.createGeneralTicketPrint(ticket, map, null);
+			PosTransaction trans = PosTransactionDAO.getInstance().findLatestTransactionByTicket(ticket);
+			HashMap map = ReceiptPrintService.populateTicketProperties(ticket, printProperties, trans);
+			JasperPrint jasperPrint = ReceiptPrintService.createGeneralTicketPrint(ticket, map, trans);
 
 			TicketReceiptView receiptView = new TicketReceiptView(jasperPrint);
 			reportPanel.add(ticketLabel);
@@ -56,6 +59,14 @@ public class OrderInfoView extends JPanel {
 			Ticket ticket = (Ticket) iter.next();
 
 			ReceiptPrintService.printTicket(ticket);
+		}
+	}
+
+	public void kitchenPrint() throws Exception {
+		for (Iterator iter = tickets.iterator(); iter.hasNext();) {
+			Ticket ticket = (Ticket) iter.next();
+
+			ReceiptPrintService.printToKitchen(ticket, true);
 		}
 	}
 }

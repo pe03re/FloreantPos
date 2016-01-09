@@ -35,6 +35,15 @@ public class OrderInfoDialog extends POSDialog {
 		btnPrint.setText("PRINT");
 		panel.add(btnPrint);
 
+		PosButton btnKitchenPrint = new PosButton();
+		btnKitchenPrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doKitchenPrint();
+			}
+		});
+		btnKitchenPrint.setText("KITCHEN PRINT");
+		panel.add(btnKitchenPrint);
+
 		PosButton btnClose = new PosButton();
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -48,6 +57,14 @@ public class OrderInfoDialog extends POSDialog {
 	protected void doPrint() {
 		try {
 			view.print();
+		} catch (Exception e) {
+			POSMessageDialog.showError(e.getMessage());
+		}
+	}
+
+	protected void doKitchenPrint() {
+		try {
+			view.kitchenPrint();
 		} catch (Exception e) {
 			POSMessageDialog.showError(e.getMessage());
 		}

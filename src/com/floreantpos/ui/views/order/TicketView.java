@@ -432,7 +432,7 @@ public class TicketView extends JPanel {
 			OrderController.saveOrder(ticket);
 
 			if (ticket.needsKitchenPrint()) {
-				ReceiptPrintService.printToKitchen(ticket);
+				ReceiptPrintService.printToKitchen(ticket, false);
 				ticketDAO.refresh(ticket);
 			}
 			closeView(false);

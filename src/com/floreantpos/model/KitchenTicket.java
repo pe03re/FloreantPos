@@ -56,7 +56,7 @@ public class KitchenTicket extends BaseKitchenTicket {
 		return printers.getKitchenPrinterFor(virtualPrinter);
 	}
 
-	public static List<KitchenTicket> fromTicket(Ticket ticket) {
+	public static List<KitchenTicket> fromTicket(Ticket ticket, boolean printAll) {
 		Map<Printer, KitchenTicket> itemMap = new HashMap<Printer, KitchenTicket>();
 		List<KitchenTicket> kitchenTickets = new ArrayList<KitchenTicket>(2);
 
@@ -66,7 +66,7 @@ public class KitchenTicket extends BaseKitchenTicket {
 		}
 
 		for (TicketItem ticketItem : ticketItems) {
-			if (ticketItem.isPrintedToKitchen() || !ticketItem.isShouldPrintToKitchen()) {
+			if ((printAll == false && ticketItem.isPrintedToKitchen()) || !ticketItem.isShouldPrintToKitchen()) {
 				continue;
 			}
 

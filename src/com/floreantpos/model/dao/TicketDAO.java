@@ -278,7 +278,13 @@ public class TicketDAO extends BaseTicketDAO {
 			Criteria criteria = session.createCriteria(getReferenceClass());
 			criteria.add(Restrictions.ge(Ticket.PROP_CREATE_DATE, ticketCreateDate));
 			criteria.add(Restrictions.eq(Ticket.PROP_SERIAL_ID, serialId));
-			Object ticket = criteria.uniqueResult();
+			criteria.addOrder(Order.asc(Ticket.PROP_ID));
+			criteria.setMaxResults(1);
+			List l = criteria.list();
+			Object ticket = null;
+			if (l.size() > 0) {
+				ticket = criteria.list().get(0);
+			}
 			if (ticket != null) {
 				Ticket t = (Ticket) ticket;
 				return t;

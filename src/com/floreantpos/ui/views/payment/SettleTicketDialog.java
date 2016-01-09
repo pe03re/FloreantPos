@@ -394,8 +394,7 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 			// FIXME
 			printTicket(ticket, transaction);
 
-			// showTransactionCompleteMsg(dueAmount,
-			// transaction.getTenderAmount(), ticket, transaction);
+			showTransactionCompleteMsg(dueAmount, transaction.getTenderAmount(), ticket, transaction);
 
 			if (ticket.getDueAmount() > 0.0) {
 				int option = JOptionPane.showConfirmDialog(Application.getPosWindow(), POSConstants.CONFIRM_PARTIAL_PAYMENT, POSConstants.MDS_POS, JOptionPane.YES_NO_OPTION);
@@ -453,7 +452,7 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 	private void printTicket(Ticket ticket, PosTransaction transaction) {
 		try {
 			if (ticket.needsKitchenPrint()) {
-				ReceiptPrintService.printToKitchen(ticket);
+				ReceiptPrintService.printToKitchen(ticket, false);
 			}
 			ReceiptPrintService.printTransaction(transaction);
 		} catch (Exception ee) {

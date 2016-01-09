@@ -33,6 +33,7 @@ public abstract class BaseMenuItem implements Comparable, Serializable {
 	public static String PROP_ID = "id";
 	public static String PROP_TRANSLATED_NAME = "translatedName";
 	public static String PROP_VIRTUAL_PRINTER = "virtualPrinter";
+	public static String PROP_KITECHEN_PRINT = "printToKitchen";
 
 	// constructors
 	public BaseMenuItem() {
@@ -80,6 +81,7 @@ public abstract class BaseMenuItem implements Comparable, Serializable {
 	protected java.lang.Integer textColor;
 	protected String image;
 	protected java.lang.Boolean showImageOnly;
+	protected Boolean printToKitchen;
 
 	// many to one
 	private com.floreantpos.model.MenuGroup parent;
@@ -464,6 +466,14 @@ public abstract class BaseMenuItem implements Comparable, Serializable {
 
 	public void setTaxList(List<TaxTreatment> taxList) {
 		this.taxList = taxList;
+	}
+
+	public Boolean getPrintToKitchen() {
+		return printToKitchen == null ? Boolean.FALSE : printToKitchen;
+	}
+
+	public void setPrintToKitchen(Boolean printToKitchen) {
+		this.printToKitchen = printToKitchen;
 	}
 
 }
