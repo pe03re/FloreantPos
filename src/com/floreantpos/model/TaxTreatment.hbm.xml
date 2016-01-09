@@ -11,7 +11,7 @@
 			not-null="true" type="java.lang.Boolean" />
 		<!-- Associations -->
 		<many-to-one class="com.floreantpos.model.Tax" lazy="false"
-			cascade="all" name="tax">
+			cascade="none" name="tax">
 			<column name="TAX_ID" />
 		</many-to-one>
 

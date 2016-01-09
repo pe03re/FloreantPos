@@ -30,6 +30,8 @@
 		<property name="image" column="IMAGE" not-null="false"
 			type="java.lang.String" length="100" />
 		<property name="showImageOnly" column="SHOW_IMAGE_ONLY" type="java.lang.Boolean" />
+		<property name="printToKitchen" column="PRINT_TO_KITCHEN" type="java.lang.Boolean" />
+		
 		<!-- <property name="smallImage" column="SMALL_IMAGE" length="120" not-null="false" 
 			type="string"/> <property name="largeImage" column="LARGE_IMAGE" length="120" 
 			not-null="false" type="string"/> -->
@@ -61,7 +63,7 @@
 		</list>
 
 		<many-to-one class="com.floreantpos.model.Recepie" lazy="false"
-			cascade="all" name="recepie">
+			cascade="none" name="recepie">
 			<column name="RECEPIE" />
 		</many-to-one>
 
