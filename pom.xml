@@ -5,8 +5,11 @@
 	<artifactId>floreantpos</artifactId>
 	<version>1.5-SNAPSHOT</version>
 
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<github.global.server>github</github.global.server>
+
 	</properties>
 
 	<!-- <scm> -->
@@ -67,7 +70,30 @@
 			<!-- </dependency> -->
 			<!-- </dependencies> -->
 			<!-- </plugin> -->
-
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.12</version>
+				<configuration>
+					<message>Creating site for jspf, jpos, licensor,miglayout</message>
+					<noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+					<outputDirectory>local-lib</outputDirectory> <!-- matches distribution management repository url above -->
+					<branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
+					<includes>
+						<include>**/*</include>
+					</includes>
+					<repositoryName>FloreantPos</repositoryName>      <!-- github repo name -->
+					<repositoryOwner>somya89</repositoryOwner>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site</phase>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -487,11 +513,8 @@
 			<version>1.1.0</version>
 		</dependency>
 
-		<!-- <dependency>
-			<groupId>com.oro</groupId>
-			<artifactId>licensor</artifactId>
-			<version>1.1-SNAPSHOT</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.oro</groupId> <artifactId>licensor</artifactId> 
+			<version>1.1-SNAPSHOT</version> </dependency> -->
 
 		<dependency>
 			<groupId>joda-time</groupId>

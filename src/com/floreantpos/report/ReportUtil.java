@@ -33,10 +33,14 @@ public class ReportUtil {
 	}
 
 	public static JasperReport getReport(String reportName) {
+		return getReport(reportName,USER_REPORT_DIR);
+	}
+	
+	public static JasperReport getReport(String reportName, String path) {
 		InputStream resource = null;
 
 		try {
-			resource = ReceiptPrintService.class.getResourceAsStream(USER_REPORT_DIR + reportName + ".jasper");
+			resource = ReceiptPrintService.class.getResourceAsStream(path + reportName + ".jasper");
 			if (resource == null) {
 				return compileReport(reportName);
 			} else {
@@ -44,7 +48,7 @@ public class ReportUtil {
 			}
 		} catch (Exception e) {
 			logger.error("Could not load report " + reportName + " from user directory, loading default report");
-			return getDefaultReport(reportName);
+			return getDefaultReport(reportName,path);
 
 		} finally {
 			IOUtils.closeQuietly(resource);
@@ -53,21 +57,25 @@ public class ReportUtil {
 	}
 
 	private static JasperReport compileReport(String reportName) throws Exception {
+		return compileReport(reportName,USER_REPORT_DIR);
+	}
+	
+	private static JasperReport compileReport(String reportName, String path) throws Exception {
 		InputStream in = null;
 		InputStream in2 = null;
 		FileOutputStream out = null;
 		File jasperFile = null;
 
 		try {
-			File jrxmlFile = new File(ReceiptPrintService.class.getResource(USER_REPORT_DIR + reportName + ".jrxml").getFile());
+			File jrxmlFile = new File(ReceiptPrintService.class.getResource(path + reportName + ".jrxml").getFile());
 			File dir = jrxmlFile.getParentFile();
 			jasperFile = new File(dir, reportName + ".jasper");
 
-			in = ReceiptPrintService.class.getResourceAsStream(USER_REPORT_DIR + reportName + ".jrxml");
+			in = ReceiptPrintService.class.getResourceAsStream(path + reportName + ".jrxml");
 			out = new FileOutputStream(jasperFile);
 			JasperCompileManager.compileReportToStream(in, out);
 
-			in2 = ReceiptPrintService.class.getResourceAsStream(USER_REPORT_DIR + reportName + ".jasper");
+			in2 = ReceiptPrintService.class.getResourceAsStream(path + reportName + ".jasper");
 			return (JasperReport) JRLoader.loadObject(in2);
 
 		} catch (Exception e) {
@@ -85,13 +93,13 @@ public class ReportUtil {
 			IOUtils.closeQuietly(out);
 		}
 	}
-
-	private static JasperReport getDefaultReport(String reportName) {
+	
+	private static JasperReport getDefaultReport(String reportName, String path) {
 		InputStream resource = null;
 
 		try {
 
-			resource = ReceiptPrintService.class.getResourceAsStream(DEFAULT_REPORT_DIR + reportName + ".jasper");
+			resource = ReceiptPrintService.class.getResourceAsStream(path + reportName + ".jasper");
 			return (JasperReport) JRLoader.loadObject(resource);
 
 		} catch (Exception e) {
