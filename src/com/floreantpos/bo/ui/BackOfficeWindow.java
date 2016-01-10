@@ -12,13 +12,18 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import com.floreantpos.actions.AboutAction;
 import com.floreantpos.bo.actions.CategoryExplorerAction;
@@ -41,11 +46,14 @@ import com.floreantpos.bo.actions.UserTypeExplorerAction;
 import com.floreantpos.config.AppConfig;
 import com.floreantpos.extension.InventoryPlugin;
 import com.floreantpos.extension.OrderServiceExtension;
+import com.floreantpos.extension.ReportPlugin;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.User;
 import com.floreantpos.model.UserPermission;
 import com.floreantpos.model.UserType;
 import com.jidesoft.swing.JideTabbedPane;
+
+import net.xeoh.plugins.base.util.PluginManagerUtil;
 
 /**
  * 
@@ -81,16 +89,16 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 	}
 
 	private void positionWindow() {
-		int width = AppConfig.getInt(WINDOW_WIDTH, 900); //$NON-NLS-1$
-		int height = AppConfig.getInt(WINDOW_HEIGHT, 650); //$NON-NLS-1$
+		int width = AppConfig.getInt(WINDOW_WIDTH, 900); // $NON-NLS-1$
+		int height = AppConfig.getInt(WINDOW_HEIGHT, 650); // $NON-NLS-1$
 		setSize(width, height);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (screenSize.width - width) >> 1;
 		int y = (screenSize.height - height) >> 1;
 
-		x = AppConfig.getInt(POSX, x); //$NON-NLS-1$
-		y = AppConfig.getInt(POSY, y); //$NON-NLS-1$
+		x = AppConfig.getInt(POSX, x); // $NON-NLS-1$
+		y = AppConfig.getInt(POSY, y); // $NON-NLS-1$
 
 		setLocation(x, y);
 	}
@@ -112,6 +120,8 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 			createExplorerMenu(menuBar);
 			createSalesReportMenu(menuBar);
 			createExpenseReportMenu(menuBar);
+			createReportMenus(menuBar);
+
 		} else {
 			if (permissions != null && permissions.contains(UserPermission.PERFORM_ADMINISTRATIVE_TASK)) {
 				createAdminMenu(menuBar);
@@ -119,6 +129,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 			if (permissions != null && permissions.contains(UserPermission.VIEW_EXPLORERS)) {
 				createExplorerMenu(menuBar);
 			}
+			
 			if (permissions != null && permissions.contains(UserPermission.VIEW_REPORTS)) {
 				createSalesReportMenu(menuBar);
 				createExpenseReportMenu(menuBar);
@@ -131,8 +142,37 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		helpMenu.add(new AboutAction());
 		menuBar.add(helpMenu);
 
+		
 		setJMenuBar(menuBar);
 	}
+
+	private void createReportMenus(JMenuBar menuBar) {
+		PluginManagerUtil pmu = new PluginManagerUtil(Application.getPluginManager());
+		Collection<ReportPlugin> reportPlugins = pmu.getPlugins(ReportPlugin.class);
+		Set<String> baseReportNames = new HashSet<String>();
+		if (reportPlugins != null && reportPlugins.size() > 0) {
+			for (ReportPlugin rplugin : reportPlugins) {
+				baseReportNames.add(rplugin.getBaseMenuName() == null ? "" : rplugin.getBaseMenuName().trim());
+			}
+			Map<String, JMenu> baseMenuItemMap = new HashMap<String, JMenu>();
+			JMenu reportMenu = new JMenu("Reports");
+			baseMenuItemMap.put("", reportMenu);
+			for (String s : baseReportNames) {
+				if (s.trim().length() > 0) {
+					JMenu jmi = new JMenu(s);
+					reportMenu.add(jmi);
+				}
+			}
+
+			for (ReportPlugin rp : reportPlugins) {
+				JMenu jmi = baseMenuItemMap.get(rp.getBaseMenuName() == null ? "" : rp.getBaseMenuName().trim());
+				for (AbstractAction abstractReportAction : rp.getReportActions()) {
+					jmi.add(abstractReportAction);
+				}
+			}
+		}
+	}
+	
 
 	private void createInventoryMenus(JMenuBar menuBar) {
 		InventoryPlugin plugin = Application.getPluginManager().getPlugin(InventoryPlugin.class);
@@ -290,9 +330,9 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 
 	private void saveSizeAndLocation() {
 		AppConfig.putInt(WINDOW_WIDTH, BackOfficeWindow.this.getWidth());
-		AppConfig.putInt(WINDOW_HEIGHT, BackOfficeWindow.this.getHeight()); //$NON-NLS-1$
-		AppConfig.putInt(POSX, BackOfficeWindow.this.getX()); //$NON-NLS-1$
-		AppConfig.putInt(POSY, BackOfficeWindow.this.getY()); //$NON-NLS-1$
+		AppConfig.putInt(WINDOW_HEIGHT, BackOfficeWindow.this.getHeight()); // $NON-NLS-1$
+		AppConfig.putInt(POSX, BackOfficeWindow.this.getX()); // $NON-NLS-1$
+		AppConfig.putInt(POSY, BackOfficeWindow.this.getY()); // $NON-NLS-1$
 	}
 
 	public void close() {
