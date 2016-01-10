@@ -432,23 +432,24 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 	protected void doCloseOrder() {
 		Ticket ticket = getFirstSelectedTicket();
+		if (ticket != null) {
+			int due = (int) POSUtil.getDouble(ticket.getDueAmount());
+			if (due != 0) {
+				POSMessageDialog.showError("Ticket is not fully paid");
+				return;
+			}
 
-		int due = (int) POSUtil.getDouble(ticket.getDueAmount());
-		if (due != 0) {
-			POSMessageDialog.showError("Ticket is not fully paid");
-			return;
+			int option = JOptionPane.showOptionDialog(Application.getPosWindow(), "Ticket# " + ticket.getId() + " will be closed.", "Confirm", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+			if (option != JOptionPane.OK_OPTION) {
+				return;
+			}
+
+			OrderController.closeOrder(ticket);
+
+			updateTicketList();
 		}
-
-		int option = JOptionPane.showOptionDialog(Application.getPosWindow(), "Ticket# " + ticket.getId() + " will be closed.", "Confirm", JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.INFORMATION_MESSAGE, null, null, null);
-
-		if (option != JOptionPane.OK_OPTION) {
-			return;
-		}
-
-		OrderController.closeOrder(ticket);
-
-		updateTicketList();
 	}
 
 	protected void doAssignDriver() {

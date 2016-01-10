@@ -133,6 +133,8 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 			if (permissions != null && permissions.contains(UserPermission.VIEW_REPORTS)) {
 				createSalesReportMenu(menuBar);
 				createExpenseReportMenu(menuBar);
+				createReportMenus(menuBar);
+
 			}
 		}
 
@@ -156,20 +158,23 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 			}
 			Map<String, JMenu> baseMenuItemMap = new HashMap<String, JMenu>();
 			JMenu reportMenu = new JMenu("Reports");
-			baseMenuItemMap.put("", reportMenu);
+			baseMenuItemMap.put("Reports", reportMenu);
 			for (String s : baseReportNames) {
 				if (s.trim().length() > 0) {
-					JMenu jmi = new JMenu(s);
+					JMenu jmi = new JMenu(s.trim());
 					reportMenu.add(jmi);
+					baseMenuItemMap.put(s.trim(), jmi);
+
 				}
 			}
 
 			for (ReportPlugin rp : reportPlugins) {
-				JMenu jmi = baseMenuItemMap.get(rp.getBaseMenuName() == null ? "" : rp.getBaseMenuName().trim());
+				JMenu jmi = baseMenuItemMap.get(rp.getBaseMenuName() == null ? "Reports" : rp.getBaseMenuName().trim());
 				for (AbstractAction abstractReportAction : rp.getReportActions()) {
 					jmi.add(abstractReportAction);
 				}
 			}
+			menuBar.add(reportMenu);
 		}
 	}
 	
