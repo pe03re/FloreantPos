@@ -61,8 +61,13 @@ public class PosTransactionDAO extends BasePosTransactionDAO {
 			criteria.addOrder(Order.desc(Ticket.PROP_ID));
 			criteria.add(Restrictions.isNotNull(PosTransaction.PROP_TICKET));
 			criteria.add(Restrictions.eq(PosTransaction.PROP_TICKET, ticket));
-
-			return (PosTransaction) criteria.list().get(0);
+			List l = criteria.list();
+			if(l != null){
+				if(l.size() > 0){
+					return (PosTransaction) criteria.list().get(0);
+				}
+			}
+			return null;
 		} finally {
 			closeSession(session);
 		}

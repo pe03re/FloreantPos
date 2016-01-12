@@ -145,10 +145,10 @@ public class TicketView extends JPanel {
 		lblTokenNo = new javax.swing.JLabel();
 		lblTokenNo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 		lblTokenNo.setText("TOKEN NO:");
-		ticketAmountPanel.add(lblTokenNo, "cell 0 3,growx");
+		ticketAmountPanel.add(lblTokenNo, "cell 0 3");
 		tfTokenNo = new IntegerTextField(6);
 		tfTokenNo.setHorizontalAlignment(SwingConstants.LEFT);
-		ticketAmountPanel.add(tfTokenNo, "cell 0 4");
+		ticketAmountPanel.add(tfTokenNo, "cell 1 3, growx");
 
 		jLabel5 = new javax.swing.JLabel();
 		jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -197,12 +197,12 @@ public class TicketView extends JPanel {
 		jLabel6.setFont(jLabel6.getFont().deriveFont(Font.BOLD, 16));
 		jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 		jLabel6.setText(com.floreantpos.POSConstants.TOTAL + ":");
-		ticketAmountPanel.add(jLabel6, "cell 2 5,growx,aligny center");
+		ticketAmountPanel.add(jLabel6, "cell 2 4,growx,aligny center");
 		tfTotal = new javax.swing.JTextField(10);
 		tfTotal.setFont(tfTotal.getFont().deriveFont(Font.BOLD, 16));
 		tfTotal.setHorizontalAlignment(SwingConstants.TRAILING);
 		tfTotal.setEditable(false);
-		ticketAmountPanel.add(tfTotal, "cell 3 5,growx,aligny center");
+		ticketAmountPanel.add(tfTotal, "cell 3 4,growx,aligny center");
 
 		controlPanel.setLayout(new MigLayout("insets 0, fill, hidemode 3", "fill, grow", ""));
 
@@ -316,7 +316,7 @@ public class TicketView extends JPanel {
 		try {
 			Object object = ticketViewerTable.getSelected();
 			if (!(object instanceof TicketItem)) {
-				POSMessageDialog.showError("Please select and item");
+				POSMessageDialog.showError("Please select an item");
 				return;
 			}
 

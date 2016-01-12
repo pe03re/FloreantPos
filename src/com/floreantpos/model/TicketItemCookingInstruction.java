@@ -33,27 +33,27 @@ public class TicketItemCookingInstruction extends BaseTicketItemCookingInstructi
 
 	@Override
 	public String getNameDisplay() {
-		return "   * " + getDescription();
+		return " *" + getDescription();
 	}
 
 	@Override
 	public Double getUnitPriceDisplay() {
-		return null;
+		return Double.valueOf(0);
 	}
 
 	@Override
 	public Integer getItemCountDisplay() {
-		return null;
+		return Integer.valueOf(1);
 	}
 
 	@Override
 	public Double getTaxAmountWithoutModifiersDisplay() {
-		return null;
+		return Double.valueOf(0);
 	}
 
 	@Override
 	public Double getTotalAmountWithoutModifiersDisplay() {
-		return null;
+		return Double.valueOf(0);
 	}
 
 	@Override
@@ -63,7 +63,6 @@ public class TicketItemCookingInstruction extends BaseTicketItemCookingInstructi
 
 	@Override
 	public Double calculateTax(boolean includeModifierTax) {
-		// TODO Auto-generated method stub
-		return null;
+		return Double.valueOf(0);
 	}
 }
