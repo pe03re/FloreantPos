@@ -188,7 +188,7 @@ public class TicketViewerTableModel extends AbstractTableModel {
 				iter.remove();
 
 				if (modifier.isPrintedToKitchen()) {
-					ticket.addDeletedItems(modifier);
+					ticket.addDeletedModifierItems(modifier);
 				}
 
 				calculateRows();
@@ -232,7 +232,7 @@ public class TicketViewerTableModel extends AbstractTableModel {
 						iterator.remove();
 
 						if (element.isPrintedToKitchen()) {
-							ticket.addDeletedItems(element);
+							ticket.addDeletedModifierItems(element);
 						}
 					}
 				}

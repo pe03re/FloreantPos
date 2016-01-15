@@ -51,6 +51,32 @@ public class PosTransactionDAO extends BasePosTransactionDAO {
 		}
 	}
 
+	public PosTransaction getConsolidatedTransactionByTicket(Ticket ticket) {
+		Session session = null;
+
+		try {
+			session = getSession();
+
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.addOrder(Order.desc(Ticket.PROP_ID));
+			criteria.add(Restrictions.isNotNull(PosTransaction.PROP_TICKET));
+			criteria.add(Restrictions.eq(PosTransaction.PROP_TICKET, ticket));
+			List<PosTransaction> l = criteria.list();
+			if (l != null) {
+				PosTransaction temp = new PosTransaction();
+				for (PosTransaction posT : l) {
+					temp.setTenderAmount(temp.getTenderAmount() + posT.getTenderAmount());
+					temp.setTicket(posT.getTicket());
+				}
+				temp.setAmount(ticket.getTotalAmount());
+				return temp;
+			}
+			return null;
+		} finally {
+			closeSession(session);
+		}
+	}
+
 	public PosTransaction findLatestTransactionByTicket(Ticket ticket) {
 		Session session = null;
 
@@ -62,8 +88,8 @@ public class PosTransactionDAO extends BasePosTransactionDAO {
 			criteria.add(Restrictions.isNotNull(PosTransaction.PROP_TICKET));
 			criteria.add(Restrictions.eq(PosTransaction.PROP_TICKET, ticket));
 			List l = criteria.list();
-			if(l != null){
-				if(l.size() > 0){
+			if (l != null) {
+				if (l.size() > 0) {
 					return (PosTransaction) criteria.list().get(0);
 				}
 			}

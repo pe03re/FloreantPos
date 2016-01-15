@@ -25,7 +25,6 @@ public class OrderInfoView extends JPanel {
 	public OrderInfoView(List<Ticket> tickets) throws Exception {
 		super();
 		this.tickets = tickets;
-
 		createUI();
 	}
 
@@ -41,7 +40,7 @@ public class OrderInfoView extends JPanel {
 			ticketLabel.setText("#TICKET STATUS: " + TicketUtils.getTicketStatus(ticket));
 
 			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);
-			PosTransaction trans = PosTransactionDAO.getInstance().findLatestTransactionByTicket(ticket);
+			PosTransaction trans = PosTransactionDAO.getInstance().getConsolidatedTransactionByTicket(ticket);
 			HashMap map = ReceiptPrintService.populateTicketProperties(ticket, printProperties, trans);
 			JasperPrint jasperPrint = ReceiptPrintService.createGeneralTicketPrint(ticket, map, trans);
 

@@ -99,11 +99,11 @@ public class TicketView extends JPanel {
 				}
 
 				ITicketItem item = (ITicketItem) selected;
-				Boolean printedToKitchen = item.isPrintedToKitchen();
+				// Boolean printedToKitchen = item.isPrintedToKitchen();
 				btnAddCookingInstruction.setEnabled(item.canAddCookingInstruction());
-				btnIncreaseAmount.setEnabled(!printedToKitchen);
-				btnDecreaseAmount.setEnabled(!printedToKitchen);
-				btnDelete.setEnabled(!printedToKitchen);
+				btnIncreaseAmount.setEnabled(true);
+				btnDecreaseAmount.setEnabled(true);
+				btnDelete.setEnabled(true);
 			}
 
 		});
@@ -352,22 +352,63 @@ public class TicketView extends JPanel {
 	private void updateInventory(Ticket t) {
 		List<TicketItem> tiList = t.getTicketItems();
 		List<TicketItem> cons = new ArrayList<TicketItem>();
+		List<TicketItem> finalTiList = new ArrayList();
 		if (t.getId() != null) {
 			Ticket old = TicketDAO.getInstance().findTicket(t.getId());
 			List<TicketItem> oldItems = old.getTicketItems();
-			Map<Integer, TicketItem> itemMap = new HashMap<Integer, TicketItem>();
+			finalTiList.addAll(oldItems);
+			Map<String, TicketItem> itemMap = new HashMap<String, TicketItem>();
+			
 			for (TicketItem ti : oldItems) {
-				itemMap.put(ti.getItemId(), ti);
+				itemMap.put(ti.getItemId() + ":" + ti.getId(), ti);
 			}
 			for (TicketItem ti : tiList) {
-				if (!itemMap.containsKey(ti.getItemId())) {
+				if (!itemMap.containsKey(ti.getItemId()+ ":" + ti.getId())) {
 					cons.add(ti);
+					finalTiList.add(ti);
 				} else {
 					TicketItem ti1 = new TicketItem(ti.getId());
-					ti1.setItemCount(ti.getItemCount() - itemMap.get(ti.getItemId()).getItemCount());
-					cons.add(ti1);
+					ti1.setItemCount(ti.getItemCount() - itemMap.get(ti.getItemId() + ":" + ti.getId()).getItemCount());
+					itemMap.remove(ti.getItemId()+ ":" + ti.getId());
+					// if reducing amount then add a void line
+					if (ti1.getItemCount() < 0) {
+						// add void line
+						TicketItem voidTi = new TicketItem(ti);
+						voidTi.setName("**" + voidTi.getName());
+						voidTi.setItemCount(ti1.getItemCount());
+						voidTi.setPrintedToKitchen(false);
+						voidTi.setTotalAmount(ti.getTotalAmount()*-1);
+
+						finalTiList.add(voidTi);
+					}
+					if (ti1.getItemCount() != 0) {
+						cons.add(ti1);
+					}
 				}
 			}
+			// items completely removed
+			for (TicketItem ti : itemMap.values()) {
+				TicketItem ti1 = new TicketItem(ti.getId());
+				ti1.setItemCount(-1 * ti.getItemCount());
+				cons.add(ti1);
+				if (!ti.getName().startsWith("**")) {
+					TicketItem voidTi = new TicketItem(ti);
+					voidTi.setName("**" + voidTi.getName());
+					voidTi.setTotalAmount(ti.getTotalAmount()*-1);
+					voidTi.setItemCount(ti1.getItemCount());
+					voidTi.setPrintedToKitchen(false);
+					finalTiList.add(voidTi);
+				} else{
+					finalTiList.remove(ti);
+				}
+			}
+
+			// update ticket
+			t.getTicketItems().clear();
+			for (TicketItem ti : finalTiList) {
+				t.addToticketItems(ti);
+			}
+			t.calculatePrice();
 		}
 		if (cons.isEmpty()) {
 			cons.addAll(t.getTicketItems());
@@ -408,6 +449,7 @@ public class TicketView extends JPanel {
 				}
 			}
 		}
+
 		if (!rollback) {
 			tx.commit();
 		} else {
@@ -472,6 +514,19 @@ public class TicketView extends JPanel {
 	private synchronized void updateModel() {
 		if (ticket.getTicketItems() == null || ticket.getTicketItems().size() == 0) {
 			throw new PosException(com.floreantpos.POSConstants.TICKET_IS_EMPTY_);
+		}
+		// check if all items are void if yes then suggest to void ticket.
+		int voidCount = 0;
+		int posCount = 0;
+		for(TicketItem ti : ticket.getTicketItems()){
+			if(ti.getName().startsWith("**")){
+				voidCount+= ti.getItemCount();
+			} else{
+				posCount+=ti.getItemCount();
+			}
+		}
+		if(voidCount + posCount == 0){
+			throw new PosException("All items voided. Please void the whole ticket.");
 		}
 		ticket.setTokenNo(tfTokenNo.getInteger());
 		ticket.calculatePrice();

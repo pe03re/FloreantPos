@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -16,6 +17,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.floreantpos.main.Application;
 import com.floreantpos.model.base.BaseTicket;
+import com.floreantpos.model.base.BaseTicketItem;
+import com.floreantpos.model.base.BaseTicketItemModifier;
 import com.floreantpos.model.dao.ShopTableDAO;
 import com.floreantpos.util.NumberUtil;
 import com.floreantpos.util.POSUtil;
@@ -57,10 +60,14 @@ public class Ticket extends BaseTicket {
 
 	/* [CONSTRUCTOR MARKER END] */
 
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy, h:m a");
+	private static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MMM dd yyyy, h:m a");
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy");
+
 	private DecimalFormat numberFormat = new DecimalFormat("0.00");
 
-	private List deletedItems;
+	private Map<String,BaseTicketItem> deletedItems;
+	private Map<String,BaseTicketItemModifier> deletedModifierItems;
+
 	private boolean priceIncludesTax;
 
 	public static final String CUSTOMER_PHONE = "CUSTOMER_PHONE";
@@ -173,6 +180,10 @@ public class Ticket extends BaseTicket {
 		setCreateDate(createTime);
 	}
 
+	public String getCreateDateTimeFormatted() {
+		return dateTimeFormat.format(getCreateDate());
+	}
+	
 	public String getCreateDateFormatted() {
 		return dateFormat.format(getCreateDate());
 	}
@@ -183,7 +194,7 @@ public class Ticket extends BaseTicket {
 			title += "#" + getId();
 		}
 		title += " Server" + ": " + getOwner();
-		title += " Create on" + ":" + getCreateDateFormatted();
+		title += " Create on" + ":" + getCreateDateTimeFormatted();
 		title += " Total" + ": " + numberFormat.format(getTotalAmount());
 
 		return title;
@@ -358,19 +369,38 @@ public class Ticket extends BaseTicket {
 		return discount;
 	}
 
-	public void addDeletedItems(Object o) {
+	public void addDeletedItems(BaseTicketItem o) {
 		if (deletedItems == null) {
-			deletedItems = new ArrayList();
+			deletedItems = new HashMap<String,BaseTicketItem>();
 		}
 
-		deletedItems.add(o);
+		deletedItems.put(o.getCategoryName()+"_"+o.getName(),o);
 	}
 
-	public List getDeletedItems() {
+	public Map getDeletedItems() {
 		return deletedItems;
 	}
 
 	public void clearDeletedItems() {
+		if (deletedItems != null) {
+			deletedItems.clear();
+		}
+
+		deletedItems = null;
+	}
+	
+	public void addDeletedModifierItems(BaseTicketItemModifier o) {
+		if (deletedModifierItems == null) {
+			deletedModifierItems = new HashMap<String,BaseTicketItemModifier>();
+		}
+		deletedModifierItems.put(o.getName()+":"+o.getItemId(),o);
+	}
+
+	public Map getDeletedModifierItems() {
+		return deletedItems;
+	}
+
+	public void clearDeletedModifierItems() {
 		if (deletedItems != null) {
 			deletedItems.clear();
 		}

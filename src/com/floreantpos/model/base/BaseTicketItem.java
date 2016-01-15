@@ -1,10 +1,12 @@
 package com.floreantpos.model.base;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.floreantpos.model.TaxTreatment;
 import com.floreantpos.model.TicketItemCookingInstruction;
+import com.floreantpos.model.TicketItemModifierGroup;
 
 /**
  * This is an object that contains data related to the TICKET_ITEM table. Do not
@@ -562,6 +564,42 @@ public abstract class BaseTicketItem implements Comparable, Serializable {
 
 	public String toString() {
 		return super.toString();
+	}
+
+	public BaseTicketItem(BaseTicketItem baseTicketItem) {
+		super();
+		this.id = null;
+		this.itemId = baseTicketItem.itemId;
+		this.itemCount = baseTicketItem.itemCount;
+		this.name = baseTicketItem.name;
+		this.groupName = baseTicketItem.groupName;
+		this.categoryName = baseTicketItem.categoryName;
+		this.unitPrice = baseTicketItem.unitPrice;
+		this.discountRate = baseTicketItem.discountRate;
+		List<TaxTreatment> tempTaxList = new ArrayList<TaxTreatment>();
+		tempTaxList.addAll(baseTicketItem.taxList);
+		this.taxList = tempTaxList;
+		this.subtotalAmount = baseTicketItem.subtotalAmount;
+		this.subtotalAmountWithoutModifiers = baseTicketItem.subtotalAmountWithoutModifiers;
+		this.discountAmount = baseTicketItem.discountAmount;
+		this.taxAmount = baseTicketItem.taxAmount;
+		this.taxAmountWithoutModifiers = baseTicketItem.taxAmountWithoutModifiers;
+		this.totalAmount = baseTicketItem.totalAmount;
+		this.totalAmountWithoutModifiers = baseTicketItem.totalAmountWithoutModifiers;
+		this.beverage = baseTicketItem.beverage;
+		this.shouldPrintToKitchen = baseTicketItem.shouldPrintToKitchen;
+		this.hasModifiers = baseTicketItem.hasModifiers;
+		this.printedToKitchen = baseTicketItem.printedToKitchen;
+		this.ticket = baseTicketItem.ticket;
+		this.virtualPrinter = baseTicketItem.virtualPrinter;
+		List<TicketItemModifierGroup> modList = new ArrayList<TicketItemModifierGroup>();
+		modList.addAll(baseTicketItem.ticketItemModifierGroups);
+		this.ticketItemModifierGroups = modList;
+		List<TicketItemCookingInstruction> instructionList = new ArrayList<TicketItemCookingInstruction>();
+		instructionList.addAll(baseTicketItem.cookingInstructions);
+		this.cookingInstructions = instructionList;
+		initialize();
+
 	}
 
 }

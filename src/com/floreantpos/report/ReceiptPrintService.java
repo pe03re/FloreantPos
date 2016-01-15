@@ -1,6 +1,8 @@
 package com.floreantpos.report;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +36,7 @@ import com.floreantpos.model.TaxTreatment;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
 import com.floreantpos.model.dao.KitchenTicketDAO;
+import com.floreantpos.model.dao.PosTransactionDAO;
 import com.floreantpos.model.dao.RestaurantDAO;
 import com.floreantpos.model.dao.TicketDAO;
 import com.floreantpos.ui.util.TicketUtils;
@@ -117,9 +120,13 @@ public class ReceiptPrintService {
 
 			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);
 			printProperties.setPrintCookingInstructions(false);
-			HashMap map = populateTicketProperties(ticket, printProperties, null);
+			
+			PosTransaction consT = PosTransactionDAO.getInstance().getConsolidatedTransactionByTicket(ticket);
 
-			JasperPrint jasperPrint = createGeneralTicketPrint(ticket, map, null);
+			
+			HashMap map = populateTicketProperties(ticket, printProperties, consT);
+
+			JasperPrint jasperPrint = createGeneralTicketPrint(ticket, map, consT);
 			jasperPrint.setName("ORDER_" + ticket.getId());
 			jasperPrint.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
 			printQuitely(jasperPrint);
@@ -134,9 +141,11 @@ public class ReceiptPrintService {
 
 			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);
 			printProperties.setPrintCookingInstructions(false);
-			HashMap map = populateTicketProperties(ticket, printProperties, null);
+			PosTransaction consT = PosTransactionDAO.getInstance().getConsolidatedTransactionByTicket(ticket);
 
-			JasperPrint jasperPrint = createGeneralTicketPrint(ticket, map, null);
+			HashMap map = populateTicketProperties(ticket, printProperties, consT);
+
+			JasperPrint jasperPrint = createGeneralTicketPrint(ticket, map, consT);
 			jasperPrint.setName("ORDER_" + ticket.getId());
 			jasperPrint.setProperty("printerName", Application.getPrinters().getReceiptPrinter());
 			printQuitely(jasperPrint);
@@ -154,6 +163,7 @@ public class ReceiptPrintService {
 		try {
 			TicketPrintProperties printProperties = new TicketPrintProperties("*** REFUND RECEIPT ***", true, true, true);
 			printProperties.setPrintCookingInstructions(false);
+			
 			HashMap map = populateTicketProperties(ticket, printProperties, posTransaction);
 			map.put("refundAmountText", "Total Refund");
 			map.put("refundAmount", String.valueOf(posTransaction.getAmount()));
@@ -172,6 +182,7 @@ public class ReceiptPrintService {
 
 	public static void printTransaction(PosTransaction transaction) {
 		try {
+			
 			Ticket ticket = transaction.getTicket();
 
 			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);

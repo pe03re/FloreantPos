@@ -34,10 +34,6 @@ public class NumberUtil {
 
 		String value = numberFormat.format(number);
 
-		if (value.startsWith("-")) { //$NON-NLS-1$
-			return numberFormat.format(0);
-		}
-
 		return value;
 	}
 

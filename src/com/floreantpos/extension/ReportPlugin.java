@@ -9,8 +9,6 @@ public interface ReportPlugin extends Plugin {
 
 	AbstractAction[] getReportActions();
 
-	void addReportView(JTabbedPane tabbedPane);
-
 	String getBaseMenuName();
 	
 }

@@ -25,6 +25,8 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -34,10 +36,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.AbstractTableModel;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -52,6 +56,7 @@ import com.floreantpos.extension.InventoryPlugin;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.MenuGroup;
 import com.floreantpos.model.MenuItem;
+import com.floreantpos.model.MenuItemModifierGroup;
 import com.floreantpos.model.MenuItemShift;
 import com.floreantpos.model.Tax;
 import com.floreantpos.model.TaxTreatment;
@@ -61,7 +66,10 @@ import com.floreantpos.model.dao.TaxDAO;
 import com.floreantpos.swing.ComboBoxModel;
 import com.floreantpos.swing.DoubleTextField;
 import com.floreantpos.swing.IUpdatebleView;
+import com.floreantpos.swing.MessageDialog;
 import com.floreantpos.ui.BeanEditor;
+import com.floreantpos.ui.dialog.BeanEditorDialog;
+import com.floreantpos.ui.dialog.ConfirmDeleteDialog;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.util.NumberUtil;
 import com.floreantpos.util.POSUtil;
@@ -133,7 +141,10 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		MenuGroupDAO foodGroupDAO = new MenuGroupDAO();
 		List<MenuGroup> foodGroups = foodGroupDAO.findAll();
 		cbGroup.setModel(new ComboBoxModel(foodGroups));
-
+		menuItemModifierGroups = menuItem.getMenuItemModiferGroups();
+		if (menuItemModifierGroups == null) {
+			menuItemModifierGroups = new ArrayList<MenuItemModifierGroup>();
+		}
 		shiftTable.setModel(shiftTableModel = new ShiftTableModel(menuItem.getShifts()));
 		setBean(menuItem);
 		addRecepieExtension();
@@ -330,6 +341,10 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		// tfDiscountRate = new DoubleTextField();
 		// tfDiscountRate.setHorizontalAlignment(SwingConstants.TRAILING);
 		chkVisible = new javax.swing.JCheckBox();
+		tabModifier = new javax.swing.JPanel();
+		btnNewModifierGroup = new javax.swing.JButton();
+		btnDeleteModifierGroup = new javax.swing.JButton();
+		btnEditModifierGroup = new javax.swing.JButton();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		tableTicketItemModifierGroups = new javax.swing.JTable();
 		tabShift = new javax.swing.JPanel();
@@ -576,6 +591,46 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		});
 
 		jScrollPane1.setViewportView(tableTicketItemModifierGroups);
+		btnNewModifierGroup.setText(com.floreantpos.POSConstants.ADD);
+		btnNewModifierGroup.setActionCommand("AddModifierGroup");
+		btnNewModifierGroup.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnNewModifierGroupActionPerformed(evt);
+			}
+		});
+
+		btnDeleteModifierGroup.setText(com.floreantpos.POSConstants.DELETE);
+		btnDeleteModifierGroup.setActionCommand("DeleteModifierGroup");
+
+		btnEditModifierGroup.setText(com.floreantpos.POSConstants.EDIT);
+		btnEditModifierGroup.setActionCommand("EditModifierGroup");
+
+		menuItemMGListModel = new MenuItemMGListModel();
+		tableTicketItemModifierGroups.setModel(menuItemMGListModel);
+
+		btnNewModifierGroup.addActionListener(this);
+		btnEditModifierGroup.addActionListener(this);
+		btnDeleteModifierGroup.addActionListener(this);
+
+		GroupLayout jPanel2Layout = new GroupLayout(tabModifier);
+		jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(Alignment.TRAILING).addGroup(
+				jPanel2Layout.createSequentialGroup().addContainerGap().addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE).addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(jPanel2Layout.createParallelGroup(Alignment.BASELINE).addComponent(btnDeleteModifierGroup).addComponent(btnEditModifierGroup).addComponent(btnNewModifierGroup))
+						.addContainerGap()));
+		jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(Alignment.TRAILING).addGroup(
+				jPanel2Layout
+						.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(
+								jPanel2Layout
+										.createParallelGroup(Alignment.LEADING)
+										.addGroup(
+												jPanel2Layout.createSequentialGroup().addComponent(btnNewModifierGroup).addPreferredGap(ComponentPlacement.RELATED).addComponent(btnEditModifierGroup)
+														.addPreferredGap(ComponentPlacement.RELATED).addComponent(btnDeleteModifierGroup))
+										.addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)).addContainerGap()));
+		tabModifier.setLayout(jPanel2Layout);
+
+		//tabbedPane.addTab(com.floreantpos.POSConstants.MODIFIER_GROUPS, tabModifier);
 
 		btnDeleteShift.setText(com.floreantpos.POSConstants.DELETE_SHIFT);
 
@@ -603,6 +658,31 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 
 		tabbedPane.addChangeListener(this);
 	}
+
+	private void btnNewModifierGroupActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnNewModifierGroupActionPerformed
+
+	}// GEN-LAST:event_btnNewModifierGroupActionPerformed
+
+	private void doCreateNewGroup(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_doCreateNewGroup
+		MenuGroupForm editor = new MenuGroupForm();
+		BeanEditorDialog dialog = new BeanEditorDialog(editor, getParentFrame(), true);
+		dialog.open();
+		if (!dialog.isCanceled()) {
+			MenuGroup foodGroup = (MenuGroup) editor.getBean();
+			ComboBoxModel model = (ComboBoxModel) cbGroup.getModel();
+			model.addElement(foodGroup);
+			model.setSelectedItem(foodGroup);
+		}
+	}// GEN-LAST:event_doCreateNewGroup
+
+	// Variables declaration - do not modify//GEN-BEGIN:variables
+	private javax.swing.JButton btnDeleteModifierGroup;
+	private javax.swing.JButton btnEditModifierGroup;
+	private javax.swing.JButton btnNewGroup;
+	private javax.swing.JButton btnNewModifierGroup;
+	private javax.swing.JPanel tabModifier;
+	private List<MenuItemModifierGroup> menuItemModifierGroups;
+	private MenuItemMGListModel menuItemMGListModel;
 
 	private void updateBasePrice() {
 		tfPriceBase.setText(String.valueOf(NumberUtil.roundToTwoDigit(calculateBasePrice())));
@@ -695,6 +775,64 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 			POSMessageDialog.showError(BackOfficeWindow.getInstance(), "Duplicate entry!");
 		}
 		taxTable.invalidate();
+	}
+
+	private void addMenuItemModifierGroup() {
+		try {
+			MenuItemModifierGroupForm form = new MenuItemModifierGroupForm();
+			BeanEditorDialog dialog = new BeanEditorDialog(form, BackOfficeWindow.getInstance(), true);
+			dialog.open();
+			if (!dialog.isCanceled()) {
+				MenuItemModifierGroup modifier = (MenuItemModifierGroup) form.getBean();
+				// modifier.setParentMenuItem((MenuItem) this.getBean());
+
+				for (MenuItemModifierGroup modifierGroup : menuItemModifierGroups) {
+					if (modifierGroup.getModifierGroup().equals(modifier.getModifierGroup())) {
+						POSMessageDialog.showError("This modifier group already exists");
+						return;
+					}
+				}
+
+				menuItemMGListModel.add(modifier);
+			}
+		} catch (Exception x) {
+			MessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
+		}
+	}
+
+	private void editMenuItemModifierGroup() {
+		try {
+			int index = tableTicketItemModifierGroups.getSelectedRow();
+			if (index < 0)
+				return;
+
+			MenuItemModifierGroup menuItemModifierGroup = menuItemMGListModel.get(index);
+
+			MenuItemModifierGroupForm form = new MenuItemModifierGroupForm(menuItemModifierGroup);
+			BeanEditorDialog dialog = new BeanEditorDialog(form, getParentFrame(), true);
+			dialog.open();
+			if (!dialog.isCanceled()) {
+				// menuItemModifierGroup.setParentMenuItem((MenuItem)
+				// this.getBean());
+				menuItemMGListModel.fireTableDataChanged();
+			}
+		} catch (Exception x) {
+			MessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
+		}
+	}
+
+	private void deleteMenuItemModifierGroup() {
+		try {
+			int index = tableTicketItemModifierGroups.getSelectedRow();
+			if (index < 0)
+				return;
+
+			if (ConfirmDeleteDialog.showMessage(this, com.floreantpos.POSConstants.CONFIRM_DELETE, com.floreantpos.POSConstants.CONFIRM) == ConfirmDeleteDialog.YES) {
+				menuItemMGListModel.remove(index);
+			}
+		} catch (Exception x) {
+			MessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
+		}
 	}
 
 	@Override
@@ -839,6 +977,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		menuItem.setSortOrder(menuItem.getSortOrder());
 		menuItem.setButtonColor(btnButtonColor.getBackground().getRGB());
 		menuItem.setTextColor(btnTextColor.getForeground().getRGB());
+		menuItem.setMenuItemModiferGroups(menuItemModifierGroups);
 
 		// try {
 		// menuItem.setDiscountRate(Double.parseDouble(tfDiscountRate.getText()));
@@ -969,7 +1108,13 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 
 	public void actionPerformed(ActionEvent e) {
 		String actionCommand = e.getActionCommand();
-		if (actionCommand.equals(com.floreantpos.POSConstants.ADD_SHIFT)) {
+		if (actionCommand.equals("AddModifierGroup")) {
+			addMenuItemModifierGroup();
+		} else if (actionCommand.equals("EditModifierGroup")) {
+			editMenuItemModifierGroup();
+		} else if (actionCommand.equals("DeleteModifierGroup")) {
+			deleteMenuItemModifierGroup();
+		} else if (actionCommand.equals(com.floreantpos.POSConstants.ADD_SHIFT)) {
 			addShift();
 		} else if (actionCommand.equals(com.floreantpos.POSConstants.DELETE_SHIFT)) {
 			deleteShift();
@@ -1013,6 +1158,74 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 				return formatDouble(taxT.getTax().getRate());
 				// case 2:
 				// return (taxT.isIncludedInPrice()) ? "Yes" : "No";
+			}
+			return null;
+		}
+	}
+
+	class MenuItemMGListModel extends AbstractTableModel {
+		String[] cn = { com.floreantpos.POSConstants.GROUP_NAME, com.floreantpos.POSConstants.MIN_QUANTITY, com.floreantpos.POSConstants.MAX_QUANTITY };
+
+		MenuItemMGListModel() {
+		}
+
+		public MenuItemModifierGroup get(int index) {
+			return menuItemModifierGroups.get(index);
+		}
+
+		public void add(MenuItemModifierGroup group) {
+			if (menuItemModifierGroups == null) {
+				menuItemModifierGroups = new ArrayList<MenuItemModifierGroup>();
+			}
+			menuItemModifierGroups.add(group);
+			fireTableDataChanged();
+		}
+
+		public void remove(int index) {
+			if (menuItemModifierGroups == null) {
+				return;
+			}
+			menuItemModifierGroups.remove(index);
+			fireTableDataChanged();
+		}
+
+		public void remove(MenuItemModifierGroup group) {
+			if (menuItemModifierGroups == null) {
+				return;
+			}
+			menuItemModifierGroups.remove(group);
+			fireTableDataChanged();
+		}
+
+		public int getRowCount() {
+			if (menuItemModifierGroups == null)
+				return 0;
+
+			return menuItemModifierGroups.size();
+
+		}
+
+		public int getColumnCount() {
+			return cn.length;
+		}
+
+		@Override
+		public String getColumnName(int column) {
+			return cn[column];
+		}
+
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			MenuItemModifierGroup menuItemModifierGroup = menuItemModifierGroups.get(rowIndex);
+
+			switch (columnIndex) {
+			case 0:
+				return menuItemModifierGroup.getModifierGroup().getName();
+
+			case 1:
+				return Integer.valueOf(menuItemModifierGroup.getMinQuantity());
+
+			case 2:
+				return Integer.valueOf(menuItemModifierGroup.getMaxQuantity());
 			}
 			return null;
 		}

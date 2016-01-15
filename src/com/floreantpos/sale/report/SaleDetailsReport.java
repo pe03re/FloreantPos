@@ -134,7 +134,7 @@ public class SaleDetailsReport extends Report {
 				if (reportItem == null) {
 					reportItem = new SaleDetailReportItem();
 					reportItem.setId(key);
-					reportItem.setDate(ticket.getCreateDateFormatted());
+					reportItem.setDate(ticket.getCreateDateTimeFormatted());
 					reportItem.setPrice(ticketItem.getUnitPrice());
 					reportItem.setBuyPrice(mi.getBuyPrice());
 					reportItem.setProfit(ticketItem.getUnitPrice() - mi.getBuyPrice());

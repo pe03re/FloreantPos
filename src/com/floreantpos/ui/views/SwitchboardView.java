@@ -684,10 +684,10 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 	}
 
 	private void editTicket(Ticket ticket) {
-		if (ticket.isPaid()) {
-			POSMessageDialog.showMessage("Paid ticket cannot be edited");
-			return;
-		}
+//		if (ticket.isPaid()) {
+//			POSMessageDialog.showMessage("Paid ticket cannot be edited");
+//			return;
+//		}
 
 		Ticket ticketToEdit = TicketDAO.getInstance().loadFullTicket(ticket.getId());
 		OrderView.getInstance().setCurrentTicket(ticketToEdit);

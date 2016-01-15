@@ -26,7 +26,7 @@ public class SettleTicketAction extends AbstractAction {
 	public boolean execute() {
 		Ticket ticket = TicketDAO.getInstance().loadFullTicket(ticketId);
 
-		if (ticket.isPaid()) {
+		if (ticket.isPaid() && ticket.getDueAmount() == 0) {
 			POSMessageDialog.showError("Ticket is already settled");
 			return false;
 		}

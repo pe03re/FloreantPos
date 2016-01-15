@@ -36,11 +36,11 @@ public class ReportUtil {
 		return getReport(reportName,USER_REPORT_DIR);
 	}
 	
-	public static JasperReport getReport(String reportName, String path) {
+	public static JasperReport getReport(String reportName, String path, Class claz){
 		InputStream resource = null;
 
 		try {
-			resource = ReceiptPrintService.class.getResourceAsStream(path + reportName + ".jasper");
+			resource = claz.getResourceAsStream(path + reportName + ".jasper");
 			if (resource == null) {
 				return compileReport(reportName);
 			} else {
@@ -53,6 +53,10 @@ public class ReportUtil {
 		} finally {
 			IOUtils.closeQuietly(resource);
 		}
+	}
+	
+	public static JasperReport getReport(String reportName, String path) {
+		return getReport(reportName,  path, ReceiptPrintService.class);
 
 	}
 
@@ -60,7 +64,7 @@ public class ReportUtil {
 		return compileReport(reportName,USER_REPORT_DIR);
 	}
 	
-	private static JasperReport compileReport(String reportName, String path) throws Exception {
+	private static JasperReport compileReport(String reportName, String path, Class claz) throws Exception {
 		InputStream in = null;
 		InputStream in2 = null;
 		FileOutputStream out = null;
@@ -71,11 +75,11 @@ public class ReportUtil {
 			File dir = jrxmlFile.getParentFile();
 			jasperFile = new File(dir, reportName + ".jasper");
 
-			in = ReceiptPrintService.class.getResourceAsStream(path + reportName + ".jrxml");
+			in = claz.getResourceAsStream(path + reportName + ".jrxml");
 			out = new FileOutputStream(jasperFile);
 			JasperCompileManager.compileReportToStream(in, out);
 
-			in2 = ReceiptPrintService.class.getResourceAsStream(path + reportName + ".jasper");
+			in2 = claz.getResourceAsStream(path + reportName + ".jasper");
 			return (JasperReport) JRLoader.loadObject(in2);
 
 		} catch (Exception e) {
@@ -92,6 +96,10 @@ public class ReportUtil {
 			IOUtils.closeQuietly(in2);
 			IOUtils.closeQuietly(out);
 		}
+	}
+	
+	private static JasperReport compileReport(String reportName, String path) throws Exception {
+		return compileReport( reportName,  path,ReceiptPrintService.class);
 	}
 	
 	private static JasperReport getDefaultReport(String reportName, String path) {

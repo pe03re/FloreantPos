@@ -122,18 +122,27 @@ public class TicketListView extends JPanel {
 				return simpleDateFormat.format(ticket.getCreateDate());
 			case 3:
 				List<TicketItem> list = ticket.getTicketItems();
-				String items = list.size() + "";
+				StringBuilder items = new StringBuilder("");
 				int count = 2;
 				for (TicketItem ti : list) {
+					if(ti.getName().startsWith("**"))
+						continue;
 					if (count > 0) {
-						items = items + ", " + ti.getNameDisplay();
+						items.append(", ");
+						items.append(ti.getNameDisplay());
 						count--;
 					} else {
-						items = items + "+" + (list.size() - 2) + " more";
+						items.append("+");
+						items.append((list.size() - 2));
+						items.append(" more");
 						break;
 					}
 				}
+				if(items.length() > 0 && items.charAt(0) == ',' ){
 				return items.substring(2);
+				}else{
+					return "";
+				}
 
 			case 4:
 				return ticket.getType();

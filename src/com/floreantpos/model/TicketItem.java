@@ -23,6 +23,10 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 		super(id);
 	}
 
+	
+	public TicketItem(TicketItem ti) {
+		super(ti);
+	}
 	/**
 	 * Constructor for required fields
 	 */
