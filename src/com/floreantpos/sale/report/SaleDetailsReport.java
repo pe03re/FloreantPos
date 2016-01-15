@@ -105,7 +105,7 @@ public class SaleDetailsReport extends Report {
 		Date date1 = DateUtils.startOfDay(getStartDate());
 		Date date2 = DateUtils.endOfDay(getEndDate());
 
-		List<Ticket> tickets = TicketDAO.getInstance().findTickets(date1, date2, getReportType() == Report.REPORT_TYPE_1 ? true : false);
+		List<Ticket> tickets = TicketDAO.getInstance().findTickets(date1, date2, true);
 		refreshBuyPrice();
 		HashMap<String, SaleDetailReportItem> itemMap = new HashMap<String, SaleDetailReportItem>();
 		HashMap<String, SaleDetailReportItem> modifierMap = new HashMap<String, SaleDetailReportItem>();

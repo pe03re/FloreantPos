@@ -98,7 +98,7 @@ public class Application {
 		if (developmentMode) {
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/InventoryPlugin/orostock/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/CustPlugin/orocust/target/classes").toURI());
-			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/salesreport/target/classes").toURI());
+			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/orderDetailReport/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/menuItemDetailReport/target/classes").toURI());
 
 

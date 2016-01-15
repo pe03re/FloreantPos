@@ -21,7 +21,7 @@ public class TicketUtils {
 		}
 		String month = new SimpleDateFormat("/MM/").format(ticketDate);
 		String date = new SimpleDateFormat("dd/").format(ticketDate);
-		System.out.println(year + month + date + ticket.getSerialId());
+//		System.out.println(year + month + date + ticket.getSerialId());
 		header = year + month + date + ticket.getSerialId();
 		return header;
 	}

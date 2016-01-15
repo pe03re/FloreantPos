@@ -75,7 +75,7 @@ public class SalesReport extends Report {
 		Date date1 = DateUtils.startOfDay(getStartDate());
 		Date date2 = DateUtils.endOfDay(getEndDate());
 
-		List<Ticket> tickets = TicketDAO.getInstance().findTickets(date1, date2, getReportType() == Report.REPORT_TYPE_1 ? true : false);
+		List<Ticket> tickets = TicketDAO.getInstance().findTickets(date1, date2, true);
 
 		HashMap<String, ReportItem> itemMap = new HashMap<String, ReportItem>();
 		HashMap<String, ReportItem> modifierMap = new HashMap<String, ReportItem>();
