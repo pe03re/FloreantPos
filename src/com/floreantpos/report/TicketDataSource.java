@@ -11,11 +11,11 @@ import com.floreantpos.util.NumberUtil;
 public class TicketDataSource extends AbstractReportDataSource {
 
 	public TicketDataSource() {
-		super(new String[] { "itemName", "itemQty", "itemSubtotal" });
+		super(new String[] { "itemName", "basePrice", "itemQty", "itemSubtotal" });
 	}
 
 	public TicketDataSource(Ticket ticket) {
-		super(new String[] { "itemName", "itemQty", "itemSubtotal" });
+		super(new String[] { "itemName", "basePrice", "itemQty", "itemSubtotal" });
 
 		setTicket(ticket);
 	}
@@ -36,8 +36,9 @@ public class TicketDataSource extends AbstractReportDataSource {
 		switch (columnIndex) {
 		case 0:
 			return item.getNameDisplay();
-
 		case 1:
+			return String.valueOf(NumberUtil.formatNumber(item.getUnitPriceDisplay()));
+		case 2:
 			Integer itemCountDisplay = item.getItemCountDisplay();
 
 			if (itemCountDisplay == null) {
@@ -46,7 +47,7 @@ public class TicketDataSource extends AbstractReportDataSource {
 
 			return String.valueOf(itemCountDisplay);
 
-		case 2:
+		case 3:
 			Double total = item.getTotalAmountWithoutModifiersDisplay() - item.getTaxAmountWithoutModifiersDisplay();
 			if (total == null) {
 				return "0";

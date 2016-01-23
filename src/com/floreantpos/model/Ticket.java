@@ -62,11 +62,12 @@ public class Ticket extends BaseTicket {
 
 	private static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MMM dd yyyy, h:m a");
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy");
+	private static SimpleDateFormat dateDayFormat = new SimpleDateFormat("MMM dd yyyy, EEE");
 
 	private DecimalFormat numberFormat = new DecimalFormat("0.00");
 
-	private Map<String,BaseTicketItem> deletedItems;
-	private Map<String,BaseTicketItemModifier> deletedModifierItems;
+	private Map<String, BaseTicketItem> deletedItems;
+	private Map<String, BaseTicketItemModifier> deletedModifierItems;
 
 	private boolean priceIncludesTax;
 
@@ -183,9 +184,13 @@ public class Ticket extends BaseTicket {
 	public String getCreateDateTimeFormatted() {
 		return dateTimeFormat.format(getCreateDate());
 	}
-	
+
 	public String getCreateDateFormatted() {
 		return dateFormat.format(getCreateDate());
+	}
+	
+	public String getCreateDateDayFormatted() {
+		return dateDayFormat.format(getCreateDate());
 	}
 
 	public String getTitle() {
@@ -305,6 +310,29 @@ public class Ticket extends BaseTicket {
 		return fixInvalidAmount(tax);
 	}
 
+	public Map<String, Double> getTicketTaxDetails() {
+		Map<String, Double> taxMap = new HashMap<String, Double>();
+
+		if (getTicketItems() != null) {
+			for (TicketItem ti : getTicketItems()) {
+				if (ti != null && ti.getTaxList() != null) {
+					List<TaxTreatment> ttList = ti.getTaxList();
+					for (TaxTreatment t : ttList) {
+						if (t.getTax() != null && t.getTax().getRate() > 0.0) {
+							double tax = 0;
+							if (taxMap.containsKey(t.getTax().getName())) {
+								tax = taxMap.get(t.getTax().getName());
+							}
+							tax = tax + ti.getSubtotalAmount() * t.getTax().getRate() / 100;
+							taxMap.put(t.getTax().getName(), tax);
+						}
+					}
+				}
+			}
+		}
+		return taxMap;
+	}
+
 	private double fixInvalidAmount(double tax) {
 		if (tax < 0 || Double.isNaN(tax)) {
 			tax = 0;
@@ -371,10 +399,10 @@ public class Ticket extends BaseTicket {
 
 	public void addDeletedItems(BaseTicketItem o) {
 		if (deletedItems == null) {
-			deletedItems = new HashMap<String,BaseTicketItem>();
+			deletedItems = new HashMap<String, BaseTicketItem>();
 		}
 
-		deletedItems.put(o.getCategoryName()+"_"+o.getName(),o);
+		deletedItems.put(o.getCategoryName() + "_" + o.getName(), o);
 	}
 
 	public Map getDeletedItems() {
@@ -388,12 +416,12 @@ public class Ticket extends BaseTicket {
 
 		deletedItems = null;
 	}
-	
+
 	public void addDeletedModifierItems(BaseTicketItemModifier o) {
 		if (deletedModifierItems == null) {
-			deletedModifierItems = new HashMap<String,BaseTicketItemModifier>();
+			deletedModifierItems = new HashMap<String, BaseTicketItemModifier>();
 		}
-		deletedModifierItems.put(o.getName()+":"+o.getItemId(),o);
+		deletedModifierItems.put(o.getName() + ":" + o.getItemId(), o);
 	}
 
 	public Map getDeletedModifierItems() {

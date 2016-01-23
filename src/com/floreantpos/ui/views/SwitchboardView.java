@@ -796,31 +796,36 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 	public synchronized void updateTicketList() {
 		try {
+			
+			List<Ticket> totalTickets = new ArrayList<Ticket>();
+			
 			// ticketListUpdateTimer.stop();
 			Application.getPosWindow().setGlassPaneVisible(true);
 
-			// User user = Application.getCurrentUser();
+			User user = Application.getCurrentUser();
 
 			TicketDAO dao = TicketDAO.getInstance();
 
-			// List<Ticket> openTickets = null;
-			//
-			// if (user.canViewAllOpenTickets()) {
-			// openTickets = dao.findOpenTickets();
-			// } else {
-			// openTickets = dao.findOpenTicketsForUser(user);
-			// }
-			// openTicketList.setTickets(openTickets);
+			List<Ticket> openTickets = null;
+
+			if (user.canViewAllOpenTickets()) {
+				openTickets = dao.findOpenTickets();
+			} else {
+				openTickets = dao.findOpenTicketsForUser(user);
+			}
+			openTicketList.setTickets(openTickets);
+			
 
 			// For now show last N (ticketHistory) tickets.
 			List<Ticket> lastTickets = null;
 
 			RestaurantDAO resDao = RestaurantDAO.getInstance();
 			Restaurant res = resDao.findAll().get(0);
-
 			lastTickets = dao.findLastNTickets(res.getTicketHistory());
-
-			openTicketList.setTickets(lastTickets);
+			
+			totalTickets.addAll(lastTickets);
+			totalTickets.addAll(openTickets);
+			openTicketList.setTickets(totalTickets);
 		} catch (Exception e) {
 			POSMessageDialog.showError(this, "Error getting open ticket list", e);
 		} finally {

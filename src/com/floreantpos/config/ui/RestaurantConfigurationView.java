@@ -257,7 +257,7 @@ public class RestaurantConfigurationView extends ConfigurationView {
 		restaurant.setTicketFooterMessage(tfTicketFooter.getText());
 
 		// restaurant.setEndTime(tfEndDate.getDate());
-		restaurant.setStartCounter(Integer.parseInt(tfStartCounter.getText()));
+		//restaurant.setStartCounter(Integer.parseInt(tfStartCounter.getText()));
 		// restaurant.setStartVCounter(Integer.parseInt(tfStartVCounter.getText()));
 		restaurant.setTicketHistory(Integer.parseInt(tfTicketHistory.getText()));
 

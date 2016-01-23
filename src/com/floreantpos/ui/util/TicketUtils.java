@@ -21,7 +21,7 @@ public class TicketUtils {
 		}
 		String month = new SimpleDateFormat("/MM/").format(ticketDate);
 		String date = new SimpleDateFormat("dd/").format(ticketDate);
-//		System.out.println(year + month + date + ticket.getSerialId());
+		// System.out.println(year + month + date + ticket.getSerialId());
 		header = year + month + date + ticket.getSerialId();
 		return header;
 	}
@@ -65,6 +65,10 @@ public class TicketUtils {
 				return TicketStatus.valueOf(ticket.getStatus()).toString();
 			}
 			return "PAID";
+		}
+
+		if (ticket.isVoided()) {
+			return "VOID";
 		}
 
 		return "OPEN";

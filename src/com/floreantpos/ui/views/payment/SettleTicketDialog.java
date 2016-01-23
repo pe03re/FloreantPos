@@ -52,6 +52,7 @@ import com.floreantpos.ui.dialog.TransactionCompletionDialog;
 import com.floreantpos.ui.views.SwitchboardView;
 import com.floreantpos.ui.views.TicketDetailView;
 import com.floreantpos.ui.views.order.OrderController;
+import com.floreantpos.util.NumberUtil;
 import com.floreantpos.util.POSUtil;
 
 public class SettleTicketDialog extends POSDialog implements CardInputListener {
@@ -231,6 +232,8 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 					PosTransactionService.adjustTerminalBalance(transaction);
 
 					ticket.addTotransactions(transaction);
+					dispose();
+
 				}
 			} else {
 
@@ -446,9 +449,10 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 		dialog.setTotalAmount(dueAmount);
 		dialog.setPaidAmount(transaction.getAmount());
 		dialog.setDueAmount(ticket.getDueAmount());
-
+		
 		if (tenderedAmount > transaction.getAmount()) {
-			dialog.setChangeAmount(tenderedAmount - transaction.getAmount());
+			double roundOff = NumberUtil.roundOff(tenderedAmount - transaction.getAmount()) - (tenderedAmount - transaction.getAmount());
+			dialog.setChangeAmount(tenderedAmount - transaction.getAmount() + roundOff);
 		} else {
 			dialog.setChangeAmount(0);
 		}

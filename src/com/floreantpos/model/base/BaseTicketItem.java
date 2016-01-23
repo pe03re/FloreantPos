@@ -577,7 +577,9 @@ public abstract class BaseTicketItem implements Comparable, Serializable {
 		this.unitPrice = baseTicketItem.unitPrice;
 		this.discountRate = baseTicketItem.discountRate;
 		List<TaxTreatment> tempTaxList = new ArrayList<TaxTreatment>();
-		tempTaxList.addAll(baseTicketItem.taxList);
+		for (TaxTreatment tax : baseTicketItem.taxList) {
+			tempTaxList.add(new TaxTreatment(tax));
+		}
 		this.taxList = tempTaxList;
 		this.subtotalAmount = baseTicketItem.subtotalAmount;
 		this.subtotalAmountWithoutModifiers = baseTicketItem.subtotalAmountWithoutModifiers;

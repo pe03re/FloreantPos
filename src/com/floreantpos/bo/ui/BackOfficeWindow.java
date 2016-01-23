@@ -120,7 +120,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		if (newUserType == null) {
 			createAdminMenu(menuBar);
 			createExplorerMenu(menuBar);
-			createSalesReportMenu(menuBar);
+			//createSalesReportMenu(menuBar);
 			createExpenseReportMenu(menuBar);
 			createReportMenus(menuBar);
 
@@ -133,7 +133,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 			}
 			
 			if (permissions != null && permissions.contains(UserPermission.VIEW_REPORTS)) {
-				createSalesReportMenu(menuBar);
+				//createSalesReportMenu(menuBar);
 				createExpenseReportMenu(menuBar);
 				createReportMenus(menuBar);
 

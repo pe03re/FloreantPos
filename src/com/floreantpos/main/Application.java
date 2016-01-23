@@ -100,6 +100,8 @@ public class Application {
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/CustPlugin/orocust/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/orderDetailReport/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/menuItemDetailReport/target/classes").toURI());
+			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/dayWiseReport/target/classes").toURI());
+			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/voidDetailReport/target/classes").toURI());
 
 
 		}

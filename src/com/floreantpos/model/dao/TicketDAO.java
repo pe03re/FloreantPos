@@ -458,6 +458,23 @@ public class TicketDAO extends BaseTicketDAO {
 		}
 	}
 	
+	public List<Ticket> findVoidTickets(Date startDate, Date endDate) {
+		Session session = null;
+		try {
+			session = getSession();
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.add(Restrictions.ge(Ticket.PROP_CREATE_DATE, startDate));
+			criteria.add(Restrictions.le(Ticket.PROP_CREATE_DATE, endDate));
+			//criteria.add(Restrictions.eq(Ticket.PROP_CLOSED, Boolean.FALSE));
+			criteria.add(Restrictions.eq(Ticket.PROP_VOIDED, Boolean.TRUE));
+			//criteria.add(Restrictions.eq(Ticket.PROP_REFUNDED, Boolean.FALSE));
+			criteria.addOrder(Order.asc(Ticket.PROP_CREATE_DATE));
+			return criteria.list();
+		} finally {
+			closeSession(session);
+		}
+	}
+	
 
 	public List<Ticket> findTickets(Date startDate, Date endDate, boolean closed) {
 		Session session = null;

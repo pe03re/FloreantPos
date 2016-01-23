@@ -120,10 +120,9 @@ public class ReceiptPrintService {
 
 			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);
 			printProperties.setPrintCookingInstructions(false);
-			
+
 			PosTransaction consT = PosTransactionDAO.getInstance().getConsolidatedTransactionByTicket(ticket);
 
-			
 			HashMap map = populateTicketProperties(ticket, printProperties, consT);
 
 			JasperPrint jasperPrint = createGeneralTicketPrint(ticket, map, consT);
@@ -163,7 +162,7 @@ public class ReceiptPrintService {
 		try {
 			TicketPrintProperties printProperties = new TicketPrintProperties("*** REFUND RECEIPT ***", true, true, true);
 			printProperties.setPrintCookingInstructions(false);
-			
+
 			HashMap map = populateTicketProperties(ticket, printProperties, posTransaction);
 			map.put("refundAmountText", "Total Refund");
 			map.put("refundAmount", String.valueOf(posTransaction.getAmount()));
@@ -182,7 +181,7 @@ public class ReceiptPrintService {
 
 	public static void printTransaction(PosTransaction transaction) {
 		try {
-			
+
 			Ticket ticket = transaction.getTicket();
 
 			TicketPrintProperties printProperties = new TicketPrintProperties("Invoice: " + TicketUtils.getTicketNumber(ticket), true, true, true);
@@ -337,6 +336,7 @@ public class ReceiptPrintService {
 			}
 			map.put("subtotalText", POSConstants.SUBTOTAL + " ");
 
+			map.put("basePriceText", "RATE");
 			map.put("totalText", POSConstants.RECEIPT_REPORT_TOTAL_LABEL);
 			map.put("discountText", POSConstants.RECEIPT_REPORT_DISCOUNT_LABEL);
 			map.put("serviceChargeText", POSConstants.RECEIPT_REPORT_SERVICE_CHARGE_LABEL);
@@ -344,18 +344,19 @@ public class ReceiptPrintService {
 			map.put("netAmountText", POSConstants.RECEIPT_REPORT_NETAMOUNT_LABEL);
 			map.put("paidAmountText", POSConstants.RECEIPT_REPORT_PAIDAMOUNT_LABEL);
 			map.put("dueAmountText", POSConstants.RECEIPT_REPORT_DUEAMOUNT_LABEL.trim());
-			
 
 			map.put("totalAmount", NumberUtil.formatNumber(totalAmount));
 
 			double roundOff = NumberUtil.roundOff(totalAmount) - totalAmount;
 			map.put("netAmount", NumberUtil.formatNumber(NumberUtil.roundOff(totalAmount + roundOff)));
 			map.put("paidAmount", NumberUtil.formatNumber(ticket.getPaidAmount()));
-			map.put("dueAmount", NumberUtil.formatNumber(ticket.getDueAmount()));
 			if (roundOff != 0) {
 				map.put("roundOff", Double.toString(NumberUtil.roundToTwoDigit(roundOff)));
 				map.put("roundOffText", "Rounding Off");
 			}
+			 roundOff = NumberUtil.roundOff(ticket.getDueAmount()) - ticket.getDueAmount();
+				map.put("dueAmount", NumberUtil.formatNumber(ticket.getDueAmount()+roundOff));
+
 			map.put("grandSubtotal", NumberUtil.formatNumber(ticket.getSubtotalAmount()));
 			if (restaurant.getTicketFeedbackMessage() != null) {
 				map.put("feedback", restaurant.getTicketFeedbackMessage().trim());
@@ -374,10 +375,13 @@ public class ReceiptPrintService {
 				if (changedAmount < 0) {
 					changedAmount = 0;
 				}
+				
+				double roundOffChanged = NumberUtil.roundOff(changedAmount) - changedAmount;
+
 				map.put("tenderedAmountText", "Tendered Amount");
 				map.put("tenderedAmount", NumberUtil.formatNumber(tenderedAmount));
 				map.put("changeAmountText", "Change Returned");
-				map.put("changedAmount", NumberUtil.formatNumber(changedAmount));
+				map.put("changedAmount", NumberUtil.formatNumber(changedAmount+roundOffChanged));
 
 				if (transaction.isCard()) {
 					map.put("cardPayment", true);
@@ -425,25 +429,7 @@ public class ReceiptPrintService {
 	}
 
 	private static void buildTaxDetails(Ticket ticket, HashMap map) {
-		Map<String, Double> taxMap = new HashMap<String, Double>();
-
-		if (ticket != null && ticket.getTicketItems() != null) {
-			for (TicketItem ti : ticket.getTicketItems()) {
-				if (ti != null && ti.getTaxList() != null) {
-					List<TaxTreatment> ttList = ti.getTaxList();
-					for (TaxTreatment t : ttList) {
-						if (t.getTax() != null && t.getTax().getRate() > 0.0) {
-							double tax = 0;
-							if (taxMap.containsKey(t.getTax().getName())) {
-								tax = taxMap.get(t.getTax().getName());
-							}
-							tax = tax + ti.getSubtotalAmount() * t.getTax().getRate() / 100;
-							taxMap.put(t.getTax().getName(), tax);
-						}
-					}
-				}
-			}
-		}
+		Map<String, Double> taxMap = ticket.getTicketTaxDetails();
 
 		StringBuilder taxNameBuilder = new StringBuilder();
 		taxNameBuilder.append("<html>");
@@ -466,7 +452,6 @@ public class ReceiptPrintService {
 
 		map.put(TAX_TEXT, taxNameBuilder.toString());
 		map.put(TAX_AMOUNT, taxRateBuilder.toString());
-
 	}
 
 	private static StringBuilder buildTicketHeader(Ticket ticket, TicketPrintProperties printProperties) {

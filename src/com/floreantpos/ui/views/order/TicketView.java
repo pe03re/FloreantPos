@@ -148,7 +148,7 @@ public class TicketView extends JPanel {
 		ticketAmountPanel.add(lblTokenNo, "cell 0 3");
 		tfTokenNo = new IntegerTextField(6);
 		tfTokenNo.setHorizontalAlignment(SwingConstants.LEFT);
-		ticketAmountPanel.add(tfTokenNo, "cell 1 3, growx");
+		ticketAmountPanel.add(tfTokenNo, "cell 0 4");
 
 		jLabel5 = new javax.swing.JLabel();
 		jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -358,18 +358,18 @@ public class TicketView extends JPanel {
 			List<TicketItem> oldItems = old.getTicketItems();
 			finalTiList.addAll(oldItems);
 			Map<String, TicketItem> itemMap = new HashMap<String, TicketItem>();
-			
+
 			for (TicketItem ti : oldItems) {
 				itemMap.put(ti.getItemId() + ":" + ti.getId(), ti);
 			}
 			for (TicketItem ti : tiList) {
-				if (!itemMap.containsKey(ti.getItemId()+ ":" + ti.getId())) {
+				if (!itemMap.containsKey(ti.getItemId() + ":" + ti.getId())) {
 					cons.add(ti);
 					finalTiList.add(ti);
 				} else {
 					TicketItem ti1 = new TicketItem(ti.getId());
 					ti1.setItemCount(ti.getItemCount() - itemMap.get(ti.getItemId() + ":" + ti.getId()).getItemCount());
-					itemMap.remove(ti.getItemId()+ ":" + ti.getId());
+					itemMap.remove(ti.getItemId() + ":" + ti.getId());
 					// if reducing amount then add a void line
 					if (ti1.getItemCount() < 0) {
 						// add void line
@@ -377,7 +377,7 @@ public class TicketView extends JPanel {
 						voidTi.setName("**" + voidTi.getName());
 						voidTi.setItemCount(ti1.getItemCount());
 						voidTi.setPrintedToKitchen(false);
-						voidTi.setTotalAmount(ti.getTotalAmount()*-1);
+						voidTi.setTotalAmount(ti.getTotalAmount() * -1);
 
 						finalTiList.add(voidTi);
 					}
@@ -394,11 +394,11 @@ public class TicketView extends JPanel {
 				if (!ti.getName().startsWith("**")) {
 					TicketItem voidTi = new TicketItem(ti);
 					voidTi.setName("**" + voidTi.getName());
-					voidTi.setTotalAmount(ti.getTotalAmount()*-1);
+					voidTi.setTotalAmount(ti.getTotalAmount() * -1);
 					voidTi.setItemCount(ti1.getItemCount());
 					voidTi.setPrintedToKitchen(false);
 					finalTiList.add(voidTi);
-				} else{
+				} else {
 					finalTiList.remove(ti);
 				}
 			}
@@ -466,11 +466,11 @@ public class TicketView extends JPanel {
 			if (ticket.getId() == null) {
 				// save ticket first. ticket needs to save so that it
 				// contains an id.
+				OrderController.assignTicketNumber(ticket);
 				OrderController.saveOrder(ticket);
 				ticketDAO.refresh(ticket);
 			}
 
-			OrderController.assignTicketNumber(ticket);
 			OrderController.saveOrder(ticket);
 
 			if (ticket.needsKitchenPrint()) {
@@ -518,14 +518,14 @@ public class TicketView extends JPanel {
 		// check if all items are void if yes then suggest to void ticket.
 		int voidCount = 0;
 		int posCount = 0;
-		for(TicketItem ti : ticket.getTicketItems()){
-			if(ti.getName().startsWith("**")){
-				voidCount+= ti.getItemCount();
-			} else{
-				posCount+=ti.getItemCount();
+		for (TicketItem ti : ticket.getTicketItems()) {
+			if (ti.getName().startsWith("**")) {
+				voidCount += ti.getItemCount();
+			} else {
+				posCount += ti.getItemCount();
 			}
 		}
-		if(voidCount + posCount == 0){
+		if (voidCount + posCount == 0) {
 			throw new PosException("All items voided. Please void the whole ticket.");
 		}
 		ticket.setTokenNo(tfTokenNo.getInteger());
@@ -536,7 +536,9 @@ public class TicketView extends JPanel {
 		try {
 			updateModel();
 			updateInventory(ticket);
-			OrderController.assignTicketNumber(ticket);
+			if (ticket.getId() == null) {
+				OrderController.assignTicketNumber(ticket);
+			}
 			OrderController.saveOrder(ticket);
 
 			firePayOrderSelected();
