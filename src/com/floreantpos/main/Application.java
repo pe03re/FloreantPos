@@ -102,7 +102,8 @@ public class Application {
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/menuItemDetailReport/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/dayWiseReport/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/voidDetailReport/target/classes").toURI());
-
+			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/categoryDetailReport/target/classes").toURI());
+			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/groupDetailReport/target/classes").toURI());
 
 		}
 

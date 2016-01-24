@@ -23,10 +23,10 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 		super(id);
 	}
 
-	
 	public TicketItem(TicketItem ti) {
 		super(ti);
 	}
+
 	/**
 	 * Constructor for required fields
 	 */
@@ -60,6 +60,28 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 		}
 
 		return super.getTaxAmount();
+	}
+
+	public double getVatTaxAmount() {
+		List<TaxTreatment> taxList = getTaxList();
+		double vatTax = 0.0;
+		for (TaxTreatment tt : taxList) {
+			if (tt.getTax().getName().toLowerCase().contains("vat")) {
+				vatTax += tt.getTax().getRate() * getSubtotalAmount() / 100;
+			}
+		}
+		return vatTax;
+	}
+
+	public double getServiceTaxAmount() {
+		List<TaxTreatment> taxList = getTaxList();
+		double serviceTax = 0.0;
+		for (TaxTreatment tt : taxList) {
+			if (tt.getTax().getName().toLowerCase().contains("service")) {
+				serviceTax += tt.getTax().getRate() * getSubtotalAmount() / 100;
+			}
+		}
+		return serviceTax;
 	}
 
 	@Override
