@@ -188,7 +188,7 @@ public class Ticket extends BaseTicket {
 	public String getCreateDateFormatted() {
 		return dateFormat.format(getCreateDate());
 	}
-	
+
 	public String getCreateDateDayFormatted() {
 		return dateDayFormat.format(getCreateDate());
 	}
@@ -253,7 +253,8 @@ public class Ticket extends BaseTicket {
 		setTotalAmount(NumberUtil.roundToTwoDigit(totalAmount));
 
 		double dueAmount = totalAmount - getPaidAmount();
-		setDueAmount(NumberUtil.roundToTwoDigit(dueAmount));
+		double roundOff = NumberUtil.roundOff(dueAmount) - dueAmount;
+		setDueAmount(dueAmount + roundOff);
 	}
 
 	private double calculateSubtotalAmount() {
