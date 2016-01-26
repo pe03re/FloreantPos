@@ -99,6 +99,23 @@ public class PosTransactionDAO extends BasePosTransactionDAO {
 		}
 	}
 
+	public List<PosTransaction> findAllTransactionByTicket(Ticket ticket) {
+		Session session = null;
+
+		try {
+			session = getSession();
+
+			Criteria criteria = session.createCriteria(getReferenceClass());
+			criteria.addOrder(Order.asc(PosTransaction.PROP_ID));
+			criteria.add(Restrictions.isNotNull(PosTransaction.PROP_TICKET));
+			criteria.add(Restrictions.eq(PosTransaction.PROP_TICKET, ticket));
+			List l = criteria.list();
+			return l;
+		} finally {
+			closeSession(session);
+		}
+	}
+
 	public List<? extends PosTransaction> findTransactions(Terminal terminal, Class transactionClass, Date from, Date to) {
 		Session session = null;
 

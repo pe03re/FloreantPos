@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.floreantpos.swing.PosButton;
@@ -13,6 +14,14 @@ import com.floreantpos.ui.dialog.POSMessageDialog;
 public class OrderInfoDialog extends POSDialog {
 	OrderInfoView view;
 
+	public OrderInfoDialog(OrderInfoView view, JFrame parent) {
+		super(parent, true);
+		this.view = view;
+		setTitle("ORDER PREVIEW");
+
+		createUI();
+	}
+	
 	public OrderInfoDialog(OrderInfoView view) {
 		this.view = view;
 		setTitle("ORDER PREVIEW");
