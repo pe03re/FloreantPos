@@ -227,5 +227,19 @@ public class TicketSelectionDialog extends POSDialog implements ActionListener {
 
 		return dialog.getValue();
 	}
+	
+	public static String takeTicketInput(String title, String tHeader,Frame parent) {
+		TicketSelectionDialog dialog = new TicketSelectionDialog(parent);
+		dialog.setTitle(title);
+		dialog.setValue(tHeader);
+		dialog.pack();
+		dialog.open();
+
+		if (dialog.isCanceled()) {
+			return null;
+		}
+
+		return dialog.getValue();
+	}
 
 }

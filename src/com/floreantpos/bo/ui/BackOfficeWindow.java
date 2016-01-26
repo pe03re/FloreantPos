@@ -42,6 +42,7 @@ import com.floreantpos.bo.actions.SalesDetailsReportAction;
 import com.floreantpos.bo.actions.SalesExceptionReportAction;
 import com.floreantpos.bo.actions.SalesReportAction;
 import com.floreantpos.bo.actions.ShiftExplorerAction;
+import com.floreantpos.bo.actions.AdminTicketManagerAction;
 import com.floreantpos.bo.actions.TaxExplorerAction;
 import com.floreantpos.bo.actions.UserExplorerAction;
 import com.floreantpos.bo.actions.UserTypeExplorerAction;
@@ -268,6 +269,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		adminMenu.add(new ConfigureRestaurantAction());
 		adminMenu.add(new UserExplorerAction());
 		adminMenu.add(new UserTypeExplorerAction());
+		adminMenu.add(new AdminTicketManagerAction());
 		// adminMenu.add(new ViewGratuitiesAction());
 		// adminMenu.add(new DrawerPullReportExplorerAction());
 		// adminMenu.add(new DataExportAction());

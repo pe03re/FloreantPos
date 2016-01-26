@@ -7,6 +7,7 @@
 package com.floreantpos.ui.views.order;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,8 +20,11 @@ import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -32,6 +36,7 @@ import org.hibernate.Transaction;
 
 import com.floreantpos.POSConstants;
 import com.floreantpos.PosException;
+import com.floreantpos.bo.actions.AdminTicketManagerAction;
 import com.floreantpos.bo.ui.BackOfficeWindow;
 import com.floreantpos.config.TerminalConfig;
 import com.floreantpos.main.Application;
@@ -41,6 +46,7 @@ import com.floreantpos.model.InventoryWarehouseItem;
 import com.floreantpos.model.MenuCategory;
 import com.floreantpos.model.MenuGroup;
 import com.floreantpos.model.MenuItem;
+import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.RecepieItem;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
@@ -49,6 +55,7 @@ import com.floreantpos.model.TicketItemModifier;
 import com.floreantpos.model.dao.CookingInstructionDAO;
 import com.floreantpos.model.dao.InventoryWarehouseItemDAO;
 import com.floreantpos.model.dao.MenuItemDAO;
+import com.floreantpos.model.dao.PosTransactionDAO;
 import com.floreantpos.model.dao.TicketDAO;
 import com.floreantpos.report.ReceiptPrintService;
 import com.floreantpos.swing.IntegerTextField;
@@ -57,6 +64,7 @@ import com.floreantpos.swing.PosScrollPane;
 import com.floreantpos.ui.dialog.BeanEditorDialog;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.ui.util.TicketUtils;
+import com.floreantpos.ui.views.AdminTicketManagerView;
 import com.floreantpos.ui.views.CashierSwitchBoardView;
 import com.floreantpos.ui.views.CookingInstructionSelectionView;
 import com.floreantpos.ui.views.SwitchboardView;
@@ -73,7 +81,20 @@ public class TicketView extends JPanel {
 
 	public final static String VIEW_NAME = "TICKET_VIEW";
 
-	public TicketView() {
+	private TicketView tv;
+	private boolean isInBackOffice;
+
+	public boolean isInBackOffice() {
+		return isInBackOffice;
+	}
+
+	public void setInBackOffice(boolean isInBackOffice) {
+		this.isInBackOffice = isInBackOffice;
+
+	}
+
+	public TicketView(boolean isInBackOffice) {
+		this.isInBackOffice = isInBackOffice;
 		initComponents();
 		btnAddCookingInstruction.setEnabled(false);
 		btnIncreaseAmount.setEnabled(false);
@@ -88,6 +109,7 @@ public class TicketView extends JPanel {
 			}
 
 		});
+		tv = this;
 
 		ticketViewerTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -107,6 +129,62 @@ public class TicketView extends JPanel {
 			}
 
 		});
+
+		this.addAncestorListener(new AncestorListener() {
+
+			@Override
+			public void ancestorRemoved(AncestorEvent event) {
+				Container c = event.getAncestor();
+				while (c != null) {
+					if (c instanceof BackOfficeWindow) {
+						tv.isInBackOffice = true;
+						btnPay.setEnabled(false);
+						return;
+					} else {
+						c = c.getParent();
+					}
+				}
+				tv.isInBackOffice = false;
+				btnPay.setEnabled(true);
+
+			}
+
+			@Override
+			public void ancestorMoved(AncestorEvent event) {
+				Container c = event.getAncestor();
+				while (c != null) {
+					if (c instanceof BackOfficeWindow) {
+						tv.isInBackOffice = true;
+						btnPay.setEnabled(false);
+						return;
+					} else {
+						c = c.getParent();
+					}
+				}
+				tv.isInBackOffice = false;
+				btnPay.setEnabled(true);
+			}
+
+			@Override
+			public void ancestorAdded(AncestorEvent event) {
+				Container c = event.getAncestor();
+				while (c != null) {
+					if (c instanceof BackOfficeWindow) {
+						tv.isInBackOffice = true;
+						btnPay.setEnabled(false);
+						return;
+					} else {
+						c = c.getParent();
+					}
+				}
+				tv.isInBackOffice = false;
+				btnPay.setEnabled(true);
+			}
+		});
+	}
+
+	public TicketView() {
+		this(false);
 	}
 
 	/**
@@ -221,7 +299,6 @@ public class TicketView extends JPanel {
 			}
 		});
 		controlPanel.add(btnSave);
-
 		btnPay.setText(com.floreantpos.POSConstants.PAY_BUTTON_TEXT);
 		btnPay.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -229,6 +306,9 @@ public class TicketView extends JPanel {
 			}
 		});
 		controlPanel.add(btnPay);
+		if (isInBackOffice) {
+			btnPay.setEnabled(false);
+		}
 
 		btnIncreaseAmount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/add_user_32.png")));
 		btnIncreaseAmount.setPreferredSize(new java.awt.Dimension(76, 45));
@@ -460,7 +540,9 @@ public class TicketView extends JPanel {
 	private synchronized void doFinishOrder(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_doFinishOrder
 		try {
 			updateModel();
-			updateInventory(ticket);
+			if (!isInBackOffice) {
+				updateInventory(ticket);
+			}
 			TicketDAO ticketDAO = TicketDAO.getInstance();
 
 			if (ticket.getId() == null) {
@@ -473,10 +555,44 @@ public class TicketView extends JPanel {
 
 			OrderController.saveOrder(ticket);
 
-			if (ticket.needsKitchenPrint()) {
+			if (!isInBackOffice && ticket.needsKitchenPrint()) {
 				ReceiptPrintService.printToKitchen(ticket, false);
 				ticketDAO.refresh(ticket);
 			}
+
+			if (isInBackOffice) {
+				// get all transactions for this ticket.
+				PosTransactionDAO transDAO = PosTransactionDAO.getInstance();
+				List<PosTransaction> allTrans = transDAO.findAllTransactionByTicket(ticket);
+				Session session = transDAO.createNewSession();
+				Transaction t = session.beginTransaction();
+				if (allTrans.size() > 0) {
+					// edit the first transaction to amounts as per current
+					// ticket.
+					PosTransaction firstTrans = allTrans.get(0);
+					firstTrans.setAmount(ticket.getTotalAmount());
+					firstTrans.setTenderAmount(NumberUtil.roundOff(ticket.getDueAmount()));
+					// save the transaction.
+					transDAO.update(firstTrans);
+					ticket.setPaidAmount(firstTrans.getAmount());
+					ticket.calculatePrice();
+					ticketDAO.saveOrUpdate(ticket);
+				}
+				// delete other transactions.
+				for (int i = 1; i < allTrans.size(); i++) {
+					PosTransaction trans = allTrans.get(i);
+					trans.setTicket(null);
+					transDAO.delete(trans);
+				}
+				try {
+					t.commit();
+				} catch (Exception e) {
+					t.rollback();
+				} finally {
+					session.close();
+				}
+			}
+
 			closeView(false);
 
 		} catch (StaleObjectStateException e) {
@@ -490,20 +606,38 @@ public class TicketView extends JPanel {
 	}// GEN-LAST:event_doFinishOrder
 
 	private void closeView(boolean orderCanceled) {
-		if (TerminalConfig.isCashierMode()) {
-			// String message = "Order canceled. What do you want to do next?";
-			// if(!orderCanceled) {
-			// message = "Ticket no " + getTicket().getId() +
-			// " saved. What do you want to do next?";
-			// }
-			//
-			// Window ancestor = SwingUtilities.getWindowAncestor(this);
-			// CashierModeNextActionDialog dialog = new
-			// CashierModeNextActionDialog((Frame) ancestor, message);
-			// dialog.open();
-			RootView.getInstance().showView(CashierSwitchBoardView.VIEW_NAME);
+
+		if (isInBackOffice) {
+			BackOfficeWindow backOfficeWindow = BackOfficeWindow.getInstance();
+
+			JTabbedPane tabbedPane = backOfficeWindow.getTabbedPane();
+			int index = tabbedPane.indexOfTab("OrderView");
+			if (index != -1) {
+				tabbedPane.remove(index);
+			}
+			index = tabbedPane.indexOfTab(AdminTicketManagerAction.adminTicketManagerName);
+			if (index != -1) {
+				AdminTicketManagerView atv = (AdminTicketManagerView) tabbedPane.getComponentAt(index);
+				atv.refreshView();
+				tabbedPane.setSelectedIndex(index);
+			}
 		} else {
-			RootView.getInstance().showView(SwitchboardView.VIEW_NAME);
+			if (TerminalConfig.isCashierMode()) {
+				// String message =
+				// "Order canceled. What do you want to do next?";
+				// if(!orderCanceled) {
+				// message = "Ticket no " + getTicket().getId() +
+				// " saved. What do you want to do next?";
+				// }
+				//
+				// Window ancestor = SwingUtilities.getWindowAncestor(this);
+				// CashierModeNextActionDialog dialog = new
+				// CashierModeNextActionDialog((Frame) ancestor, message);
+				// dialog.open();
+				RootView.getInstance().showView(CashierSwitchBoardView.VIEW_NAME);
+			} else {
+				RootView.getInstance().showView(SwitchboardView.VIEW_NAME);
+			}
 		}
 	}
 

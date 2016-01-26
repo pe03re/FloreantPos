@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -253,8 +252,7 @@ public class Ticket extends BaseTicket {
 		setTotalAmount(NumberUtil.roundToTwoDigit(totalAmount));
 
 		double dueAmount = totalAmount - getPaidAmount();
-		double roundOff = NumberUtil.roundOff(dueAmount) - dueAmount;
-		setDueAmount(dueAmount + roundOff);
+		setDueAmount(NumberUtil.roundOff(dueAmount));
 	}
 
 	private double calculateSubtotalAmount() {

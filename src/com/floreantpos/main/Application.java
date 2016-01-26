@@ -419,9 +419,9 @@ public class Application {
 		return getInstance().posWindow;
 	}
 
-	// public BackOfficeWindow getBackOfficeWindow() {
-	// return backOfficeWindow;
-	// }
+	 public static BackOfficeWindow getBackOfficeWindow() {
+	 return getInstance().backOfficeWindow;
+	 }
 
 	public void setBackOfficeWindow(BackOfficeWindow backOfficeWindow) {
 		this.backOfficeWindow = backOfficeWindow;
