@@ -23,7 +23,8 @@ import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+
+import net.xeoh.plugins.base.util.PluginManagerUtil;
 
 import com.floreantpos.actions.AboutAction;
 import com.floreantpos.bo.actions.CategoryExplorerAction;
@@ -35,8 +36,6 @@ import com.floreantpos.bo.actions.GroupExplorerAction;
 import com.floreantpos.bo.actions.InventoryItemReportAction;
 import com.floreantpos.bo.actions.InventoryTransactionReportAction;
 import com.floreantpos.bo.actions.ItemExplorerAction;
-import com.floreantpos.bo.actions.ModifierExplorerAction;
-import com.floreantpos.bo.actions.ModifierGroupExplorerAction;
 import com.floreantpos.bo.actions.SalesBalanceReportAction;
 import com.floreantpos.bo.actions.SalesDetailsReportAction;
 import com.floreantpos.bo.actions.SalesExceptionReportAction;
@@ -54,8 +53,6 @@ import com.floreantpos.model.User;
 import com.floreantpos.model.UserPermission;
 import com.floreantpos.model.UserType;
 import com.jidesoft.swing.JideTabbedPane;
-
-import net.xeoh.plugins.base.util.PluginManagerUtil;
 
 /**
  * 
