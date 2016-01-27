@@ -24,7 +24,7 @@ public class TicketDataSource extends AbstractReportDataSource {
 		ArrayList<ITicketItem> rows = new ArrayList<ITicketItem>();
 
 		LinkedHashMap<String, ITicketItem> tableRows = new LinkedHashMap<String, ITicketItem>();
-		TicketItemRowCreator.calculateTicketRows(ticket, tableRows);
+		TicketItemRowCreator.calculateTicketRows(ticket, tableRows, true, false);
 
 		rows.addAll(tableRows.values());
 		setRows(rows);

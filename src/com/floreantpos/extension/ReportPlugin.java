@@ -1,7 +1,6 @@
 package com.floreantpos.extension;
 
 import javax.swing.AbstractAction;
-import javax.swing.JTabbedPane;
 
 import net.xeoh.plugins.base.Plugin;
 

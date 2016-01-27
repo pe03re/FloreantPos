@@ -157,8 +157,8 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 				baseReportNames.add(rplugin.getBaseMenuName() == null ? "" : rplugin.getBaseMenuName().trim());
 			}
 			Map<String, JMenu> baseMenuItemMap = new HashMap<String, JMenu>();
-			JMenu reportMenu = new JMenu("Reports");
-			baseMenuItemMap.put("Reports", reportMenu);
+			JMenu reportMenu = new JMenu("Sales Reports");
+			baseMenuItemMap.put("Sales Reports", reportMenu);
 			for (String s : baseReportNames) {
 				if (s.trim().length() > 0) {
 					JMenu jmi = new JMenu(s.trim());
@@ -169,7 +169,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 			}
 
 			for (ReportPlugin rp : reportPlugins) {
-				JMenu jmi = baseMenuItemMap.get(rp.getBaseMenuName() == null ? "Reports" : rp.getBaseMenuName().trim());
+				JMenu jmi = baseMenuItemMap.get(rp.getBaseMenuName() == null ? "Sales Reports" : rp.getBaseMenuName().trim());
 				for (AbstractAction abstractReportAction : rp.getReportActions()) {
 					jmi.add(abstractReportAction);
 				}
