@@ -7,7 +7,6 @@ import javax.swing.Action;
 import javax.swing.JDialog;
 
 import com.floreantpos.IconFactory;
-import com.floreantpos.Messages;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.dao.TicketDAO;
@@ -20,13 +19,15 @@ import com.floreantpos.ui.views.OrderInfoView;
 
 public class SearchTicketAction extends PosAction {
 
+	private static final String searchString = "Search Ticket";
+
 	public SearchTicketAction() {
-		super(Messages.getString("Search Ticket")); //$NON-NLS-1$
+		super(searchString); //$NON-NLS-1$
 	}
 
 	public SearchTicketAction(boolean showText, boolean showIcon) {
 		if (showText) {
-			putValue(Action.NAME, Messages.getString("Search Ticket")); //$NON-NLS-1$
+			putValue(Action.NAME, searchString); //$NON-NLS-1$
 		}
 		if (showIcon) {
 			putValue(Action.SMALL_ICON, IconFactory.getIcon("search_32.png")); //$NON-NLS-1$

@@ -30,8 +30,8 @@ public class HeaderPanel extends JPanel {
 	private JLabel statusLabel;
 	private Timer timer;
 
-	private String userString = Messages.getString("PosMessage.70"); //$NON-NLS-1$
-	private String terminalString = Messages.getString("TERMINAL_LABEL"); //$NON-NLS-1$
+	private String userString = Messages.getString("PosMessage.70");
+	private String terminalString = Messages.getString("TERMINAL_LABEL");
 
 	private String name;
 
@@ -40,14 +40,14 @@ public class HeaderPanel extends JPanel {
 	}
 
 	public HeaderPanel(String name) {
-		super(new MigLayout("ins 2 2 0 2", "[][fill, grow][]", "")); //$NON-NLS-1$  //$NON-NLS-2$  //$NON-NLS-3$
+		super(new MigLayout("ins 2 2 0 2", "[][fill, grow][]", ""));
 
 		this.name = name;
 
 		setOpaque(true);
 		setBackground(Color.white);
 
-		JLabel logoLabel = new JLabel(IconFactory.getIcon("Vintro_print.jpg")); //$NON-NLS-1$
+		JLabel logoLabel = new JLabel(IconFactory.getIcon("Vintro_print.jpg"));
 		add(logoLabel);
 
 		statusLabel = new JLabel();
@@ -61,11 +61,11 @@ public class HeaderPanel extends JPanel {
 		//		add(btnClockOUt, "w 60!, h 60!"); //$NON-NLS-1$
 
 		PosButton btnSearchTicket = new PosButton(new SearchTicketAction(false, true));
-		btnSearchTicket.setToolTipText(Messages.getString("Search Ticket")); //$NON-NLS-1$
+		btnSearchTicket.setToolTipText("Search Ticket");
 		add(btnSearchTicket, "w 60!, h 60!");
-		
+
 		PosButton btnExportSql = new PosButton(new ExportSQLAction(false, true));
-		btnExportSql.setToolTipText(Messages.getString("Export SQL")); //$NON-NLS-1$
+		btnExportSql.setToolTipText("Export SQL");
 		add(btnExportSql, "w 60!, h 60!");
 
 		// PosButton btnPrintLastTicket = new PosButton(new
@@ -74,13 +74,13 @@ public class HeaderPanel extends JPanel {
 		// add(btnPrintLastTicket, "w 60!, h 60!");
 
 		PosButton btnLogout = new PosButton(new LogoutAction(false, true));
-		btnLogout.setToolTipText(Messages.getString("Logout")); //$NON-NLS-1$
-		add(btnLogout, "w 60!, h 60!"); //$NON-NLS-1$
+		btnLogout.setToolTipText(Messages.getString("Logout"));
+		add(btnLogout, "w 60!, h 60!");
 
 		PosButton btnShutdown = new PosButton(new ShutDownAction(false, true));
-		btnShutdown.setIcon(IconFactory.getIcon("shutdown.png")); //$NON-NLS-1$
-		btnShutdown.setToolTipText(Messages.getString("Shutdown")); //$NON-NLS-1$
-		add(btnShutdown, "w 60!, h 60!"); //$NON-NLS-1$
+		btnShutdown.setIcon(IconFactory.getIcon("shutdown.png"));
+		btnShutdown.setToolTipText(Messages.getString("Shutdown"));
+		add(btnShutdown, "w 60!, h 60!");
 
 		timer = new Timer(1000, new ActionListener() {
 			@Override
@@ -111,10 +111,10 @@ public class HeaderPanel extends JPanel {
 
 	private void showHeader() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(userString + ": " + Application.getCurrentUser().getFirstName()); //$NON-NLS-1$
-		sb.append(", "); //$NON-NLS-1$
-		sb.append(terminalString + ": " + Application.getInstance().getTerminal().getName()); //$NON-NLS-1$
-		sb.append(", "); //$NON-NLS-1$
+		sb.append(userString + ": " + Application.getCurrentUser().getFirstName());
+		sb.append(", ");
+		sb.append(terminalString + ": " + Application.getInstance().getTerminal().getName());
+		sb.append(", ");
 		sb.append(dateFormat.format(Calendar.getInstance().getTime()));
 
 		statusLabel.setText(sb.toString());

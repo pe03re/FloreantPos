@@ -107,9 +107,9 @@ public class DatabaseConfigurationView extends ConfigurationView implements Acti
 		add(tfDbExportPath, "grow, wrap"); //$NON-NLS-1$
 		add(new JSeparator(), "span, grow, gaptop 10"); //$NON-NLS-1$
 
-		btnXamppPath = new JButton(Messages.getString("Choose XAMPP Path").toUpperCase()); //$NON-NLS-1$
+		btnXamppPath = new JButton("Choose XAMPP Path"); //$NON-NLS-1$
 		btnXamppPath.setActionCommand(XAMPP);
-		btnExportPath = new JButton(Messages.getString("Choose Export Path").toUpperCase()); //$NON-NLS-1$
+		btnExportPath = new JButton("Choose Export Path"); //$NON-NLS-1$
 		btnExportPath.setActionCommand(EXPORT);
 		btnTestConnection = new JButton(Messages.getString("DatabaseConfigurationDialog.26")); //$NON-NLS-1$
 		btnTestConnection.setActionCommand(TEST);
