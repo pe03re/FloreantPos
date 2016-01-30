@@ -26,7 +26,7 @@ public class ExportSQLAction extends PosAction {
 			putValue(Action.NAME, Messages.getString(exportSQLName)); //$NON-NLS-1$
 		}
 		if (showIcon) {
-			putValue(Action.SMALL_ICON, IconFactory.getIcon("export_database_icon")); //$NON-NLS-1$
+			putValue(Action.SMALL_ICON, IconFactory.getIcon("export_database_icon.png")); //$NON-NLS-1$
 		}
 	}
 
