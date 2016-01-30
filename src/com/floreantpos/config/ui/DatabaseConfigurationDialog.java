@@ -349,7 +349,7 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 		AppConfig.setDatabaseUser(user);
 		AppConfig.setDatabasePassword(pass);
 		AppConfig.setXamppPath(xamppPath);
-		AppConfig.setSqlExportPath(sqlExportPath);
+		AppConfig.setExportPath(sqlExportPath);
 	}
 
 	public void setTitle(String title) {

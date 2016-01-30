@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.ServiceLoader;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -25,6 +27,7 @@ import org.apache.commons.logging.LogFactory;
 import com.floreantpos.Messages;
 import com.floreantpos.POSConstants;
 import com.floreantpos.bo.ui.BackOfficeWindow;
+import com.floreantpos.config.AppConfig;
 import com.floreantpos.config.AppProperties;
 import com.floreantpos.config.TerminalConfig;
 import com.floreantpos.config.ui.DatabaseConfigurationDialog;
@@ -40,6 +43,7 @@ import com.floreantpos.model.dao.PrinterConfigurationDAO;
 import com.floreantpos.model.dao.RestaurantDAO;
 import com.floreantpos.model.dao.TerminalDAO;
 import com.floreantpos.model.dao.UserDAO;
+import com.floreantpos.report.Report;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.ui.views.CashierSwitchBoardView;
 import com.floreantpos.ui.views.LoginView;
@@ -58,6 +62,7 @@ public class Application {
 	private static Log logger = LogFactory.getLog(Application.class);
 
 	private boolean developmentMode = false;
+	private boolean reportMode = false;
 
 	private Timer autoDrawerPullTimer;
 
@@ -76,6 +81,10 @@ public class Application {
 	private static Application instance;
 
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy"); //$NON-NLS-1$
+	public static SimpleDateFormat yearFolderFormat = new SimpleDateFormat("yyyy");
+	public static SimpleDateFormat monthFolderFormat = new SimpleDateFormat("MMM");
+	public static SimpleDateFormat dateFolderFormat = new SimpleDateFormat("dd_MM_yyyy");
+	SimpleDateFormat format = new SimpleDateFormat("yyyy_MMM_dd_hh_mm_ss");
 	private static ImageIcon applicationIcon;
 
 	private boolean systemInitialized;
@@ -107,7 +116,6 @@ public class Application {
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/categoryWiseReport/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/groupWiseReport/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/menuItemWiseReport/target/classes").toURI());
-
 		}
 
 		setApplicationLook();
@@ -120,9 +128,43 @@ public class Application {
 		if (TerminalConfig.isFullscreenMode()) {
 			posWindow.enterFullScreenMode();
 		}
-		posWindow.setVisible(true);
+		if (!reportMode) {
+			posWindow.setVisible(true);
+		}
 
 		initializeSystem();
+
+		if (reportMode) {
+			printAllReports();
+		}
+	}
+
+	private void printAllReports() {
+		ServiceLoader<Report> loader = ServiceLoader.load(Report.class);
+		Date today = new Date();
+		String dateFolderName = dateFolderFormat.format(today);
+
+		Calendar c = Calendar.getInstance();
+		c.setTime(today);
+		c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+		Date lastDayOfMonth = c.getTime();
+		File saleReportFolder = new File(AppConfig.getExportPath() + "\\Sales_Reports\\" + yearFolderFormat.format(today) + "\\" + monthFolderFormat.format(today) + "\\" + dateFolderName + "\\");
+		try {
+			for (Report implReportClass : loader) {
+				File reportFile = new File(saleReportFolder + "\\" + implReportClass.getName() + "_" + format.format(today));
+				if (!reportFile.exists()) {
+					reportFile.createNewFile();
+				}
+				if (implReportClass.isDailyReport()) {
+					implReportClass.exportReportPDF(today, today, reportFile.getAbsolutePath());
+				}
+				if (today.getDate() == lastDayOfMonth.getDate()) {
+					implReportClass.exportReportPDF(today, today, reportFile.getAbsolutePath());
+				}
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	private void setApplicationLook() {
@@ -422,9 +464,9 @@ public class Application {
 		return getInstance().posWindow;
 	}
 
-	 public static BackOfficeWindow getBackOfficeWindow() {
-	 return getInstance().backOfficeWindow;
-	 }
+	public static BackOfficeWindow getBackOfficeWindow() {
+		return getInstance().backOfficeWindow;
+	}
 
 	public void setBackOfficeWindow(BackOfficeWindow backOfficeWindow) {
 		this.backOfficeWindow = backOfficeWindow;

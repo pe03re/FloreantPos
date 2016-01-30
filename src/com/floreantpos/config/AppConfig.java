@@ -16,7 +16,7 @@ public class AppConfig {
 	public static final String CONNECTION_STRING = "connection_string";
 	public static final String DATABASE_PROVIDER_NAME = "database_provider_name";
 	public static final String XAMPP_PATH = "xampp_path";
-	public static final String SQL_EXPORT_PATH = "export_path";
+	public static final String EXPORT_PATH = "export_path";
 
 	private static final String KITCHEN_PRINT_ON_ORDER_SETTLE = "kitchen_print_on_order_settle";
 	private static final String KITCHEN_PRINT_ON_ORDER_FINISH = "kitchen_print_on_order_finish";
@@ -89,12 +89,12 @@ public class AppConfig {
 		config.setProperty(XAMPP_PATH, path);
 	}
 
-	public static String getSqlExportPath() {
-		return config.getString(SQL_EXPORT_PATH, "."); //$NON-NLS-1$
+	public static String getExportPath() {
+		return config.getString(EXPORT_PATH, "."); //$NON-NLS-1$
 	}
 
-	public static void setSqlExportPath(String path) {
-		config.setProperty(SQL_EXPORT_PATH, path);
+	public static void setExportPath(String path) {
+		config.setProperty(EXPORT_PATH, path);
 	}
 
 	public static String getConnectString() {

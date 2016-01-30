@@ -253,7 +253,7 @@ public class DatabaseConfigurationView extends ConfigurationView implements Acti
 		AppConfig.setDatabaseUser(user);
 		AppConfig.setDatabasePassword(pass);
 		AppConfig.setXamppPath(xamppPath);
-		AppConfig.setSqlExportPath(sqlExportPath);
+		AppConfig.setExportPath(sqlExportPath);
 		try {
 			AppConfig.getConfig().save();
 		} catch (ConfigurationException e) {

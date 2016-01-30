@@ -185,4 +185,16 @@ public class SaleDetailsReport extends Report {
 		modifierReportModel.setItems(new ArrayList<SaleDetailReportItem>(modifierMap.values()));
 		modifierReportModel.calculateGrandTotal();
 	}
+
+	@Override
+	public void generateReport(Date startDate, Date endDate) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createModels(Date date1, Date date2) {
+		// TODO Auto-generated method stub
+		
+	}
 }

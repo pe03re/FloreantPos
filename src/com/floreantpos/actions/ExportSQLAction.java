@@ -9,12 +9,13 @@ import javax.swing.Action;
 
 import com.floreantpos.IconFactory;
 import com.floreantpos.config.AppConfig;
+import com.floreantpos.main.Application;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 
 public class ExportSQLAction extends PosAction {
 
 	private static final String exportSQLName = "Export SQL";
-	SimpleDateFormat format = new SimpleDateFormat("dd_MMM_yyyy_hh_mm_ss");
+	SimpleDateFormat format = new SimpleDateFormat("yyyy_MMM_dd_hh_mm_ss");
 
 	public ExportSQLAction() {
 		super(exportSQLName); //$NON-NLS-1$
@@ -32,14 +33,20 @@ public class ExportSQLAction extends PosAction {
 	@Override
 	public void execute() {
 		try {
-			Date d = new Date();
-			String backupFileName = "pos_" + format.format(d) + ".sql";
+			Date today = new Date();
+			String dateFolderName = Application.dateFolderFormat.format(today);
+			String backupFileName = "pos_" + format.format(today) + ".sql";
 			File f = new File(AppConfig.getXamppPath() + "\\mysqldump.exe");
-			
-			ProcessBuilder pb = new ProcessBuilder(f.getCanonicalPath(),"-u","pos","-ppos123", "pos");
-			pb.redirectOutput(Redirect.to(new File(AppConfig.getSqlExportPath() + "\\" + backupFileName)));
+
+			ProcessBuilder pb = new ProcessBuilder(f.getCanonicalPath(), "-u", "pos", "-ppos123", "pos");
+			File sqlFile = new File(AppConfig.getExportPath() + "\\posBackup\\" + Application.yearFolderFormat.format(today) + "\\" + Application.monthFolderFormat.format(today) + "\\"
+					+ dateFolderName + "\\" + backupFileName);
+			if (!sqlFile.exists()) {
+				sqlFile.createNewFile();
+			}
+			pb.redirectOutput(Redirect.to(sqlFile));
 			Process p = pb.start();
-			
+
 			int exit = p.waitFor();
 			System.out.println("Exited status = " + exit);
 		} catch (Exception e) {
