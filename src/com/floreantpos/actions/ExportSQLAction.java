@@ -1,5 +1,7 @@
 package com.floreantpos.actions;
 
+import java.io.File;
+import java.lang.ProcessBuilder.Redirect;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -7,6 +9,7 @@ import javax.swing.Action;
 
 import com.floreantpos.IconFactory;
 import com.floreantpos.Messages;
+import com.floreantpos.config.AppConfig;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 
 public class ExportSQLAction extends PosAction {
@@ -30,13 +33,18 @@ public class ExportSQLAction extends PosAction {
 	@Override
 	public void execute() {
 		try {
-			Runtime runtime = Runtime.getRuntime();
 			Date d = new Date();
 			String backupFileName = "pos_" + format.format(d) + ".sql";
-			runtime.exec("F:/xampp/mysql/bin/mysqldump -u pos -ppos123 pos | gzip > F:/backupSQL/" + backupFileName);
+			File f = new File(AppConfig.getXamppPath() + "\\mysqldump.exe");
+			
+			ProcessBuilder pb = new ProcessBuilder(f.getCanonicalPath(),"-u","pos","-ppos123", "pos");
+			pb.redirectOutput(Redirect.to(new File(AppConfig.getSqlExportPath() + "\\" + backupFileName)));
+			Process p = pb.start();
+			
+			int exit = p.waitFor();
+			System.out.println("Exited status = " + exit);
 		} catch (Exception e) {
 			POSMessageDialog.showError(e.getMessage(), e);
 		}
 	}
-
 }

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -35,21 +36,27 @@ import com.floreantpos.util.DatabaseUtil;
 
 public class DatabaseConfigurationDialog extends POSDialog implements ActionListener {
 
-	private static final String CREATE_DATABASE = "CD"; //$NON-NLS-1$
-	private static final String UPDATE_DATABASE = "UD"; //$NON-NLS-1$
-	private static final String SAVE = "SAVE"; //$NON-NLS-1$
-	private static final String CANCEL = "cancel"; //$NON-NLS-1$
-	private static final String TEST = "test"; //$NON-NLS-1$
+	private static final String CREATE_DATABASE = "CD";
+	private static final String UPDATE_DATABASE = "UD";
+	private static final String SAVE = "SAVE";
+	private static final String CANCEL = "cancel";
+	private static final String TEST = "test";
+	private static final String XAMPP = "xampp";
+	private static final String EXPORT = "export";
 	private POSTextField tfServerAddress;
 	private POSTextField tfServerPort;
 	private POSTextField tfDatabaseName;
 	private POSTextField tfUserName;
 	private POSPasswordField tfPassword;
+	private POSTextField tfXamppPath;
+	private POSTextField tfDbExportPath;
 	private PosButton btnTestConnection;
 	private PosButton btnCreateDb;
 	private PosButton btnUpdateDb;
 	private PosButton btnExit;
 	private PosButton btnSave;
+	private PosButton btnXamppPath;
+	private PosButton btnExportPath;
 	private JComboBox databaseCombo;
 
 	private TitlePanel titlePanel;
@@ -58,6 +65,8 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 	private JLabel lblDbName;
 	private JLabel lblUserName;
 	private JLabel lblDbPassword;
+	private JLabel lblDbXamppPath;
+	private JLabel lblDbExportPath;
 
 	public DatabaseConfigurationDialog() throws HeadlessException {
 		super();
@@ -88,6 +97,9 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 		tfServerPort = new POSTextField();
 		tfDatabaseName = new POSTextField();
 		tfUserName = new POSTextField();
+		tfXamppPath = new POSTextField();
+		tfDbExportPath = new POSTextField();
+
 		tfPassword = new POSPasswordField();
 		databaseCombo = new JComboBox(Database.values());
 
@@ -115,8 +127,18 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 		lblDbPassword = new JLabel(Messages.getString("DatabaseConfigurationDialog.22") + ":"); //$NON-NLS-1$ //$NON-NLS-2$
 		getContentPane().add(lblDbPassword);
 		getContentPane().add(tfPassword, "grow, wrap"); //$NON-NLS-1$
+		lblDbXamppPath = new JLabel(Messages.getString("Xampp ExportSQL Path") + ":"); //$NON-NLS-1$ //$NON-NLS-2$
+		getContentPane().add(lblDbXamppPath);
+		getContentPane().add(tfXamppPath, "grow, wrap"); //$NON-NLS-1$
+		lblDbExportPath = new JLabel(Messages.getString("Xampp ExportSQL Path") + ":"); //$NON-NLS-1$ //$NON-NLS-2$
+		getContentPane().add(lblDbExportPath);
+		getContentPane().add(tfDbExportPath, "grow, wrap"); //$NON-NLS-1$
 		getContentPane().add(new JSeparator(), "span, grow, gaptop 10"); //$NON-NLS-1$
 
+		btnXamppPath = new PosButton(Messages.getString("Choose XAMPP Path").toUpperCase()); //$NON-NLS-1$
+		btnXamppPath.setActionCommand(XAMPP);
+		btnExportPath = new PosButton(Messages.getString("Choose Export Path").toUpperCase()); //$NON-NLS-1$
+		btnExportPath.setActionCommand(EXPORT);
 		btnTestConnection = new PosButton(Messages.getString("DatabaseConfigurationDialog.26").toUpperCase()); //$NON-NLS-1$
 		btnTestConnection.setActionCommand(TEST);
 		btnSave = new PosButton(Messages.getString("DatabaseConfigurationDialog.27").toUpperCase()); //$NON-NLS-1$
@@ -125,13 +147,15 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 		btnExit.setActionCommand(CANCEL);
 
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		
+
 		btnCreateDb = new PosButton(Messages.getString("DatabaseConfigurationDialog.29").toUpperCase()); //$NON-NLS-1$
 		btnCreateDb.setActionCommand(CREATE_DATABASE);
-		
+
 		btnUpdateDb = new PosButton(Messages.getString("UPDATE_DATABASE").toUpperCase()); //$NON-NLS-1$
 		btnUpdateDb.setActionCommand(UPDATE_DATABASE);
-		
+
+		buttonPanel.add(btnXamppPath);
+		buttonPanel.add(btnExportPath);
 		buttonPanel.add(btnUpdateDb);
 		buttonPanel.add(btnCreateDb);
 		buttonPanel.add(btnTestConnection);
@@ -147,6 +171,8 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 		btnSave.addActionListener(this);
 		btnExit.addActionListener(this);
 		btnUpdateDb.addActionListener(this);
+		btnXamppPath.addActionListener(this);
+		btnExportPath.addActionListener(this);
 
 		databaseCombo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -187,8 +213,7 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 
 		if (selectedDb == Database.DERBY_SINGLE) {
 			setFieldsVisible(false);
-		}
-		else {
+		} else {
 			setFieldsVisible(true);
 		}
 	}
@@ -204,24 +229,44 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 			final String databasePort = tfServerPort.getText();
 			final String databaseName = tfDatabaseName.getText();
 			final String user = tfUserName.getText();
+			final String xampp = tfXamppPath.getText();
+			final String sqlPath = tfDbExportPath.getText();
 			final String pass = new String(tfPassword.getPassword());
 
 			final String connectionString = selectedDb.getConnectString(databaseURL, databasePort, databaseName);
 			final String hibernateDialect = selectedDb.getHibernateDialect();
 			final String driverClass = selectedDb.getHibernateConnectionDriverClass();
-			
+
 			if (CANCEL.equalsIgnoreCase(command)) {
 				dispose();
 				return;
 			}
-			
+
 			setGlassPaneVisible(true);
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			
+
 			Application.getInstance().setSystemInitialized(false);
-			saveConfig(selectedDb, providerName, databaseURL, databasePort, databaseName, user, pass, connectionString, hibernateDialect);
-			
-			if (TEST.equalsIgnoreCase(command)) {
+			saveConfig(selectedDb, providerName, databaseURL, databasePort, databaseName, user, pass, connectionString, hibernateDialect, xampp, sqlPath);
+
+			if (XAMPP.equalsIgnoreCase(command)) {
+				JFileChooser xChooser = new JFileChooser();
+				xChooser.setCurrentDirectory(new java.io.File("."));
+				xChooser.setDialogTitle("Select folder");
+				xChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				xChooser.setAcceptAllFileFilterUsed(false);
+				if (xChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					tfXamppPath.setText(xChooser.getCurrentDirectory().getAbsolutePath());
+				}
+			} else if (EXPORT.equalsIgnoreCase(command)) {
+				JFileChooser xXport = new JFileChooser();
+				xXport.setCurrentDirectory(new java.io.File("."));
+				xXport.setDialogTitle("Select folder");
+				xXport.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				xXport.setAcceptAllFileFilterUsed(false);
+				if (xXport.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+					tfDbExportPath.setText(xXport.getCurrentDirectory().getAbsolutePath());
+				}
+			} else if (TEST.equalsIgnoreCase(command)) {
 				try {
 					DatabaseUtil.checkConnection(connectionString, hibernateDialect, driverClass, user, pass);
 				} catch (DatabaseConnectionException e1) {
@@ -230,28 +275,24 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 				}
 
 				JOptionPane.showMessageDialog(this, Messages.getString("DatabaseConfigurationDialog.31")); //$NON-NLS-1$
-			}
-			else if(UPDATE_DATABASE.equals(command)) {
+			} else if (UPDATE_DATABASE.equals(command)) {
 				int i = JOptionPane.showConfirmDialog(this, "This will update existing database. Existing data will not be lost. Proceed?", "Confirm", JOptionPane.YES_NO_OPTION);
 				if (i != JOptionPane.YES_OPTION) {
 					return;
 				}
-				
-				//isAuthorizedToPerformDbChange();
-				
+
+				// isAuthorizedToPerformDbChange();
+
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				
+
 				boolean databaseUpdated = DatabaseUtil.updateDatabase(connectionString, hibernateDialect, driverClass, user, pass);
-				if(databaseUpdated) {
+				if (databaseUpdated) {
 					JOptionPane.showMessageDialog(DatabaseConfigurationDialog.this, "Database successfully updated.");
-				}
-				else {
+				} else {
 					JOptionPane.showMessageDialog(DatabaseConfigurationDialog.this, "Failed to update database, please see log for detail.");
 				}
-			}
-			else if (CREATE_DATABASE.equals(command)) {
-				int i = JOptionPane.showConfirmDialog(this,
-						Messages.getString("DatabaseConfigurationDialog.33"), Messages.getString("DatabaseConfigurationDialog.34"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
+			} else if (CREATE_DATABASE.equals(command)) {
+				int i = JOptionPane.showConfirmDialog(this, Messages.getString("DatabaseConfigurationDialog.33"), Messages.getString("DatabaseConfigurationDialog.34"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
 				if (i != JOptionPane.YES_OPTION) {
 					return;
 				}
@@ -262,20 +303,18 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 					generateSampleData = true;
 
 				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-				
+
 				String createDbConnectString = selectedDb.getCreateDbConnectString(databaseURL, databasePort, databaseName);
-				
+
 				boolean databaseCreated = DatabaseUtil.createDatabase(createDbConnectString, hibernateDialect, driverClass, user, pass, generateSampleData);
 
 				if (databaseCreated) {
-					JOptionPane.showMessageDialog(DatabaseConfigurationDialog.this, "Database created. You can now log in using password 1111.\n" +
-							"Do not forget to change password once you are logged in.");
-				}
-				else {
+					JOptionPane.showMessageDialog(DatabaseConfigurationDialog.this, "Database created. You can now log in using password 1111.\n"
+							+ "Do not forget to change password once you are logged in.");
+				} else {
 					JOptionPane.showMessageDialog(DatabaseConfigurationDialog.this, Messages.getString("DatabaseConfigurationDialog.36")); //$NON-NLS-1$
 				}
-			}
-			else if (SAVE.equalsIgnoreCase(command)) {
+			} else if (SAVE.equalsIgnoreCase(command)) {
 				dispose();
 			}
 		} catch (Exception e2) {
@@ -289,19 +328,19 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 
 	private void isAuthorizedToPerformDbChange() {
 		DatabaseUtil.initialize();
-		
+
 		UserDAO.getInstance().findAll();
-		
+
 		String password = JOptionPane.showInputDialog("Enter Administrator password.");
 		User user2 = UserDAO.getInstance().findUserBySecretKey(password);
-		if(user2 == null || !user2.isAdministrator()) {
+		if (user2 == null || !user2.isAdministrator()) {
 			POSMessageDialog.showError(this, "Wrong password");
 			return;
 		}
 	}
 
-	private void saveConfig(Database selectedDb, String providerName, String databaseURL, String databasePort, String databaseName, String user, String pass,
-			String connectionString, String hibernateDialect) {
+	private void saveConfig(Database selectedDb, String providerName, String databaseURL, String databasePort, String databaseName, String user, String pass, String connectionString,
+			String hibernateDialect, String xamppPath, String sqlExportPath) {
 		AppConfig.setDatabaseProviderName(providerName);
 		AppConfig.setConnectString(connectionString);
 		AppConfig.setDatabaseHost(databaseURL);
@@ -309,6 +348,8 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 		AppConfig.setDatabaseName(databaseName);
 		AppConfig.setDatabaseUser(user);
 		AppConfig.setDatabasePassword(pass);
+		AppConfig.setXamppPath(xamppPath);
+		AppConfig.setSqlExportPath(sqlExportPath);
 	}
 
 	public void setTitle(String title) {

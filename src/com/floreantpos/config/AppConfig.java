@@ -8,18 +8,20 @@ import com.floreantpos.Database;
 
 public class AppConfig {
 
-	public static final String DATABASE_URL = "database_url"; //$NON-NLS-1$
-	public static final String DATABASE_PORT = "database_port"; //$NON-NLS-1$
-	public static final String DATABASE_NAME = "database_name"; //$NON-NLS-1$
-	public static final String DATABASE_USER = "database_user"; //$NON-NLS-1$
-	public static final String DATABASE_PASSWORD = "database_pass"; //$NON-NLS-1$
-	public static final String CONNECTION_STRING = "connection_string"; //$NON-NLS-1$
-	public static final String DATABASE_PROVIDER_NAME = "database_provider_name"; //$NON-NLS-1$
+	public static final String DATABASE_URL = "database_url";
+	public static final String DATABASE_PORT = "database_port";
+	public static final String DATABASE_NAME = "database_name";
+	public static final String DATABASE_USER = "database_user";
+	public static final String DATABASE_PASSWORD = "database_pass";
+	public static final String CONNECTION_STRING = "connection_string";
+	public static final String DATABASE_PROVIDER_NAME = "database_provider_name";
+	public static final String XAMPP_PATH = "xampp_path";
+	public static final String SQL_EXPORT_PATH = "export_path";
 
-	private static final String KITCHEN_PRINT_ON_ORDER_SETTLE = "kitchen_print_on_order_settle"; //$NON-NLS-1$
-	private static final String KITCHEN_PRINT_ON_ORDER_FINISH = "kitchen_print_on_order_finish"; //$NON-NLS-1$
-	private static final String PRINT_RECEIPT_ON_ORDER_SETTLE = "print_receipt_on_order_settle"; //$NON-NLS-1$
-	private static final String PRINT_RECEIPT_ON_ORDER_FINISH = "print_receipt_on_order_finish"; //$NON-NLS-1$
+	private static final String KITCHEN_PRINT_ON_ORDER_SETTLE = "kitchen_print_on_order_settle";
+	private static final String KITCHEN_PRINT_ON_ORDER_FINISH = "kitchen_print_on_order_finish";
+	private static final String PRINT_RECEIPT_ON_ORDER_SETTLE = "print_receipt_on_order_settle";
+	private static final String PRINT_RECEIPT_ON_ORDER_FINISH = "print_receipt_on_order_finish";
 
 	private static PropertiesConfiguration config;
 
@@ -77,6 +79,22 @@ public class AppConfig {
 
 	public static void setDatabaseHost(String url) {
 		config.setProperty(DATABASE_URL, url);
+	}
+
+	public static String getXamppPath() {
+		return config.getString(XAMPP_PATH, "."); //$NON-NLS-1$
+	}
+
+	public static void setXamppPath(String path) {
+		config.setProperty(XAMPP_PATH, path);
+	}
+
+	public static String getSqlExportPath() {
+		return config.getString(SQL_EXPORT_PATH, "."); //$NON-NLS-1$
+	}
+
+	public static void setSqlExportPath(String path) {
+		config.setProperty(SQL_EXPORT_PATH, path);
 	}
 
 	public static String getConnectString() {
