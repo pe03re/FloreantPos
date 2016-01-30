@@ -224,18 +224,23 @@ public class AdminTicketManagerView extends ViewPanel implements ActionListener,
 
 	private void editTicket(Ticket ticket) {
 		Ticket ticketToEdit = TicketDAO.getInstance().loadFullTicket(ticket.getId());
-		OrderView.getInstance().setCurrentTicket(ticketToEdit);
-		OrderView ov = OrderView.getInstance();
+		
 		BackOfficeWindow backOfficeWindow = BackOfficeWindow.getInstance();
-
+		OrderView ov = null;
 		JTabbedPane tabbedPane = backOfficeWindow.getTabbedPane();
-		int index = tabbedPane.indexOfTab("OrderView");
+		int index = tabbedPane.indexOfTab(OrderView.VIEW_NAME);
 		if (index == -1) {
-			tabbedPane.addTab("OrderView", ov);
+			ov = OrderView.getInstance();
+			ov.setCurrentTicket(ticketToEdit);
+			tabbedPane.addTab(OrderView.VIEW_NAME, ov);
 		} else {
 			ov = (OrderView) tabbedPane.getComponentAt(index);
 		}
+		try{
 		tabbedPane.setSelectedComponent(ov);
+		} catch (Exception e ){
+			e.printStackTrace();
+		}
 	}
 
 	public void updateView() {

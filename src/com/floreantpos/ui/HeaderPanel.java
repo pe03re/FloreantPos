@@ -17,6 +17,7 @@ import net.miginfocom.swing.MigLayout;
 
 import com.floreantpos.IconFactory;
 import com.floreantpos.Messages;
+import com.floreantpos.actions.ExportSQLAction;
 import com.floreantpos.actions.LogoutAction;
 import com.floreantpos.actions.SearchTicketAction;
 import com.floreantpos.actions.ShutDownAction;
@@ -62,6 +63,10 @@ public class HeaderPanel extends JPanel {
 		PosButton btnSearchTicket = new PosButton(new SearchTicketAction(false, true));
 		btnSearchTicket.setToolTipText(Messages.getString("Search Ticket")); //$NON-NLS-1$
 		add(btnSearchTicket, "w 60!, h 60!");
+		
+		PosButton btnExportSql = new PosButton(new ExportSQLAction(false, true));
+		btnExportSql.setToolTipText(Messages.getString("Export SQL")); //$NON-NLS-1$
+		add(btnExportSql, "w 60!, h 60!");
 
 		// PosButton btnPrintLastTicket = new PosButton(new
 		// PrintLastTicketAction(false, true));

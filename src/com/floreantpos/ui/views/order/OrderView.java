@@ -13,6 +13,7 @@ import java.util.HashMap;
 import javax.swing.JComponent;
 
 import com.floreantpos.model.Ticket;
+import com.floreantpos.swing.TransparentPanel;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 
 /**
@@ -174,6 +175,17 @@ public class OrderView extends ViewPanel {
 		}
 		return instance;
 	}
+	
+	public synchronized static OrderView getInstance(boolean freshInstance) {
+		if(freshInstance){
+			OrderView ov = new OrderView();
+			return ov;
+		}
+		if (instance == null) {
+			instance = new OrderView();
+		}
+		return instance;
+	}
 
 	public void resetView() {
 	}
@@ -188,6 +200,7 @@ public class OrderView extends ViewPanel {
 			try {
 				categoryView.initialize();
 			} catch (Throwable t) {
+				t.printStackTrace();
 				POSMessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, t);
 			}
 		} else {
@@ -200,4 +213,5 @@ public class OrderView extends ViewPanel {
 	public String getViewName() {
 		return VIEW_NAME;
 	}
+
 }

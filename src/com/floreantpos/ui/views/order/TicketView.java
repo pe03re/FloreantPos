@@ -569,21 +569,24 @@ public class TicketView extends JPanel {
 				if (allTrans.size() > 0) {
 					// edit the first transaction to amounts as per current
 					// ticket.
+					ticket.calculatePrice();
 					PosTransaction firstTrans = allTrans.get(0);
 					firstTrans.setAmount(ticket.getTotalAmount());
-					firstTrans.setTenderAmount(NumberUtil.roundOff(ticket.getDueAmount()));
+					firstTrans.setTenderAmount(NumberUtil.roundOff(ticket.getTotalAmount()));
 					// save the transaction.
 					transDAO.update(firstTrans);
-					ticket.setPaidAmount(firstTrans.getAmount());
-					ticket.calculatePrice();
+					for (int i = 1; i < allTrans.size(); i++) {
+						PosTransaction trans = allTrans.get(i);
+						trans.setTicket(null);
+						transDAO.delete(trans);
+					}
+					ticket.setPaidAmount(ticket.getTotalAmount());
+					ticket.setDueAmount(0d);
+					ticket.getTransactions().clear();
+					ticket.getTransactions().add(firstTrans);
+					//ticket.calculatePrice();
 					ticketDAO.saveOrUpdate(ticket);
-				}
-				// delete other transactions.
-				for (int i = 1; i < allTrans.size(); i++) {
-					PosTransaction trans = allTrans.get(i);
-					trans.setTicket(null);
-					transDAO.delete(trans);
-				}
+				}				
 				try {
 					t.commit();
 				} catch (Exception e) {
