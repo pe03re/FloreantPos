@@ -11,8 +11,11 @@ import java.awt.ComponentOrientation;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -31,8 +34,10 @@ import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.LogFactory;
 import org.jdesktop.swingx.JXCollapsiblePane;
+import org.reflections.Reflections;
 
 import com.floreantpos.ITicketList;
 import com.floreantpos.POSConstants;
@@ -41,6 +46,7 @@ import com.floreantpos.actions.NewBarTabAction;
 import com.floreantpos.actions.RefundAction;
 import com.floreantpos.actions.SettleTicketAction;
 import com.floreantpos.bo.ui.BackOfficeWindow;
+import com.floreantpos.config.AppConfig;
 import com.floreantpos.config.TerminalConfig;
 import com.floreantpos.extension.OrderServiceExtension;
 import com.floreantpos.main.Application;
@@ -53,6 +59,7 @@ import com.floreantpos.model.UserPermission;
 import com.floreantpos.model.UserType;
 import com.floreantpos.model.dao.RestaurantDAO;
 import com.floreantpos.model.dao.TicketDAO;
+import com.floreantpos.report.Report;
 import com.floreantpos.services.TicketService;
 import com.floreantpos.swing.POSToggleButton;
 import com.floreantpos.swing.PosButton;
@@ -216,8 +223,8 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		centerPanel.add(rightPanel, java.awt.BorderLayout.EAST);
 
 		add(centerPanel, java.awt.BorderLayout.CENTER);
-	}// </editor-fold>//GEN-END:initComponents
-
+	}
+	
 	private JPanel createActivityPanel() {
 		JPanel activityPanel = new JPanel(new BorderLayout(5, 5));
 		JPanel innerActivityPanel = new JPanel(new MigLayout("hidemode 3, fill, ins 0", "fill, grow", ""));

@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.swing.Action;
 
+import org.apache.commons.io.FileUtils;
+
 import com.floreantpos.IconFactory;
 import com.floreantpos.config.AppConfig;
 import com.floreantpos.main.Application;
@@ -42,7 +44,10 @@ public class ExportSQLAction extends PosAction {
 			File sqlFile = new File(AppConfig.getExportPath() + "\\posBackup\\" + Application.yearFolderFormat.format(today) + "\\" + Application.monthFolderFormat.format(today) + "\\"
 					+ dateFolderName + "\\" + backupFileName);
 			if (!sqlFile.exists()) {
-				sqlFile.createNewFile();
+				File parent = sqlFile.getParentFile();
+				if (parent.exists() == false) {
+					FileUtils.forceMkdir(parent);
+				}
 			}
 			pb.redirectOutput(Redirect.to(sqlFile));
 			Process p = pb.start();

@@ -1,6 +1,7 @@
 package com.floreantpos.report;
 
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.jdesktop.swingx.calendar.DateUtils;
@@ -9,11 +10,13 @@ import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.view.JRViewer;
 
 public abstract class Report {
 	public static final int REPORT_TYPE_1 = 0;
 	public static final int REPORT_TYPE_2 = 1;
+	public static SimpleDateFormat format = new SimpleDateFormat("yyyy_MMM_dd_HH_mm_ss");
 
 	private Date startDate;
 	private Date endDate;
@@ -22,7 +25,7 @@ public abstract class Report {
 	protected JasperPrint print;
 	protected boolean dailyReport;
 	protected String name;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -31,14 +34,14 @@ public abstract class Report {
 		this.name = name;
 	}
 
-	public Report(String name){
+	public Report(String name) {
 		this.name = name;
 	}
-	
-	public Report(){
-		
+
+	public Report() {
+
 	}
-	
+
 	public boolean isDailyReport() {
 		return dailyReport;
 	}
@@ -51,23 +54,30 @@ public abstract class Report {
 		Date date1 = DateUtils.startOfDay(getStartDate());
 		Date date2 = DateUtils.endOfDay(getEndDate());
 		generateReport(date1, date2);
+		System.out.println("From UI, startDate: " + format.format(date1) + ", endDate: " + format.format(date2));
 
 		viewer = new JRViewer(print);
 	}
 
 	public abstract void generateReport(Date startDate, Date endDate) throws Exception;
 
-	public void exportReportPDF(Date startDate, Date endDate, String reportPath) throws Exception {
+	public void exportReport(Date startDate, Date endDate, String reportPath) throws Exception {
 		generateReport(startDate, endDate);
+		System.out.println("From AutoGenerateI, " + getName() + ", startDate: " + format.format(startDate) + ", endDate: " + format.format(endDate));
 
-		JRExporter exporter = new JRPdfExporter();
-		exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-		exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, new FileOutputStream(reportPath));
-		exporter.exportReport();
+		JRExporter pdfExporter = new JRPdfExporter();
+		pdfExporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+		pdfExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, new FileOutputStream(reportPath + ".pdf"));
+		pdfExporter.exportReport();
+
+		JRExporter xlsXporter = new JRXlsExporter();
+		xlsXporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+		xlsXporter.setParameter(JRExporterParameter.OUTPUT_STREAM, new FileOutputStream(reportPath + ".xls"));
+		xlsXporter.exportReport();
 	}
 
 	public abstract boolean isDateRangeSupported();
-	
+
 	public abstract void createModels(Date date1, Date date2);
 
 	public abstract boolean isTypeSupported();

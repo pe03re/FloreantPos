@@ -2,13 +2,20 @@ package com.floreantpos.main;
 
 import java.awt.Font;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Random;
-import java.util.ServiceLoader;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -19,6 +26,7 @@ import javax.swing.plaf.FontUIResource;
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.logging.Log;
@@ -63,9 +71,7 @@ public class Application {
 
 	private boolean developmentMode = false;
 	private boolean reportMode = false;
-
 	private Timer autoDrawerPullTimer;
-
 	private PluginManager pluginManager;
 
 	private Terminal terminal;
@@ -84,7 +90,7 @@ public class Application {
 	public static SimpleDateFormat yearFolderFormat = new SimpleDateFormat("yyyy");
 	public static SimpleDateFormat monthFolderFormat = new SimpleDateFormat("MMM");
 	public static SimpleDateFormat dateFolderFormat = new SimpleDateFormat("dd_MM_yyyy");
-	SimpleDateFormat format = new SimpleDateFormat("yyyy_MMM_dd_hh_mm_ss");
+	public static SimpleDateFormat format = new SimpleDateFormat("yyyy_MMM_dd_HH_mm_ss");
 	private static ImageIcon applicationIcon;
 
 	private boolean systemInitialized;
@@ -140,30 +146,86 @@ public class Application {
 	}
 
 	private void printAllReports() {
-		ServiceLoader<Report> loader = ServiceLoader.load(Report.class);
-		Date today = new Date();
-		String dateFolderName = dateFolderFormat.format(today);
-
-		Calendar c = Calendar.getInstance();
-		c.setTime(today);
-		c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
-		Date lastDayOfMonth = c.getTime();
-		File saleReportFolder = new File(AppConfig.getExportPath() + "\\Sales_Reports\\" + yearFolderFormat.format(today) + "\\" + monthFolderFormat.format(today) + "\\" + dateFolderName + "\\");
+		List<Report> repList = new ArrayList<Report>();
+		File f = new File("plugins/");
 		try {
-			for (Report implReportClass : loader) {
-				File reportFile = new File(saleReportFolder + "\\" + implReportClass.getName() + "_" + format.format(today));
-				if (!reportFile.exists()) {
-					reportFile.createNewFile();
-				}
-				if (implReportClass.isDailyReport()) {
-					implReportClass.exportReportPDF(today, today, reportFile.getAbsolutePath());
-				}
-				if (today.getDate() == lastDayOfMonth.getDate()) {
-					implReportClass.exportReportPDF(today, today, reportFile.getAbsolutePath());
+			for (File f1 : f.listFiles()) {
+				if (f1.getName().endsWith(".jar")) {
+					JarFile jarFile = new JarFile(f1);
+					Enumeration e = jarFile.entries();
+					URL[] urls = { new URL("jar:file:" + f1.getAbsolutePath() + "!/") };
+					URLClassLoader cl = URLClassLoader.newInstance(urls);
+
+					while (e.hasMoreElements()) {
+						JarEntry je = (JarEntry) e.nextElement();
+						if (je.isDirectory() || !je.getName().endsWith(".class")) {
+							continue;
+						}
+						String className = je.getName().substring(0, je.getName().length() - 6);
+						className = className.replace('/', '.');
+						Class c;
+						c = cl.loadClass(className);
+						if (Report.class.isAssignableFrom(c)) {
+							repList.add((Report) c.newInstance());
+						}
+					}
 				}
 			}
+			for (Report r : repList) {
+				Date today = new Date();
+
+				File reportFolder = new File(AppConfig.getExportPath() + "\\Sales_Reports\\" + yearFolderFormat.format(today) + "\\" + monthFolderFormat.format(today) + "\\"
+						+ dateFolderFormat.format(today) + "\\");
+				File reportFile = new File(reportFolder + "\\" + r.getName() + "_" + format.format(today));
+				if (!reportFile.exists()) {
+					File parent = reportFile.getParentFile();
+					if (parent.exists() == false) {
+						FileUtils.forceMkdir(parent);
+					}
+				}
+				if (r.isDailyReport()) {
+					Date startDate = new Date();
+					startDate.setHours(0);
+					startDate.setMinutes(0);
+					startDate.setSeconds(0);
+
+					Date endDate = new Date();
+					endDate.setHours(23);
+					endDate.setMinutes(59);
+					endDate.setSeconds(59);
+
+					r.exportReport(startDate, endDate, reportFile.getAbsolutePath());
+				}
+
+				Calendar c1 = Calendar.getInstance();
+				c1.setTime(today);
+				c1.set(Calendar.DAY_OF_MONTH, c1.getActualMaximum(Calendar.DAY_OF_MONTH));
+				Date lastDayOfMonth = c1.getTime();
+				lastDayOfMonth.setHours(23);
+				lastDayOfMonth.setMinutes(59);
+				lastDayOfMonth.setSeconds(59);
+
+				if (today.getDate() == lastDayOfMonth.getDate()) {
+					Calendar c2 = Calendar.getInstance();
+					c2.set(Calendar.DAY_OF_MONTH, 1);
+					Date firstDayOfMonth = c2.getTime();
+					firstDayOfMonth.setHours(0);
+					firstDayOfMonth.setMinutes(0);
+					firstDayOfMonth.setSeconds(0);
+
+					r.exportReport(firstDayOfMonth, lastDayOfMonth, reportFile.getAbsolutePath());
+				}
+			}
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			e1.printStackTrace();
+		} catch (IOException e2) {
+			e2.printStackTrace();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -174,10 +236,7 @@ public class Application {
 
 			PlasticXPLookAndFeel.setPlasticTheme(new ExperienceBlue());
 			UIManager.setLookAndFeel(new PlasticXPLookAndFeel());
-			// UIManager.setLookAndFeel(new NimbusLookAndFeel());
 			UIManager.put("ComboBox.is3DEnabled", Boolean.FALSE); //$NON-NLS-1$
-			// UIManager.put("ToggleButtonUI",
-			// "com.floreantpos.swing.POSButtonUI");
 		} catch (Exception ignored) {
 			ignored.printStackTrace();
 		}
@@ -553,6 +612,14 @@ public class Application {
 
 	public void setDevelopmentMode(boolean developmentMode) {
 		this.developmentMode = developmentMode;
+	}
+
+	public boolean isReportMode() {
+		return reportMode;
+	}
+
+	public void setReportMode(boolean reportMode) {
+		this.reportMode = reportMode;
 	}
 
 	public boolean isPriceIncludesTax() {
