@@ -7,6 +7,7 @@
 package com.floreantpos.ui.views;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -787,6 +788,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 					// }
 					else if (permission.equals(UserPermission.TAKE_OUT)) {
 						btnTakeout.setEnabled(true);
+						btnTakeout.setForeground(Color.red);
 					} else if (permission.equals(UserPermission.EDIT_TICKET)) {
 						btnEditTicket.setEnabled(true);
 					} else if (permission.equals(UserPermission.CREATE_TICKET)) {

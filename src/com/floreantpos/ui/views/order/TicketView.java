@@ -7,6 +7,7 @@
 package com.floreantpos.ui.views.order;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -822,6 +823,7 @@ public class TicketView extends JPanel {
 		tfTotal.setText(NumberUtil.formatNumber(ticket.getTotalAmount()));
 		if (ticket.getCustomer() != null) {
 			lblCustomerName.setText("CUSTOMER: " + ticket.getCustomer().getName());
+			lblCustomerName.setForeground(Color.red);
 		} else {
 			lblCustomerName.setText("CUSTOMER: ");
 		}
