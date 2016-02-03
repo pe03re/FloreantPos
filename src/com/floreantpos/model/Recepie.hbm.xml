@@ -10,7 +10,7 @@
 			<column name="MENU_ITEM" />
 		</many-to-one>
 
-		<bag cascade="none" inverse="false" lazy="false" name="recepieItems">
+		<bag cascade="all" inverse="false" lazy="false" name="recepieItems">
 			<key>
 				<column name="RECEPIE_ID" />
 			</key>

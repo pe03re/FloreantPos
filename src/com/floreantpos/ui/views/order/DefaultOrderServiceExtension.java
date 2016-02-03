@@ -36,39 +36,39 @@ public class DefaultOrderServiceExtension implements OrderServiceExtension {
 
 	@Override
 	public void createNewTicket(OrderType ticketType) throws TicketAlreadyExistsException {
-		List<ShopTable> tables = null;
+//		List<ShopTable> tables = null;
 		
-		FloorLayoutPlugin floorLayoutPlugin = Application.getPluginManager().getPlugin(FloorLayoutPlugin.class);
-		if(floorLayoutPlugin != null) {
-			tables = floorLayoutPlugin.captureTableNumbers(null);
-		}
-		else {
-			tables = PosGuiUtil.captureTable(null);
-		}
-
-		if(tables == null) {
-			return;
-		}
-		
-		int numberOfGuests = PosGuiUtil.captureGuestNumber();
-		if (numberOfGuests == -1) {
-			return;
-		}
+//		FloorLayoutPlugin floorLayoutPlugin = Application.getPluginManager().getPlugin(FloorLayoutPlugin.class);
+//		if(floorLayoutPlugin != null) {
+//			tables = floorLayoutPlugin.captureTableNumbers(null);
+//		}
+//		else {
+//			tables = PosGuiUtil.captureTable(null);
+//		}
+//
+//		if(tables == null) {
+//			return;
+//		}
+//		
+//		int numberOfGuests = PosGuiUtil.captureGuestNumber();
+//		if (numberOfGuests == -1) {
+//			return;
+//		}
 
 		Application application = Application.getInstance();
 		
 		Ticket ticket = new Ticket();
-		ticket.setPriceIncludesTax(application.isPriceIncludesTax());
+		//ticket.setPriceIncludesTax(application.isPriceIncludesTax());
 		ticket.setType(ticketType);
-		ticket.setNumberOfGuests(numberOfGuests);
+		//ticket.setNumberOfGuests(numberOfGuests);
 		ticket.setTerminal(application.getTerminal());
 		ticket.setOwner(Application.getCurrentUser());
 		ticket.setShift(application.getCurrentShift());
 		
-		for (ShopTable shopTable : tables) {
-			shopTable.setOccupied(true);
-			ticket.addTable(shopTable.getTableNumber());
-		}
+//		for (ShopTable shopTable : tables) {
+//			shopTable.setOccupied(true);
+//			ticket.addTable(shopTable.getTableNumber());
+//		}
 
 		Calendar currentTime = Calendar.getInstance();
 		ticket.setCreateDate(currentTime.getTime());

@@ -63,7 +63,7 @@
 		</list>
 
 		<many-to-one class="com.floreantpos.model.Recepie" lazy="false"
-			cascade="none" name="recepie">
+			cascade="all" name="recepie">
 			<column name="RECEPIE" />
 		</many-to-one>
 

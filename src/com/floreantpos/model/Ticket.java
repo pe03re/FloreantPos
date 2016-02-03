@@ -220,7 +220,7 @@ public class Ticket extends BaseTicket {
 
 	public void calculatePrice() {
 		List<TicketItem> ticketItems = getTicketItems();
-		if (ticketItems == null) {
+		if (ticketItems == null || ticketItems.isEmpty()) {
 			return;
 		}
 
@@ -305,7 +305,6 @@ public class Ticket extends BaseTicket {
 		for (TicketItem ticketItem : ticketItems) {
 			tax += ticketItem.getTaxAmount();
 		}
-
 		return fixInvalidAmount(tax);
 	}
 
