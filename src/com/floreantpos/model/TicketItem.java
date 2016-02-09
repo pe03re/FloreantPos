@@ -154,7 +154,7 @@ public class TicketItem extends BaseTicketItem implements ITicketItem {
 
 		if (ticketItemModifierGroups != null) {
 			for (TicketItemModifierGroup ticketItemModifierGroup : ticketItemModifierGroups) {
-				if (ticketItemModifierGroup.getModifierGroupId() == menuModifierGroupId) {
+				if (ticketItemModifierGroup.getModifierGroupId().intValue() == menuModifierGroupId.intValue()) {
 					return ticketItemModifierGroup;
 				}
 			}

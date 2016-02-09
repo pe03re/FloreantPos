@@ -167,7 +167,8 @@ public abstract class ListTableModel<E> extends AbstractTableModel {
 				break;
 			}
 		}
-		this.pageOffset = (int) (Math.ceil(rowI / this.getPageSize()));
+		double offset = (double)rowI / (double)this.getPageSize();
+		this.pageOffset = (int) (Math.ceil(offset));
 		fireTableDataChanged();
 		return rowI - (this.pageOffset * this.getPageSize());
 	}

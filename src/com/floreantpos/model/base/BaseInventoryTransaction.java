@@ -77,9 +77,9 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 	private double discount;
 	private Set<InventoryTransaction> inventoryTransactions = new HashSet<InventoryTransaction>(0);
 
-	public BaseInventoryTransaction(InventoryTransaction inventoryTransaction, InventoryItem inventoryItem, Company company, PackSize packSize, InventoryVendor inventoryVendor, Date transactionDate,
+	public BaseInventoryTransaction(InventoryTransaction inventoryTransaction, InventoryTransactionType inventoryTransType, InventoryItem inventoryItem, Company company, PackSize packSize, InventoryVendor inventoryVendor, Date transactionDate,
 			double quantity, double totalPrice, Tax vatPaid, boolean creditCheck, double discount) {
-		this.inventoryTransactionType = inventoryTransactionType;
+		this.inventoryTransactionType = inventoryTransType;
 		this.inventoryItem = inventoryItem;
 		this.company = company;
 		this.packSize = packSize;
@@ -92,10 +92,10 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 		this.discount = discount;
 	}
 
-	public BaseInventoryTransaction(InventoryTransaction inventoryTransaction, InventoryWarehouse inventoryWarehouseByFromWarehouseId, InventoryWarehouse inventoryWarehouseByToWarehouseId,
+	public BaseInventoryTransaction(InventoryTransaction inventoryTransaction, InventoryTransactionType inventoryTransType, InventoryWarehouse inventoryWarehouseByFromWarehouseId, InventoryWarehouse inventoryWarehouseByToWarehouseId,
 			InventoryItem inventoryItem, Company company, PackSize packSize, InventoryVendor inventoryVendor, Date transactionDate, double quantity, double totalPrice, Tax vatPaid,
 			boolean creditCheck, String remark, double discount, Set<InventoryTransaction> inventoryTransactions) {
-		this.inventoryTransactionType = inventoryTransactionType;
+		this.inventoryTransactionType = inventoryTransType;
 		this.inventoryWarehouseByFromWarehouseId = inventoryWarehouseByFromWarehouseId;
 		this.inventoryWarehouseByToWarehouseId = inventoryWarehouseByToWarehouseId;
 		this.inventoryItem = inventoryItem;

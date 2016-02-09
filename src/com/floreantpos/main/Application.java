@@ -2,9 +2,12 @@ package com.floreantpos.main;
 
 import java.awt.Font;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.ProcessBuilder.Redirect;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
@@ -16,6 +19,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -68,7 +74,6 @@ import com.jgoodies.looks.plastic.theme.ExperienceBlue;
 
 public class Application {
 	private static Log logger = LogFactory.getLog(Application.class);
-
 	private boolean developmentMode = false;
 	private boolean reportMode = false;
 	private Timer autoDrawerPullTimer;
@@ -85,12 +90,11 @@ public class Application {
 	private PosPrinters printers;
 
 	private static Application instance;
-
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy"); //$NON-NLS-1$
-	public static SimpleDateFormat yearFolderFormat = new SimpleDateFormat("yyyy");
-	public static SimpleDateFormat monthFolderFormat = new SimpleDateFormat("MMM");
-	public static SimpleDateFormat dateFolderFormat = new SimpleDateFormat("dd_MM_yyyy");
-	public static SimpleDateFormat format = new SimpleDateFormat("yyyy_MMM_dd_HH_mm_ss");
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy");
+	SimpleDateFormat yearFolderFormat = new SimpleDateFormat("yyyy");
+	SimpleDateFormat monthFolderFormat = new SimpleDateFormat("MMM");
+	SimpleDateFormat dateFolderFormat = new SimpleDateFormat("dd_MM_yyyy");
+	SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy_MMM_dd_HH_mm_ss");
 	private static ImageIcon applicationIcon;
 
 	private boolean systemInitialized;
@@ -174,9 +178,9 @@ public class Application {
 			for (Report r : repList) {
 				Date today = new Date();
 
-				File reportFolder = new File(AppConfig.getExportPath() + "\\Sales_Reports\\" + yearFolderFormat.format(today) + "\\" + monthFolderFormat.format(today) + "\\"
+				File reportFolder = new File(AppConfig.getReportPath() + "\\Sales_Reports\\" + yearFolderFormat.format(today) + "\\" + monthFolderFormat.format(today) + "\\"
 						+ dateFolderFormat.format(today) + "\\");
-				File reportFile = new File(reportFolder + "\\" + r.getName() + "_" + format.format(today));
+				File reportFile = new File(reportFolder + "\\" + r.getName() + "_" + fullDateFormat.format(today));
 				if (!reportFile.exists()) {
 					File parent = reportFile.getParentFile();
 					if (parent.exists() == false) {
@@ -634,5 +638,45 @@ public class Application {
 	public String getLocation() {
 		File file = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getFile());
 		return file.getParent();
+	}
+
+	public void takeSqlBackup() {
+		try {
+			Date today = new Date();
+			String dateFolderName = dateFolderFormat.format(today);
+			String backupFileName = "pos_" + fullDateFormat.format(today) + ".sql";
+			File f = new File(AppConfig.getXamppPath() + "\\mysqldump.exe");
+
+			ProcessBuilder pb = new ProcessBuilder(f.getCanonicalPath(), "-u", "pos", "-ppos123", "pos");
+			File sqlFile = new File(AppConfig.getExportPath() + "\\posBackup\\" + yearFolderFormat.format(today) + "\\" + monthFolderFormat.format(today) + "\\" + dateFolderName + "\\"
+					+ backupFileName);
+			if (!sqlFile.exists()) {
+				File parent = sqlFile.getParentFile();
+				if (parent.exists() == false) {
+					FileUtils.forceMkdir(parent);
+				}
+			}
+			pb.redirectOutput(Redirect.to(sqlFile));
+
+			Process p = pb.start();
+			int exit = p.waitFor();
+			File zipSqlFile = new File(sqlFile.getAbsolutePath() + ".zip");
+			gzipFile(sqlFile, zipSqlFile);
+			sqlFile.delete();
+		} catch (Exception e) {
+			POSMessageDialog.showError(e.getMessage(), e);
+		}
+	}
+
+	public static void gzipFile(File from, File to) throws IOException {
+		FileInputStream in = new FileInputStream(from);
+		GZIPOutputStream out = new GZIPOutputStream(new FileOutputStream(to));
+		byte[] buffer = new byte[4096];
+		int bytesRead;
+		while ((bytesRead = in.read(buffer)) != -1) {
+			out.write(buffer, 0, bytesRead);
+		}
+		in.close();
+		out.close();
 	}
 }
