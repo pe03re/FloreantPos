@@ -233,7 +233,7 @@ public abstract class BaseInventoryTransaction implements Comparable, Serializab
 	}
 
 	public InventoryTransactionType getInventoryTransactionType() {
-		return inventoryTransactionType;
+		return this.inventoryTransactionType;
 	}
 
 	public void setInventoryTransactionType(InventoryTransactionType inventoryTransactionType) {
