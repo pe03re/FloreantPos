@@ -1,7 +1,5 @@
 package com.floreantpos.actions;
 
-import java.text.SimpleDateFormat;
-
 import javax.swing.Action;
 
 import com.floreantpos.IconFactory;
@@ -10,10 +8,6 @@ import com.floreantpos.main.Application;
 public class ExportSQLAction extends PosAction {
 
 	private static final String exportSQLName = "Export SQL";
-	SimpleDateFormat format = new SimpleDateFormat("yyyy_MMM_dd_hh_mm_ss");
-	SimpleDateFormat yearFolderFormat = new SimpleDateFormat("yyyy");
-	SimpleDateFormat monthFolderFormat = new SimpleDateFormat("MMM");
-	SimpleDateFormat dateFolderFormat = new SimpleDateFormat("dd_MM_yyyy");
 
 	public ExportSQLAction() {
 		super(exportSQLName); //$NON-NLS-1$

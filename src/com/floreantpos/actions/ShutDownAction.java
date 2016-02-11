@@ -27,6 +27,7 @@ public class ShutDownAction extends PosAction {
 
 	@Override
 	public void execute() {
+		// First take sql backup then shut down
 		Application.getInstance().takeSqlBackup();
 		Application.getInstance().shutdownPOS();
 	}

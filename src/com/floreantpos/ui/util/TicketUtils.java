@@ -49,7 +49,11 @@ public class TicketUtils {
 			if (ticket.getAssignedDriver() == null) {
 				return "Driver not assigned";
 			} else if (ticket.isPaid()) {
-				return "Out for Delivery";
+				if (ticket.isClosed()) {
+					return "PAID, Closed";
+				} else {
+					return "PAID, On the Way";
+				}
 			}
 			return "Driver assigned";
 		} else if (ticket.getType() == OrderType.DRIVE_THRU) {
