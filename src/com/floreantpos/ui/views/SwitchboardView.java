@@ -574,6 +574,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 	private void doShowOrderInfo() {
 		doShowOrderInfo(openTicketList.getSelectedTickets());
+		updateTicketList();
 	}
 
 	private void doShowOrderInfo(List<Ticket> tickets) {
@@ -601,6 +602,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		} catch (Exception e) {
 			POSMessageDialog.showError(POSConstants.ERROR_MESSAGE, e);
 		}
+		updateTicketList();
 	}
 
 	private void doVoidTicket() {

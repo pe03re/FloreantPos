@@ -59,8 +59,9 @@ public class Ticket extends BaseTicket {
 
 	/* [CONSTRUCTOR MARKER END] */
 
-	private static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MMM dd yyyy, h:m a");
+	private static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MMM dd yyyy, h:mm a");
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy");
+	private static SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aaa");
 	private static SimpleDateFormat dateDayFormat = new SimpleDateFormat("MMM dd yyyy, EEE");
 
 	private DecimalFormat numberFormat = new DecimalFormat("0.00");
@@ -178,6 +179,10 @@ public class Ticket extends BaseTicket {
 	public Ticket(User owner, Date createTime) {
 		setOwner(owner);
 		setCreateDate(createTime);
+	}
+
+	public String getCreateTimeFormatted() {
+		return timeFormat.format(getCreateDate());
 	}
 
 	public String getCreateDateTimeFormatted() {

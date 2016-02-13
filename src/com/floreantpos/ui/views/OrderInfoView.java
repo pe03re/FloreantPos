@@ -4,13 +4,18 @@ import java.awt.BorderLayout;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import net.miginfocom.swing.MigLayout;
 import net.sf.jasperreports.engine.JasperPrint;
 
+import com.floreantpos.model.PaymentType;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.dao.PosTransactionDAO;
@@ -66,6 +71,34 @@ public class OrderInfoView extends JPanel {
 			Ticket ticket = (Ticket) iter.next();
 
 			ReceiptPrintService.printToKitchen(ticket, true);
+		}
+	}
+
+	public void changeToCash() throws Exception {
+		for (Iterator iter = tickets.iterator(); iter.hasNext();) {
+			Ticket ticket = (Ticket) iter.next();
+			// get all transactions for this ticket.
+			PosTransactionDAO transDAO = PosTransactionDAO.getInstance();
+			List<PosTransaction> allTrans = transDAO.findAllTransactionByTicket(ticket);
+			for (int i = 0; i < allTrans.size(); i++) {
+				PosTransaction trans = allTrans.get(i);
+				trans.setPaymentType(PaymentType.CASH.name());
+				transDAO.saveOrUpdate(trans);
+			}
+		}
+	}
+
+	public void changeToCard() throws Exception {
+		for (Iterator iter = tickets.iterator(); iter.hasNext();) {
+			Ticket ticket = (Ticket) iter.next();
+			// get all transactions for this ticket.
+			PosTransactionDAO transDAO = PosTransactionDAO.getInstance();
+			List<PosTransaction> allTrans = transDAO.findAllTransactionByTicket(ticket);
+			for (int i = 0; i < allTrans.size(); i++) {
+				PosTransaction trans = allTrans.get(i);
+				trans.setPaymentType(PaymentType.CARD.name());
+				transDAO.saveOrUpdate(trans);
+			}
 		}
 	}
 }

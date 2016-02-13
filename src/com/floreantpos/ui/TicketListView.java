@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -14,6 +15,8 @@ import org.jdesktop.swingx.JXTable;
 
 import com.floreantpos.POSConstants;
 import com.floreantpos.bo.ui.explorer.ListTableModel;
+import com.floreantpos.model.PaymentType;
+import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
 import com.floreantpos.swing.PosScrollPane;
@@ -38,13 +41,14 @@ public class TicketListView extends JPanel {
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(5);
 		columnModel.getColumn(1).setPreferredWidth(2);
-		columnModel.getColumn(2).setPreferredWidth(40);
+		columnModel.getColumn(2).setPreferredWidth(60);
 		columnModel.getColumn(3).setPreferredWidth(250);
 		columnModel.getColumn(4).setPreferredWidth(30);
 		columnModel.getColumn(5).setPreferredWidth(50);
 		columnModel.getColumn(6).setPreferredWidth(10);
 		columnModel.getColumn(7).setPreferredWidth(10);
-		columnModel.getColumn(8).setPreferredWidth(80);
+		columnModel.getColumn(8).setPreferredWidth(10);
+		columnModel.getColumn(9).setPreferredWidth(60);
 
 		PosScrollPane scrollPane = new PosScrollPane(table, PosScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, PosScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -106,7 +110,7 @@ public class TicketListView extends JPanel {
 
 	private class TicketListTableModel extends ListTableModel {
 		public TicketListTableModel() {
-			super(new String[] { "TICKET ID", "TOKEN", "DATE", "ITEMS", POSConstants.TICKET_TYPE, "STATUS", POSConstants.TOTAL, POSConstants.DUE, "CUSTOMER" });
+			super(new String[] { "TICKET ID", "TOKEN", "DATE", "ITEMS", POSConstants.TICKET_TYPE, "STATUS", POSConstants.TOTAL, POSConstants.DUE, "MODE", "CUSTOMER" });
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
@@ -118,14 +122,14 @@ public class TicketListView extends JPanel {
 			case 1:
 				return ticket.getTokenNo();
 			case 2:
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy h:mm aaa");
 				return simpleDateFormat.format(ticket.getCreateDate());
 			case 3:
 				List<TicketItem> list = ticket.getTicketItems();
 				StringBuilder items = new StringBuilder("");
 				int count = 2;
 				for (TicketItem ti : list) {
-					if(ti.getName().startsWith("**"))
+					if (ti.getName().startsWith("**"))
 						continue;
 					if (count > 0) {
 						items.append(", ");
@@ -138,9 +142,9 @@ public class TicketListView extends JPanel {
 						break;
 					}
 				}
-				if(items.length() > 0 && items.charAt(0) == ',' ){
-				return items.substring(2);
-				}else{
+				if (items.length() > 0 && items.charAt(0) == ',') {
+					return items.substring(2);
+				} else {
 					return "";
 				}
 
@@ -153,6 +157,19 @@ public class TicketListView extends JPanel {
 			case 7:
 				return ticket.getDueAmount();
 			case 8:
+				Set<PosTransaction> tansactions = ticket.getTransactions();
+				boolean card = false;
+				for (PosTransaction trans : tansactions) {
+					if (trans.getPaymentType().equalsIgnoreCase(PaymentType.CARD.name())) {
+						card = true;
+					}
+				}
+				if (card) {
+					return PaymentType.CARD.name();
+				} else {
+					return PaymentType.CASH.name();
+				}
+			case 9:
 				if (ticket.getCustomer() != null) {
 					return ticket.getCustomer().getName();
 				}

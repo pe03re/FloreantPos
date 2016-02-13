@@ -21,7 +21,7 @@ public class OrderInfoDialog extends POSDialog {
 
 		createUI();
 	}
-	
+
 	public OrderInfoDialog(OrderInfoView view) {
 		this.view = view;
 		setTitle("ORDER PREVIEW");
@@ -50,8 +50,26 @@ public class OrderInfoDialog extends POSDialog {
 				doKitchenPrint();
 			}
 		});
-		btnKitchenPrint.setText("KITCHEN PRINT");
+		btnKitchenPrint.setText("KITCHEN");
 		panel.add(btnKitchenPrint);
+
+		PosButton btnCash = new PosButton();
+		btnCash.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doChangeTicketToCash();
+			}
+		});
+		btnCash.setText("CASH");
+		panel.add(btnCash);
+
+		PosButton btnCard = new PosButton();
+		btnCard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				doChangeTicketToCard();
+			}
+		});
+		btnCard.setText("CARD");
+		panel.add(btnCard);
 
 		PosButton btnClose = new PosButton();
 		btnClose.addActionListener(new ActionListener() {
@@ -74,6 +92,24 @@ public class OrderInfoDialog extends POSDialog {
 	protected void doKitchenPrint() {
 		try {
 			view.kitchenPrint();
+		} catch (Exception e) {
+			POSMessageDialog.showError(e.getMessage());
+		}
+	}
+
+	private void doChangeTicketToCard() {
+		try {
+			view.changeToCard();
+			dispose();
+		} catch (Exception e) {
+			POSMessageDialog.showError(e.getMessage());
+		}
+	}
+
+	private void doChangeTicketToCash() {
+		try {
+			view.changeToCash();
+			dispose();
 		} catch (Exception e) {
 			POSMessageDialog.showError(e.getMessage());
 		}
