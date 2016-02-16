@@ -1,8 +1,6 @@
 package com.floreantpos.report;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +30,7 @@ import com.floreantpos.model.OrderType;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.RefundTransaction;
 import com.floreantpos.model.Restaurant;
-import com.floreantpos.model.TaxTreatment;
 import com.floreantpos.model.Ticket;
-import com.floreantpos.model.TicketItem;
 import com.floreantpos.model.dao.KitchenTicketDAO;
 import com.floreantpos.model.dao.PosTransactionDAO;
 import com.floreantpos.model.dao.RestaurantDAO;
@@ -354,8 +350,8 @@ public class ReceiptPrintService {
 				map.put("roundOff", Double.toString(NumberUtil.roundToTwoDigit(roundOff)));
 				map.put("roundOffText", "Rounding Off");
 			}
-			 roundOff = NumberUtil.roundOff(ticket.getDueAmount()) - ticket.getDueAmount();
-				map.put("dueAmount", NumberUtil.formatNumber(ticket.getDueAmount()+roundOff));
+			roundOff = NumberUtil.roundOff(ticket.getDueAmount()) - ticket.getDueAmount();
+			map.put("dueAmount", NumberUtil.formatNumber(ticket.getDueAmount() + roundOff));
 
 			map.put("grandSubtotal", NumberUtil.formatNumber(ticket.getSubtotalAmount()));
 			if (restaurant.getTicketFeedbackMessage() != null) {
@@ -375,13 +371,13 @@ public class ReceiptPrintService {
 				if (changedAmount < 0) {
 					changedAmount = 0;
 				}
-				
+
 				double roundOffChanged = NumberUtil.roundOff(changedAmount) - changedAmount;
 
 				map.put("tenderedAmountText", "Tendered Amount");
 				map.put("tenderedAmount", NumberUtil.formatNumber(tenderedAmount));
 				map.put("changeAmountText", "Change Returned");
-				map.put("changedAmount", NumberUtil.formatNumber(changedAmount+roundOffChanged));
+				map.put("changedAmount", NumberUtil.formatNumber(changedAmount + roundOffChanged));
 
 				if (transaction.isCard()) {
 					map.put("cardPayment", true);
@@ -429,21 +425,39 @@ public class ReceiptPrintService {
 	}
 
 	private static void buildTaxDetails(Ticket ticket, HashMap map) {
-		Map<String, Double> taxMap = ticket.getTicketTaxDetails();
-
 		StringBuilder taxNameBuilder = new StringBuilder();
 		taxNameBuilder.append("<html>");
 
 		StringBuilder taxRateBuilder = new StringBuilder();
 		taxRateBuilder.append("<html>");
 
+		double serviceTax = 0.0;
+		double vatTax = 0.0;
+		Map<String, Double> taxMap = ticket.getTicketTaxDetails();
 		for (Map.Entry<String, Double> entry : taxMap.entrySet()) {
+			if (entry.getKey().toLowerCase().contains("service")) {
+				serviceTax += entry.getValue();
+			} else if (entry.getKey().toLowerCase().contains("vat")) {
+				vatTax += entry.getValue();
+			}
+		}
+		if (serviceTax > 0.0) {
 			beginRow(taxNameBuilder);
-			addColumn(taxNameBuilder, entry.getKey());
+			addColumn(taxNameBuilder, "Service Tax");
 			endRow(taxNameBuilder);
 
 			beginRow(taxRateBuilder);
-			addColumn(taxRateBuilder, NumberUtil.formatNumber(entry.getValue()));
+			addColumn(taxRateBuilder, NumberUtil.formatNumber(serviceTax));
+			endRow(taxRateBuilder);
+		}
+
+		if (vatTax > 0.0) {
+			beginRow(taxNameBuilder);
+			addColumn(taxNameBuilder, "VAT");
+			endRow(taxNameBuilder);
+
+			beginRow(taxRateBuilder);
+			addColumn(taxRateBuilder, NumberUtil.formatNumber(vatTax));
 			endRow(taxRateBuilder);
 		}
 
