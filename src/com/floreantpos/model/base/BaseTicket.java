@@ -423,7 +423,7 @@ public abstract class BaseTicket implements Comparable, Serializable {
 	}
 
 	public java.lang.Double getRoundedOffAmount() {
-		return totalAmount == null ? Double.valueOf(0) : -NumberUtil.roundToTwoDigit(totalAmount) + NumberUtil.roundOff(NumberUtil.roundToTwoDigit(totalAmount));
+		return totalAmount == null ? Double.valueOf(0) : -NumberUtil.roundToTwoDigit(totalAmount) + NumberUtil.mathRoundOff(NumberUtil.roundToTwoDigit(totalAmount));
 	}
 
 	/**

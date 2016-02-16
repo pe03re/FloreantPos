@@ -343,14 +343,14 @@ public class ReceiptPrintService {
 
 			map.put("totalAmount", NumberUtil.formatNumber(totalAmount));
 
-			double roundOff = NumberUtil.roundOff(totalAmount) - totalAmount;
-			map.put("netAmount", NumberUtil.formatNumber(NumberUtil.roundOff(totalAmount + roundOff)));
+			double roundOff = NumberUtil.mathRoundOff(totalAmount) - totalAmount;
+			map.put("netAmount", NumberUtil.formatNumber(NumberUtil.mathRoundOff(totalAmount + roundOff)));
 			map.put("paidAmount", NumberUtil.formatNumber(ticket.getPaidAmount()));
 			if (roundOff != 0) {
 				map.put("roundOff", Double.toString(NumberUtil.roundToTwoDigit(roundOff)));
 				map.put("roundOffText", "Rounding Off");
 			}
-			roundOff = NumberUtil.roundOff(ticket.getDueAmount()) - ticket.getDueAmount();
+			roundOff = NumberUtil.mathRoundOff(ticket.getDueAmount()) - ticket.getDueAmount();
 			map.put("dueAmount", NumberUtil.formatNumber(ticket.getDueAmount() + roundOff));
 
 			map.put("grandSubtotal", NumberUtil.formatNumber(ticket.getSubtotalAmount()));
@@ -372,7 +372,7 @@ public class ReceiptPrintService {
 					changedAmount = 0;
 				}
 
-				double roundOffChanged = NumberUtil.roundOff(changedAmount) - changedAmount;
+				double roundOffChanged = NumberUtil.mathRoundOff(changedAmount) - changedAmount;
 
 				map.put("tenderedAmountText", "Tendered Amount");
 				map.put("tenderedAmount", NumberUtil.formatNumber(tenderedAmount));

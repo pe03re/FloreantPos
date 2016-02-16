@@ -21,10 +21,14 @@ public class NumberUtil {
 		return bd.doubleValue();
 	}
 
-	public static double roundOff(double value) {
+	public static double roundOffOld(double value) {
 		BigDecimal bd = new BigDecimal(value);
 		bd = bd.setScale(0, RoundingMode.HALF_UP);
 		return bd.doubleValue();
+	}
+
+	public static double mathRoundOff(double value) {
+		return Math.round(value);
 	}
 
 	public static String formatNumber(Double number) {

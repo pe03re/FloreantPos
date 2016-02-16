@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -15,13 +14,12 @@ import org.jdesktop.swingx.JXTable;
 
 import com.floreantpos.POSConstants;
 import com.floreantpos.bo.ui.explorer.ListTableModel;
-import com.floreantpos.model.PaymentType;
-import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
 import com.floreantpos.swing.PosScrollPane;
 import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.ui.util.TicketUtils;
+import com.floreantpos.util.NumberUtil;
 
 public class TicketListView extends JPanel {
 	private JXTable table;
@@ -153,21 +151,14 @@ public class TicketListView extends JPanel {
 			case 5:
 				return TicketUtils.getTicketStatus(ticket);
 			case 6:
-				return ticket.getTotalAmount();
+				return NumberUtil.mathRoundOff(ticket.getTotalAmount());
 			case 7:
-				return ticket.getDueAmount();
+				return NumberUtil.mathRoundOff(ticket.getDueAmount());
 			case 8:
-				Set<PosTransaction> tansactions = ticket.getTransactions();
-				boolean card = false;
-				for (PosTransaction trans : tansactions) {
-					if (trans.getPaymentType().equalsIgnoreCase(PaymentType.CARD.name())) {
-						card = true;
-					}
-				}
-				if (card) {
-					return PaymentType.CARD.name();
+				if (TicketUtils.getTicketStatus(ticket).contains("OPEN")) {
+					return "-";
 				} else {
-					return PaymentType.CASH.name();
+					return ticket.getPaymentMode();
 				}
 			case 9:
 				if (ticket.getCustomer() != null) {

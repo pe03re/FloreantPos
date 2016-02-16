@@ -573,7 +573,7 @@ public class TicketView extends JPanel {
 					ticket.calculatePrice();
 					PosTransaction firstTrans = allTrans.get(0);
 					firstTrans.setAmount(ticket.getTotalAmount());
-					firstTrans.setTenderAmount(NumberUtil.roundOff(ticket.getTotalAmount()));
+					firstTrans.setTenderAmount(NumberUtil.mathRoundOff(ticket.getTotalAmount()));
 					// save the transaction.
 					transDAO.update(firstTrans);
 					for (int i = 1; i < allTrans.size(); i++) {

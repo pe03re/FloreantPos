@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -223,6 +224,21 @@ public class Ticket extends BaseTicket {
 		return count;
 	}
 
+	public String getPaymentMode() {
+		Set<PosTransaction> tansactions = getTransactions();
+		boolean card = false;
+		for (PosTransaction trans : tansactions) {
+			if (trans.getPaymentType().equalsIgnoreCase(PaymentType.CARD.name())) {
+				card = true;
+			}
+		}
+		if (card) {
+			return PaymentType.CARD.name();
+		} else {
+			return PaymentType.CASH.name();
+		}
+	}
+
 	public void calculatePrice() {
 		List<TicketItem> ticketItems = getTicketItems();
 		if (ticketItems == null || ticketItems.isEmpty()) {
@@ -257,7 +273,7 @@ public class Ticket extends BaseTicket {
 		setTotalAmount(NumberUtil.roundToTwoDigit(totalAmount));
 
 		double dueAmount = totalAmount - getPaidAmount();
-		setDueAmount(NumberUtil.roundOff(dueAmount));
+		setDueAmount(NumberUtil.mathRoundOff(dueAmount));
 	}
 
 	private double calculateSubtotalAmount() {

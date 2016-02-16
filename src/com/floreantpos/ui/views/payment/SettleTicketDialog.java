@@ -451,7 +451,7 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 		dialog.setDueAmount(ticket.getDueAmount());
 		
 		if (tenderedAmount > transaction.getAmount()) {
-			double roundOff = NumberUtil.roundOff(tenderedAmount - transaction.getAmount()) - (tenderedAmount - transaction.getAmount());
+			double roundOff = NumberUtil.mathRoundOff(tenderedAmount - transaction.getAmount()) - (tenderedAmount - transaction.getAmount());
 			dialog.setChangeAmount(tenderedAmount - transaction.getAmount() + roundOff);
 		} else {
 			dialog.setChangeAmount(0);
