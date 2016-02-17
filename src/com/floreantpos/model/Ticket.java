@@ -63,6 +63,7 @@ public class Ticket extends BaseTicket {
 	private static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MMM dd yyyy, h:mm a");
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy");
 	private static SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aaa");
+	private static SimpleDateFormat time24HrFormat = new SimpleDateFormat("HH:mm");
 	private static SimpleDateFormat dateDayFormat = new SimpleDateFormat("MMM dd yyyy, EEE");
 
 	private DecimalFormat numberFormat = new DecimalFormat("0.00");
@@ -184,6 +185,10 @@ public class Ticket extends BaseTicket {
 
 	public String getCreateTimeFormatted() {
 		return timeFormat.format(getCreateDate());
+	}
+
+	public String getCreateTime24HrFormatted() {
+		return time24HrFormat.format(getCreateDate());
 	}
 
 	public String getCreateDateTimeFormatted() {

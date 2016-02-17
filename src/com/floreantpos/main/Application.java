@@ -126,6 +126,7 @@ public class Application {
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/categoryWiseReport/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/groupWiseReport/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/menuItemWiseReport/target/classes").toURI());
+			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/cardPaymentReport/target/classes").toURI());
 		}
 
 		setApplicationLook();
