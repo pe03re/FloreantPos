@@ -227,15 +227,23 @@ public class Ticket extends BaseTicket {
 	public String getPaymentMode() {
 		Set<PosTransaction> tansactions = getTransactions();
 		boolean card = false;
+		boolean cash = false;
 		for (PosTransaction trans : tansactions) {
 			if (trans.getPaymentType().equalsIgnoreCase(PaymentType.CARD.name())) {
 				card = true;
 			}
+			if (trans.getPaymentType().equalsIgnoreCase(PaymentType.CASH.name())) {
+				cash = true;
+			}
 		}
-		if (card) {
+		if (card && !cash) {
 			return PaymentType.CARD.name();
-		} else {
+		} else if (!card && cash) {
 			return PaymentType.CASH.name();
+		} else if (card && cash) {
+			return "Both";
+		} else {
+			return "";
 		}
 	}
 

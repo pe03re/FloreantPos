@@ -127,9 +127,11 @@ public class TicketListView extends JPanel {
 			Ticket ticket = (Ticket) rows.get(rowIndex);
 			Color c = Color.WHITE;
 			if (ticket.getPaymentMode().contains(PaymentType.CARD.name())) {
-				c = new Color(255,218,185);
+				c = new Color(255, 218, 185);
 			} else if (ticket.getPaymentMode().contains(PaymentType.CASH.name())) {
 				c = Color.WHITE;
+			} else if (ticket.getPaymentMode().contains("Both")) {
+				c = new Color(255, 204, 204);
 			}
 			switch (columnIndex) {
 			case 0:
