@@ -14,6 +14,7 @@ import org.jdesktop.swingx.JXTable;
 
 import com.floreantpos.POSConstants;
 import com.floreantpos.bo.ui.explorer.ListTableModel;
+import com.floreantpos.model.PaymentType;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
 import com.floreantpos.swing.PosScrollPane;
@@ -47,6 +48,17 @@ public class TicketListView extends JPanel {
 		columnModel.getColumn(7).setPreferredWidth(10);
 		columnModel.getColumn(8).setPreferredWidth(10);
 		columnModel.getColumn(9).setPreferredWidth(60);
+
+		columnModel.getColumn(0).setCellRenderer(new ColoredCellRenderer());
+		columnModel.getColumn(1).setCellRenderer(new ColoredCellRenderer());
+		columnModel.getColumn(2).setCellRenderer(new ColoredCellRenderer());
+		columnModel.getColumn(3).setCellRenderer(new ColoredCellRenderer());
+		columnModel.getColumn(4).setCellRenderer(new ColoredCellRenderer());
+		columnModel.getColumn(5).setCellRenderer(new ColoredCellRenderer());
+		columnModel.getColumn(6).setCellRenderer(new ColoredCellRenderer());
+		columnModel.getColumn(7).setCellRenderer(new ColoredCellRenderer());
+		columnModel.getColumn(8).setCellRenderer(new ColoredCellRenderer());
+		columnModel.getColumn(9).setCellRenderer(new ColoredCellRenderer());
 
 		PosScrollPane scrollPane = new PosScrollPane(table, PosScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, PosScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -113,15 +125,20 @@ public class TicketListView extends JPanel {
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			Ticket ticket = (Ticket) rows.get(rowIndex);
-
+			Color c = Color.WHITE;
+			if (ticket.getPaymentMode().contains(PaymentType.CARD.name())) {
+				c = new Color(255,218,185);
+			} else if (ticket.getPaymentMode().contains(PaymentType.CASH.name())) {
+				c = Color.WHITE;
+			}
 			switch (columnIndex) {
 			case 0:
-				return ticket.getCreateDate().getDate() + "/" + ticket.getSerialId();
+				return new ColoredCellData(ticket.getCreateDate().getDate() + "/" + ticket.getSerialId(), c);
 			case 1:
-				return ticket.getTokenNo();
+				return new ColoredCellData(ticket.getTokenNo().toString(), c);
 			case 2:
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy h:mm aaa");
-				return simpleDateFormat.format(ticket.getCreateDate());
+				return new ColoredCellData(simpleDateFormat.format(ticket.getCreateDate()), c);
 			case 3:
 				List<TicketItem> list = ticket.getTicketItems();
 				StringBuilder items = new StringBuilder("");
@@ -141,30 +158,30 @@ public class TicketListView extends JPanel {
 					}
 				}
 				if (items.length() > 0 && items.charAt(0) == ',') {
-					return items.substring(2);
+					return new ColoredCellData(items.substring(2), c);
 				} else {
-					return "";
+					return new ColoredCellData("", c);
 				}
 
 			case 4:
-				return ticket.getType();
+				return new ColoredCellData(ticket.getType().name(), c);
 			case 5:
-				return TicketUtils.getTicketStatus(ticket);
+				return new ColoredCellData(TicketUtils.getTicketStatus(ticket), c);
 			case 6:
-				return NumberUtil.mathRoundOff(ticket.getTotalAmount());
+				return new ColoredCellData(String.valueOf(NumberUtil.mathRoundOff(ticket.getTotalAmount())), c);
 			case 7:
-				return NumberUtil.mathRoundOff(ticket.getDueAmount());
+				return new ColoredCellData(String.valueOf(NumberUtil.mathRoundOff(ticket.getDueAmount())), c);
 			case 8:
 				if (TicketUtils.getTicketStatus(ticket).contains("OPEN")) {
-					return "-";
+					return new ColoredCellData("-", c);
 				} else {
-					return ticket.getPaymentMode();
+					return new ColoredCellData(ticket.getPaymentMode(), c);
 				}
 			case 9:
 				if (ticket.getCustomer() != null) {
-					return ticket.getCustomer().getName();
+					return new ColoredCellData(ticket.getCustomer().getName(), c);
 				}
-				return "***";
+				return new ColoredCellData("***", c);
 			}
 
 			return null;
