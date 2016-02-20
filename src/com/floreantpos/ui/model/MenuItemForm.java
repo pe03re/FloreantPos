@@ -630,7 +630,8 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 										.addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)).addContainerGap()));
 		tabModifier.setLayout(jPanel2Layout);
 
-		//tabbedPane.addTab(com.floreantpos.POSConstants.MODIFIER_GROUPS, tabModifier);
+		// tabbedPane.addTab(com.floreantpos.POSConstants.MODIFIER_GROUPS,
+		// tabModifier);
 
 		btnDeleteShift.setText(com.floreantpos.POSConstants.DELETE_SHIFT);
 
@@ -704,7 +705,7 @@ public class MenuItemForm extends BeanEditor<MenuItem> implements ActionListener
 		}
 		double base = tfPrice.getDouble() / (1 + taxRate / 100);
 		// base = base * (1 + tfDiscountRate.getDouble() / 100);
-		return base;
+		return NumberUtil.mathRoundOff(base);
 	}
 
 	private double calculateDisplayPrice() {

@@ -137,7 +137,7 @@ public class TicketListView extends JPanel {
 			case 0:
 				return new ColoredCellData(ticket.getCreateDate().getDate() + "/" + ticket.getSerialId(), c);
 			case 1:
-				return new ColoredCellData(ticket.getTokenNo().toString(), c);
+				return new ColoredCellData(ticket.getTokenNo() != null ? ticket.getTokenNo().toString() : "", c);
 			case 2:
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yy h:mm aaa");
 				return new ColoredCellData(simpleDateFormat.format(ticket.getCreateDate()), c);

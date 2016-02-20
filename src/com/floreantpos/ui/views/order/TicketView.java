@@ -585,9 +585,9 @@ public class TicketView extends JPanel {
 					ticket.setDueAmount(0d);
 					ticket.getTransactions().clear();
 					ticket.getTransactions().add(firstTrans);
-					//ticket.calculatePrice();
+					// ticket.calculatePrice();
 					ticketDAO.saveOrUpdate(ticket);
-				}				
+				}
 				try {
 					t.commit();
 				} catch (Exception e) {
