@@ -54,8 +54,6 @@ public abstract class Report {
 		Date date1 = DateUtils.startOfDay(getStartDate());
 		Date date2 = DateUtils.endOfDay(getEndDate());
 		generateReport(date1, date2);
-		System.out.println("From UI, startDate: " + format.format(date1) + ", endDate: " + format.format(date2));
-
 		viewer = new JRViewer(print);
 	}
 
