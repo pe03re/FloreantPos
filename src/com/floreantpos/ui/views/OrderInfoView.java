@@ -4,13 +4,9 @@ import java.awt.BorderLayout;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import net.miginfocom.swing.MigLayout;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -19,6 +15,7 @@ import com.floreantpos.model.PaymentType;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.dao.PosTransactionDAO;
+import com.floreantpos.model.dao.TicketDAO;
 import com.floreantpos.report.ReceiptPrintService;
 import com.floreantpos.report.TicketPrintProperties;
 import com.floreantpos.swing.PosScrollPane;
@@ -34,7 +31,7 @@ public class OrderInfoView extends JPanel {
 	}
 
 	private void createUI() throws Exception {
-		JPanel reportPanel = new JPanel(new MigLayout("wrap 1, ax 50%", "", ""));
+		JPanel reportPanel = new JPanel(new MigLayout("wrap 1, ax 60%", "", ""));
 		PosScrollPane scrollPane = new PosScrollPane(reportPanel);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 
@@ -99,6 +96,15 @@ public class OrderInfoView extends JPanel {
 				trans.setPaymentType(PaymentType.CARD.name());
 				transDAO.saveOrUpdate(trans);
 			}
+		}
+	}
+	
+	public void changeTokenTo99() throws Exception {
+		for (Iterator iter = tickets.iterator(); iter.hasNext();) {
+			Ticket ticket = (Ticket) iter.next();
+			TicketDAO ticketDao = TicketDAO.getInstance();
+			ticket.setTokenNo(99);
+			ticketDao.saveOrUpdate(ticket);
 		}
 	}
 }

@@ -77,6 +77,16 @@ public class OrderInfoDialog extends POSDialog {
 				dispose();
 			}
 		});
+		
+		PosButton btn99 = new PosButton();
+		btn99.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				do99();
+			}
+		});
+		btn99.setText("99");
+		panel.add(btn99);
+		
 		btnClose.setText("CLOSE");
 		panel.add(btnClose);
 	}
@@ -109,6 +119,15 @@ public class OrderInfoDialog extends POSDialog {
 	private void doChangeTicketToCash() {
 		try {
 			view.changeToCash();
+			dispose();
+		} catch (Exception e) {
+			POSMessageDialog.showError(e.getMessage());
+		}
+	}
+	
+	private void do99() {
+		try {
+			view.changeTokenTo99();
 			dispose();
 		} catch (Exception e) {
 			POSMessageDialog.showError(e.getMessage());

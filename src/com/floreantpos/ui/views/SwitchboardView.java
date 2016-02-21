@@ -581,7 +581,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 		try {
 
 			if (tickets.size() == 0) {
-				POSMessageDialog.showMessage(POSConstants.SELECT_ONE_TICKET_TO_PRINT);
+				POSMessageDialog.showMessage("Please select at atleast 1 ticket");
 				return;
 			}
 

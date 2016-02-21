@@ -95,8 +95,8 @@ public class AdminTicketManagerView extends ViewPanel implements ActionListener,
 		centerPanel.add(rightPanel, java.awt.BorderLayout.EAST);
 		add(centerPanel, java.awt.BorderLayout.CENTER);
 	}
-	
-	public void refreshView(){
+
+	public void refreshView() {
 		updateTicketList();
 	}
 
@@ -176,7 +176,7 @@ public class AdminTicketManagerView extends ViewPanel implements ActionListener,
 		try {
 
 			if (tickets.size() == 0) {
-				POSMessageDialog.showMessage(POSConstants.SELECT_ONE_TICKET_TO_PRINT);
+				POSMessageDialog.showMessage(this, "Please select at atleast 1 ticket");
 				return;
 			}
 
@@ -193,9 +193,8 @@ public class AdminTicketManagerView extends ViewPanel implements ActionListener,
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setLocationRelativeTo(Application.getBackOfficeWindow());
 			dialog.setVisible(true);
-
 		} catch (Exception e) {
-			POSMessageDialog.showError(POSConstants.ERROR_MESSAGE, e);
+			POSMessageDialog.showError(this, POSConstants.ERROR_MESSAGE, e);
 		}
 	}
 
@@ -224,7 +223,7 @@ public class AdminTicketManagerView extends ViewPanel implements ActionListener,
 
 	private void editTicket(Ticket ticket) {
 		Ticket ticketToEdit = TicketDAO.getInstance().loadFullTicket(ticket.getId());
-		
+
 		BackOfficeWindow backOfficeWindow = BackOfficeWindow.getInstance();
 		OrderView ov = null;
 		JTabbedPane tabbedPane = backOfficeWindow.getTabbedPane();
@@ -236,9 +235,9 @@ public class AdminTicketManagerView extends ViewPanel implements ActionListener,
 		} else {
 			ov = (OrderView) tabbedPane.getComponentAt(index);
 		}
-		try{
-		tabbedPane.setSelectedComponent(ov);
-		} catch (Exception e ){
+		try {
+			tabbedPane.setSelectedComponent(ov);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -267,13 +266,14 @@ public class AdminTicketManagerView extends ViewPanel implements ActionListener,
 		} else if (source == btnOrderInfo) {
 			doShowOrderInfo();
 		}
+		refreshView();
 	}
 
 	public Ticket getFirstSelectedTicket() {
 		List<Ticket> selectedTickets = myTicketList.getSelectedTickets();
 
 		if (selectedTickets.size() == 0 || selectedTickets.size() > 1) {
-			POSMessageDialog.showMessage("Please select a ticket");
+			POSMessageDialog.showMessage(this, "Please select a ticket");
 			return null;
 		}
 
