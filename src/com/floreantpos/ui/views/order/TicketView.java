@@ -550,11 +550,19 @@ public class TicketView extends JPanel {
 				// save ticket first. ticket needs to save so that it
 				// contains an id.
 				OrderController.assignTicketNumber(ticket);
-				OrderController.saveOrder(ticket);
+				if (isInBackOffice) {
+					OrderController.saveOrder(ticket, false);
+				} else {
+					OrderController.saveOrder(ticket, true);
+				}
 				ticketDAO.refresh(ticket);
 			}
 
-			OrderController.saveOrder(ticket);
+			if (isInBackOffice) {
+				OrderController.saveOrder(ticket, false);
+			} else {
+				OrderController.saveOrder(ticket, true);
+			}
 
 			if (!isInBackOffice && ticket.needsKitchenPrint()) {
 				ReceiptPrintService.printToKitchen(ticket, false);
@@ -586,7 +594,7 @@ public class TicketView extends JPanel {
 					ticket.getTransactions().clear();
 					ticket.getTransactions().add(firstTrans);
 					// ticket.calculatePrice();
-					ticketDAO.saveOrUpdate(ticket);
+					ticketDAO.saveOrUpdate(ticket, false);
 				}
 				try {
 					t.commit();
@@ -677,8 +685,11 @@ public class TicketView extends JPanel {
 			if (ticket.getId() == null) {
 				OrderController.assignTicketNumber(ticket);
 			}
-			OrderController.saveOrder(ticket);
-
+			if (isInBackOffice) {
+				OrderController.saveOrder(ticket, false);
+			} else {
+				OrderController.saveOrder(ticket, true);
+			}
 			firePayOrderSelected();
 		} catch (PosException e) {
 			POSMessageDialog.showError(e.getMessage());

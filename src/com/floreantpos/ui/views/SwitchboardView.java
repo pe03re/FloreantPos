@@ -225,7 +225,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 		add(centerPanel, java.awt.BorderLayout.CENTER);
 	}
-	
+
 	private JPanel createActivityPanel() {
 		JPanel activityPanel = new JPanel(new BorderLayout(5, 5));
 		JPanel innerActivityPanel = new JPanel(new MigLayout("hidemode 3, fill, ins 0", "fill, grow", ""));
@@ -521,7 +521,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			ticket.setClosingDate(null);
 			ticket.setReOpened(true);
 
-			TicketDAO.getInstance().saveOrUpdate(ticket);
+			TicketDAO.getInstance().saveOrUpdate(ticket, true);
 
 			OrderInfoView view = new OrderInfoView(Arrays.asList(ticket));
 			OrderInfoDialog dialog = new OrderInfoDialog(view);
@@ -694,10 +694,10 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 	}
 
 	private void editTicket(Ticket ticket) {
-//		if (ticket.isPaid()) {
-//			POSMessageDialog.showMessage("Paid ticket cannot be edited");
-//			return;
-//		}
+		// if (ticket.isPaid()) {
+		// POSMessageDialog.showMessage("Paid ticket cannot be edited");
+		// return;
+		// }
 
 		Ticket ticketToEdit = TicketDAO.getInstance().loadFullTicket(ticket.getId());
 		OrderView.getInstance().setCurrentTicket(ticketToEdit);
@@ -807,9 +807,9 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 
 	public synchronized void updateTicketList() {
 		try {
-			
+
 			List<Ticket> totalTickets = new ArrayList<Ticket>();
-			
+
 			// ticketListUpdateTimer.stop();
 			Application.getPosWindow().setGlassPaneVisible(true);
 
@@ -825,7 +825,6 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 				openTickets = dao.findOpenTicketsForUser(user);
 			}
 			openTicketList.setTickets(openTickets);
-			
 
 			// For now show last N (ticketHistory) tickets.
 			List<Ticket> lastTickets = null;
@@ -833,7 +832,7 @@ public class SwitchboardView extends ViewPanel implements ActionListener, ITicke
 			RestaurantDAO resDao = RestaurantDAO.getInstance();
 			Restaurant res = resDao.findAll().get(0);
 			lastTickets = dao.findLastNTickets(res.getTicketHistory());
-			
+
 			totalTickets.addAll(lastTickets);
 			totalTickets.addAll(openTickets);
 			openTicketList.setTickets(totalTickets);

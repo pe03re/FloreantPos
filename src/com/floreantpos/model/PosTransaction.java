@@ -16,7 +16,7 @@ public class PosTransaction extends BasePosTransaction {
 	public PosTransaction () {
 		super();
 	}
-
+	
 	/**
 	 * Constructor for primary key
 	 */

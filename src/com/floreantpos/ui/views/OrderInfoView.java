@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import net.sf.jasperreports.engine.JasperPrint;
 
+import com.floreantpos.model.CardTransaction;
+import com.floreantpos.model.CashTransaction;
 import com.floreantpos.model.PaymentType;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.Ticket;
@@ -79,8 +81,11 @@ public class OrderInfoView extends JPanel {
 			List<PosTransaction> allTrans = transDAO.findAllTransactionByTicket(ticket);
 			for (int i = 0; i < allTrans.size(); i++) {
 				PosTransaction trans = allTrans.get(i);
-				trans.setPaymentType(PaymentType.CASH.name());
-				transDAO.saveOrUpdate(trans);
+				if (trans instanceof CardTransaction) {
+					PosTransaction cashTrans = new CashTransaction(trans);
+					transDAO.delete(trans);
+					transDAO.saveOrUpdate(cashTrans);
+				}				
 			}
 		}
 	}
@@ -93,18 +98,21 @@ public class OrderInfoView extends JPanel {
 			List<PosTransaction> allTrans = transDAO.findAllTransactionByTicket(ticket);
 			for (int i = 0; i < allTrans.size(); i++) {
 				PosTransaction trans = allTrans.get(i);
-				trans.setPaymentType(PaymentType.CARD.name());
-				transDAO.saveOrUpdate(trans);
+				if (trans instanceof CashTransaction) {
+					PosTransaction cashTrans = new CardTransaction(trans);
+					transDAO.delete(trans);
+					transDAO.saveOrUpdate(cashTrans);
+				}				
 			}
 		}
 	}
-	
+
 	public void changeTokenTo99() throws Exception {
 		for (Iterator iter = tickets.iterator(); iter.hasNext();) {
 			Ticket ticket = (Ticket) iter.next();
 			TicketDAO ticketDao = TicketDAO.getInstance();
 			ticket.setTokenNo(99);
-			ticketDao.saveOrUpdate(ticket);
+			ticketDao.saveOrUpdate(ticket, false);
 		}
 	}
 }

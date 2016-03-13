@@ -238,7 +238,7 @@ public class CustomerSelectionDialog extends POSDialog {
 
 	protected void doSetCustomer(Customer customer) {
 		ticket.setCustomer(customer);
-//		TicketDAO.getInstance().saveOrUpdate(ticket);
+		// TicketDAO.getInstance().saveOrUpdate(ticket);
 		setCanceled(false);
 		dispose();
 	}
@@ -250,7 +250,7 @@ public class CustomerSelectionDialog extends POSDialog {
 		}
 
 		ticket.setCustomer(null);
-		TicketDAO.getInstance().saveOrUpdate(ticket);
+		TicketDAO.getInstance().saveOrUpdate(ticket, true);
 		setCanceled(false);
 		dispose();
 	}

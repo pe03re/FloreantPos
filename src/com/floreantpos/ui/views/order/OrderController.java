@@ -163,14 +163,14 @@ public class OrderController implements OrderListener, CategorySelectionListener
 	}
 
 	// VERIFIED
-	public synchronized static void saveOrder(Ticket ticket) {
+	public synchronized static void saveOrder(Ticket ticket, boolean changeTicketTime) {
 		if (ticket == null)
 			return;
 
 		boolean newTicket = ticket.getId() == null;
 
 		TicketDAO ticketDAO = new TicketDAO();
-		ticketDAO.saveOrUpdate(ticket);
+		ticketDAO.saveOrUpdate(ticket, changeTicketTime);
 
 		// save the action
 		ActionHistoryDAO actionHistoryDAO = ActionHistoryDAO.getInstance();
@@ -190,7 +190,7 @@ public class OrderController implements OrderListener, CategorySelectionListener
 		ticket.setClosingDate(new Date());
 
 		TicketDAO ticketDAO = new TicketDAO();
-		ticketDAO.saveOrUpdate(ticket);
+		ticketDAO.saveOrUpdate(ticket, true);
 
 		User driver = ticket.getAssignedDriver();
 		if (driver != null) {

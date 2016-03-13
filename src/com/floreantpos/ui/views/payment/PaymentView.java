@@ -279,7 +279,7 @@ public class PaymentView extends JPanel {
 	protected void removeKalaId() {
 		Ticket ticket = settleTicketView.getTicket();
 		ticket.getProperties().remove(SettleTicketDialog.LOYALTY_ID);
-		TicketDAO.getInstance().saveOrUpdate(ticket);
+		TicketDAO.getInstance().saveOrUpdate(ticket, true);
 
 		POSMessageDialog.showMessage("Loyalty Id removed");
 	}
@@ -293,7 +293,7 @@ public class PaymentView extends JPanel {
 
 		Ticket ticket = settleTicketView.getTicket();
 		ticket.addProperty(SettleTicketDialog.LOYALTY_ID, loyaltyid);
-		TicketDAO.getInstance().saveOrUpdate(ticket);
+		TicketDAO.getInstance().saveOrUpdate(ticket, true);
 
 		POSMessageDialog.showMessage("Loyalty id set.");
 	}

@@ -72,10 +72,10 @@ public class TicketAuthorizationDialog extends POSDialog {
 	public void updateTransactiontList() {
 		User owner = null;
 		User currentUser = Application.getCurrentUser();
-		if(!currentUser.hasPermission(UserPermission.VIEW_ALL_OPEN_TICKETS)) {
+		if (!currentUser.hasPermission(UserPermission.VIEW_ALL_OPEN_TICKETS)) {
 			owner = currentUser;
 		}
-		
+
 		listView.setTransactions(PosTransactionDAO.getInstance().findUnauthorizedTransactions(owner));
 	}
 
@@ -155,7 +155,7 @@ public class TicketAuthorizationDialog extends POSDialog {
 		double totalAmount = transaction.getAmount();
 
 		CardProcessor cardProcessor = CardConfig.getMerchantGateway().getProcessor();
-		
+
 		if (totalAmount > authorizedAmount) {
 			cardProcessor.voidAmount(transaction);
 			cardProcessor.captureNewAmount(transaction);
@@ -163,8 +163,7 @@ public class TicketAuthorizationDialog extends POSDialog {
 			transaction.setCaptured(true);
 
 			PosTransactionDAO.getInstance().saveOrUpdate(transaction);
-		}
-		else {
+		} else {
 			cardProcessor.captureAuthorizedAmount(transaction);
 
 			transaction.setCaptured(true);
@@ -207,15 +206,14 @@ public class TicketAuthorizationDialog extends POSDialog {
 
 			ticket.setGratuityAmount(newTicketTipsAmount);
 			ticket.setPaidAmount(newTicketPaidAmount);
-		}
-		else {
+		} else {
 			ticket.setGratuityAmount(newTipsAmount);
 			ticket.setPaidAmount(ticket.getPaidAmount() + newTipsAmount);
 		}
 
 		ticket.calculatePrice();
 
-		TicketDAO.getInstance().saveOrUpdate(ticket);
+		TicketDAO.getInstance().saveOrUpdate(ticket, true);
 		updateTransactiontList();
 	}
 
@@ -229,18 +227,18 @@ public class TicketAuthorizationDialog extends POSDialog {
 		CardReader cardReader = CardReader.valueOf(cardEntryType);
 
 		switch (cardReader) {
-			case SWIPE:
-			case MANUAL:
-				authorizeSwipeCard(transaction);
-				break;
+		case SWIPE:
+		case MANUAL:
+			authorizeSwipeCard(transaction);
+			break;
 
-			case EXTERNAL_TERMINAL:
-				transaction.setCaptured(true);
-				PosTransactionDAO.getInstance().saveOrUpdate(transaction);
-				break;
+		case EXTERNAL_TERMINAL:
+			transaction.setCaptured(true);
+			PosTransactionDAO.getInstance().saveOrUpdate(transaction);
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	}
 
@@ -252,20 +250,20 @@ public class TicketAuthorizationDialog extends POSDialog {
 
 			try {
 				switch (command) {
-					case EDIT_TIPS:
+				case EDIT_TIPS:
 
-						doEditTips();
-						break;
+					doEditTips();
+					break;
 
-					case AUTHORIZE:
-						doAuthorize();
-						break;
+				case AUTHORIZE:
+					doAuthorize();
+					break;
 
-					case AUTHORIZE_ALL:
-						doAuthorizeAll();
+				case AUTHORIZE_ALL:
+					doAuthorizeAll();
 
-					default:
-						break;
+				default:
+					break;
 				}
 			} catch (Exception e2) {
 				POSMessageDialog.showError(TicketAuthorizationDialog.this, e2.getMessage(), e2);

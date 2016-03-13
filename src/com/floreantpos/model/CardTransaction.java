@@ -1,5 +1,6 @@
 package com.floreantpos.model;
 
+import com.floreantpos.main.Application;
 import com.floreantpos.model.base.BaseCardTransaction;
 
 public class CardTransaction extends BaseCardTransaction {
@@ -8,6 +9,18 @@ public class CardTransaction extends BaseCardTransaction {
 	/* [CONSTRUCTOR MARKER BEGIN] */
 	public CardTransaction() {
 		super();
+	}
+
+	public CardTransaction(PosTransaction pt) {
+		this.amount = pt.getAmount();
+		this.paymentType = PaymentType.CARD.name();
+		this.transactionTime = pt.getTransactionTime();
+		this.tenderAmount = pt.getTenderAmount();
+		this.transactionType = pt.getTransactionType();
+		this.setTerminal(Application.getInstance().getTerminal());
+		this.setCaptured(true);
+		this.setTicket(pt.getTicket());
+		this.setUser(Application.getCurrentUser());
 	}
 
 	/**

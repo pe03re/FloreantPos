@@ -127,7 +127,7 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 
 				updateModel();
 
-				OrderController.saveOrder(ticket);
+				OrderController.saveOrder(ticket, true);
 				ticketDetailView.updateView();
 				paymentView.updateView();
 			}
@@ -149,11 +149,11 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 
 			ticket.setTaxExempt(true);
 			ticket.calculatePrice();
-			TicketDAO.getInstance().saveOrUpdate(ticket);
+			TicketDAO.getInstance().saveOrUpdate(ticket, true);
 		} else {
 			ticket.setTaxExempt(false);
 			ticket.calculatePrice();
-			TicketDAO.getInstance().saveOrUpdate(ticket);
+			TicketDAO.getInstance().saveOrUpdate(ticket, true);
 		}
 
 		ticketDetailView.updateView();
@@ -179,7 +179,7 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 
 		ticket.setGratuity(gratuity);
 		ticket.calculatePrice();
-		OrderController.saveOrder(ticket);
+		OrderController.saveOrder(ticket, true);
 
 		ticketDetailView.updateView();
 		paymentView.updateView();
@@ -201,7 +201,7 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 			if (!dialog.isCanceled() && dialog.isModified()) {
 				updateModel();
 
-				TicketDAO.getInstance().saveOrUpdate(ticket);
+				TicketDAO.getInstance().saveOrUpdate(ticket, true);
 
 				ticketDetailView.updateView();
 				paymentView.updateView();
@@ -449,7 +449,7 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 		dialog.setTotalAmount(dueAmount);
 		dialog.setPaidAmount(transaction.getAmount());
 		dialog.setDueAmount(ticket.getDueAmount());
-		
+
 		if (tenderedAmount > transaction.getAmount()) {
 			double roundOff = NumberUtil.mathRoundOff(tenderedAmount - transaction.getAmount()) - (tenderedAmount - transaction.getAmount());
 			dialog.setChangeAmount(tenderedAmount - transaction.getAmount() + roundOff);
@@ -667,7 +667,7 @@ public class SettleTicketDialog extends POSDialog implements CardInputListener {
 
 			updateModel();
 
-			OrderController.saveOrder(ticket);
+			OrderController.saveOrder(ticket, true);
 
 			POSMessageDialog.showMessage("Congrations! you have discounts from Kala Loyalty Check discounts list for more.");
 

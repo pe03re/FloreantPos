@@ -1,5 +1,6 @@
 package com.floreantpos.model;
 
+import com.floreantpos.main.Application;
 import com.floreantpos.model.base.BaseCashTransaction;
 
 public class CashTransaction extends BaseCashTransaction {
@@ -8,6 +9,18 @@ public class CashTransaction extends BaseCashTransaction {
 	/*[CONSTRUCTOR MARKER BEGIN]*/
 	public CashTransaction () {
 		super();
+	}
+	
+	public CashTransaction(PosTransaction pt) {
+		this.amount = pt.getAmount();
+		this.paymentType = PaymentType.CASH.name();
+		this.transactionTime = pt.getTransactionTime();
+		this.tenderAmount = pt.getTenderAmount();
+		this.transactionType = pt.getTransactionType();
+		this.setTerminal(Application.getInstance().getTerminal());
+		this.setCaptured(true);
+		this.setTicket(pt.getTicket());
+		this.setUser(Application.getCurrentUser());
 	}
 
 	/**

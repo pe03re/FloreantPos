@@ -612,7 +612,7 @@ public class ReceiptPrintService {
 			transaction.commit();
 
 			ticket.clearDeletedItems();
-			TicketDAO.getInstance().saveOrUpdate(ticket);
+			TicketDAO.getInstance().saveOrUpdate(ticket, true);
 
 		} catch (Exception e) {
 			transaction.rollback();

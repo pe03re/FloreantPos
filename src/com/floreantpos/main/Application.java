@@ -1,6 +1,8 @@
 package com.floreantpos.main;
 
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -24,6 +26,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.UIManager;
@@ -83,6 +86,7 @@ public class Application {
 	private PosWindow posWindow;
 	private User currentUser;
 	private RootView rootView;
+	private ReportGenerationView reportView;
 	private BackOfficeWindow backOfficeWindow;
 	private Shift currentShift;
 	public PrinterConfiguration printConfiguration;
@@ -127,109 +131,37 @@ public class Application {
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/groupWiseReport/target/classes").toURI());
 			pluginManager.addPluginsFrom(new File("C:/MyProjects/ReportPlugin/cardPaymentReport/target/classes").toURI());
 		}
-
 		setApplicationLook();
 
-		rootView = RootView.getInstance();
-
-		posWindow.getContentPane().add(rootView);
-		posWindow.setupSizeAndLocation();
-
-		if (TerminalConfig.isFullscreenMode()) {
-			posWindow.enterFullScreenMode();
-		}
 		if (!reportMode) {
+			rootView = RootView.getInstance();
+
+			posWindow.getContentPane().add(rootView);
+			posWindow.setupSizeAndLocation();
+
+			if (TerminalConfig.isFullscreenMode()) {
+				posWindow.enterFullScreenMode();
+			}
 			posWindow.setVisible(true);
-		}
+			initializeSystem();
 
-		initializeSystem();
+		} else{
 
-		if (reportMode) {
-			printAllReports();
-		}
-	}
+			posWindow.setGlassPaneVisible(true);
+			// posWindow.setGlassPaneMessage(com.floreantpos.POSConstants.LOADING);
+			DatabaseUtil.checkConnection(DatabaseUtil.initialize());
+			posWindow.setGlassPaneVisible(false);
 
-	private void printAllReports() {
-		List<Report> repList = new ArrayList<Report>();
-		File f = new File("plugins/");
-		try {
-			for (File f1 : f.listFiles()) {
-				if (f1.getName().endsWith(".jar")) {
-					JarFile jarFile = new JarFile(f1);
-					Enumeration e = jarFile.entries();
-					URL[] urls = { new URL("jar:file:" + f1.getAbsolutePath() + "!/") };
-					URLClassLoader cl = URLClassLoader.newInstance(urls);
+			reportView = ReportGenerationView.getInstance();
 
-					while (e.hasMoreElements()) {
-						JarEntry je = (JarEntry) e.nextElement();
-						if (je.isDirectory() || !je.getName().endsWith(".class")) {
-							continue;
-						}
-						String className = je.getName().substring(0, je.getName().length() - 6);
-						className = className.replace('/', '.');
-						Class c;
-						c = cl.loadClass(className);
-						if (Report.class.isAssignableFrom(c)) {
-							repList.add((Report) c.newInstance());
-						}
-					}
-				}
-			}
-			for (Report r : repList) {
-				Date today = new Date();
-
-				File reportFolder = new File(AppConfig.getReportPath() + "\\Sales_Reports\\" + yearFolderFormat.format(today) + "\\" + monthFolderFormat.format(today) + "\\"
-						+ dateFolderFormat.format(today) + "\\");
-				File reportFile = new File(reportFolder + "\\" + r.getName() + "_" + fullDateFormat.format(today));
-				if (!reportFile.exists()) {
-					File parent = reportFile.getParentFile();
-					if (parent.exists() == false) {
-						FileUtils.forceMkdir(parent);
-					}
-				}
-				if (r.isDailyReport()) {
-					Date startDate = new Date();
-					startDate.setHours(0);
-					startDate.setMinutes(0);
-					startDate.setSeconds(0);
-
-					Date endDate = new Date();
-					endDate.setHours(23);
-					endDate.setMinutes(59);
-					endDate.setSeconds(59);
-
-					r.exportReport(startDate, endDate, reportFile.getAbsolutePath());
-				}
-
-				Calendar c1 = Calendar.getInstance();
-				c1.setTime(today);
-				c1.set(Calendar.DAY_OF_MONTH, c1.getActualMaximum(Calendar.DAY_OF_MONTH));
-				Date lastDayOfMonth = c1.getTime();
-				lastDayOfMonth.setHours(23);
-				lastDayOfMonth.setMinutes(59);
-				lastDayOfMonth.setSeconds(59);
-
-				if (today.getDate() == lastDayOfMonth.getDate()) {
-					Calendar c2 = Calendar.getInstance();
-					c2.set(Calendar.DAY_OF_MONTH, 1);
-					Date firstDayOfMonth = c2.getTime();
-					firstDayOfMonth.setHours(0);
-					firstDayOfMonth.setMinutes(0);
-					firstDayOfMonth.setSeconds(0);
-
-					r.exportReport(firstDayOfMonth, lastDayOfMonth, reportFile.getAbsolutePath());
-				}
-			}
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (InstantiationException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+			posWindow.getContentPane().add(reportView);
+			
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			posWindow.setSize(400,300);
+			
+			posWindow.setLocation((screenSize.width - posWindow.getWidth() >> 1),((screenSize.height - posWindow.getHeight()) >> 1));
+			posWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			posWindow.setVisible(true);
 		}
 	}
 
