@@ -25,6 +25,7 @@ import org.jdesktop.swingx.calendar.DateUtils;
 
 import com.floreantpos.config.AppConfig;
 import com.floreantpos.report.Report;
+import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.ui.util.UiUtil;
 
 public class ReportGenerationView extends com.floreantpos.swing.TransparentPanel {
@@ -57,6 +58,7 @@ public class ReportGenerationView extends com.floreantpos.swing.TransparentPanel
 		btn1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				printAllReports(dStartDate.getDate(), dEndDate.getDate(), true);
+				POSMessageDialog.showMessage("Daily Reports generated");
 			}
 		});
 
@@ -66,6 +68,7 @@ public class ReportGenerationView extends com.floreantpos.swing.TransparentPanel
 		btn2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				printAllReports(dStartDate.getDate(), dEndDate.getDate(), false);
+				POSMessageDialog.showMessage("Consolidated Reports generated");
 			}
 		});
 
@@ -123,6 +126,10 @@ public class ReportGenerationView extends com.floreantpos.swing.TransparentPanel
 					if (parent.exists() == false) {
 						FileUtils.forceMkdir(parent);
 					}
+				}
+				if (r != null) {
+					r.setStartDate(startDate);
+					r.setEndDate(endDate);
 				}
 				if (isDaily && r.isDailyReport()) {
 					r.exportReport(startDate, endDate, reportFile.getAbsolutePath());

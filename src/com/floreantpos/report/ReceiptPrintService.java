@@ -573,6 +573,9 @@ public class ReceiptPrintService {
 
 		map.put(SERVER_NAME, POSConstants.RECEIPT_REPORT_SERVER_LABEL + ticket.getServerName());
 		String dateString = new SimpleDateFormat("dd-MM-yyyy HH:mm").format(ticket.getCreateDate());
+		if (ticket.getTicketType().contains(OrderType.HOME_DELIVERY.name()) || ticket.getTicketType().contains(OrderType.TAKE_OUT.name()) || ticket.getTicketType().contains(OrderType.PICKUP.name())) {
+			map.put("pack", "PACK");
+		}
 		map.put(REPORT_DATE, dateString);
 		map.put("TicketNo", "Ticket: " + ticket.getSerialId());
 		if (ticket.getTokenNo() != null && ticket.getTokenNo() > 0) {
