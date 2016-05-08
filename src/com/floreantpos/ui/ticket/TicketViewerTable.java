@@ -201,20 +201,21 @@ public class TicketViewerTable extends JTable {
 		Ticket t = getTicket();
 
 		List<TaxTreatment> tList = ticketItem.getTaxList();
-		if (tList != null && !tList.isEmpty()) {
-			List<TaxTreatment> newTaxList = new ArrayList<TaxTreatment>();
-			for (TaxTreatment tax : tList) {
-				if (t != null && t.getTicketType() == OrderType.TAKE_OUT.name()) {
-					if (!tax.getTax().getName().toLowerCase().contains("service")) {
-						newTaxList.add(tax);
-					}
-				} else {
-					newTaxList.add(tax);
-				}
-			}
-			ticketItem.setTaxList(newTaxList);
-		}
-		
+		// if (tList != null && !tList.isEmpty()) {
+		// List<TaxTreatment> newTaxList = new ArrayList<TaxTreatment>();
+		// for (TaxTreatment tax : tList) {
+		// if (t != null && t.getTicketType() == OrderType.TAKE_OUT.name()) {
+		// if (!tax.getTax().getName().toLowerCase().contains("service")) {
+		// newTaxList.add(tax);
+		// }
+		// } else {
+		// newTaxList.add(tax);
+		// }
+		//
+		// }
+
+		ticketItem.setTaxList(tList);
+
 		ticketItem.setTicket(t);
 		int addTicketItem = model.addTicketItem(ticketItem);
 		int actualRowCount = addTicketItem;// getActualRowCount() - 1;
