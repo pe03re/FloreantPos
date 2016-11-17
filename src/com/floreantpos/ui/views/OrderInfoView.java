@@ -85,7 +85,7 @@ public class OrderInfoView extends JPanel {
 					PosTransaction cashTrans = new CashTransaction(trans);
 					transDAO.delete(trans);
 					transDAO.saveOrUpdate(cashTrans);
-				}				
+				}
 			}
 		}
 	}
@@ -102,7 +102,7 @@ public class OrderInfoView extends JPanel {
 					PosTransaction cashTrans = new CardTransaction(trans);
 					transDAO.delete(trans);
 					transDAO.saveOrUpdate(cashTrans);
-				}				
+				}
 			}
 		}
 	}
@@ -111,7 +111,11 @@ public class OrderInfoView extends JPanel {
 		for (Iterator iter = tickets.iterator(); iter.hasNext();) {
 			Ticket ticket = (Ticket) iter.next();
 			TicketDAO ticketDao = TicketDAO.getInstance();
-			ticket.setTokenNo(99);
+			if (ticket.getTokenNo() == 99) {
+				ticket.setTokenNo(0);
+			} else {
+				ticket.setTokenNo(99);
+			}
 			ticketDao.saveOrUpdate(ticket, false);
 		}
 	}

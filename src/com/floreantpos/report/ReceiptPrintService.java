@@ -441,6 +441,7 @@ public class ReceiptPrintService {
 				vatTax += entry.getValue();
 			}
 		}
+
 		if (serviceTax > 0.0) {
 			beginRow(taxNameBuilder);
 			addColumn(taxNameBuilder, "Service Tax");

@@ -117,7 +117,7 @@ public class TicketViewerTableModel extends AbstractTableModel {
 
 			TicketItem t = (TicketItem) entry.getValue();
 
-			if (ticketItem.getName().equals(t.getName()) && !t.isPrintedToKitchen()) {
+			if (ticketItem.getName().equals(t.getName()) && !t.isPrintedToKitchen() && (t.getCookingInstructions() == null || t.getCookingInstructions().isEmpty())) {
 				t.setItemCount(t.getItemCount() + 1);
 
 				table.repaint();

@@ -351,12 +351,18 @@ public class Ticket extends BaseTicket {
 					List<TaxTreatment> ttList = ti.getTaxList();
 					for (TaxTreatment t : ttList) {
 						if (t.getTax() != null && t.getTax().getRate() > 0.0) {
+							String taxKeyName = "tax";
+							if (t.getTax().getName().toLowerCase().contains("service")) {
+								taxKeyName = "service" + "-" + t.getTax().getRate();
+							} else if (t.getTax().getName().toLowerCase().contains("vat")) {
+								taxKeyName = "vat" + "-" + t.getTax().getRate();
+							}
 							double tax = 0;
-							if (taxMap.containsKey(t.getTax().getName())) {
-								tax = taxMap.get(t.getTax().getName());
+							if (taxMap.containsKey(taxKeyName)) {
+								tax = taxMap.get(taxKeyName);
 							}
 							tax = tax + ti.getSubtotalAmount() * t.getTax().getRate() / 100;
-							taxMap.put(t.getTax().getName(), tax);
+							taxMap.put(taxKeyName, tax);
 						}
 					}
 				}

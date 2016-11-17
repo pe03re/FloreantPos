@@ -155,20 +155,23 @@ public class CustomerForm extends BeanEditor<Customer> {
 
 			Customer customer = (Customer) getBean();
 			CustomerDAO dao = CustomerDAO.getInstance();
-			if (!dao.hasCustomerByPhone(customer.getTelephoneNo())) {
+			if (doesCustomerExist(customer) || !dao.hasCustomerByPhone(customer.getTelephoneNo())) {
 				CustomerDAO.getInstance().saveOrUpdate(customer);
 				return true;
 			} else {
-				BOMessageDialog.showError(this, "Customer already exists!");
+				BOMessageDialog.showError(this, "Customer already exists against this phone number!");
 				return false;
 			}
 		} catch (IllegalModelStateException e) {
 		} catch (StaleObjectStateException e) {
-			BOMessageDialog.showError(this,
-					"It seems this Customer is modified by some other person or terminal. Save failed.");
+			BOMessageDialog.showError(this, "It seems this Customer is modified by some other person or terminal. Save failed.");
 		}
 
 		return false;
+	}
+
+	private boolean doesCustomerExist(Customer customer) {
+		return customer.getAutoId() != null ? true : false;
 	}
 
 	@Override
